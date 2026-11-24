@@ -1,0 +1,28 @@
+### good RFC
+RFC: rfc-0001-transferencias-recorrentes.md (946 words)
+
+Result: 0 error(s), 0 warning(s) -> PASS
+
+### bad RFC
+RFC: rfc-ruim.md (86 words)
+E missing-section        riscos
+E status                 'aprovada' not in [aceita, em revisão, rascunho, rejeitada, retirada, substituída]
+E many-approvers         tech lead, produto e arquitetura
+E no-comment-deadline    a review without a date never ends
+E alternatives           1 option(s); need >= 2
+W no-do-nothing          "não fazer nada" is always an option
+W placeholders           2 TODO/TBD/a definir
+
+Result: 5 error(s), 2 warning(s) -> FAIL
+
+### mutant: good RFC without the Decisor line
+RFC: rfc-mutant.md (941 words)
+E no-approver            DACI: exactly one Approver ("Decisor")
+
+Result: 1 error(s), 0 warning(s) -> FAIL
+
+### same good RFC read on 2026-12-10 (comment deadline passed, still 'em revisão')
+RFC: rfc-0001-transferencias-recorrentes.md (946 words)
+W deadline-passed        2026-12-04 < 2026-12-10: decide or extend
+
+Result: 0 error(s), 1 warning(s) -> PASS

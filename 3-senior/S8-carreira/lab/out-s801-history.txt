@@ -1,0 +1,23 @@
+d118402 chore: remove local config and ignore it
+7078019 chore: local config
+36c4461 docs: readme
+
+1) the latest commit (what the repository page shows):
+   files in HEAD with the secret: 0
+2) the whole history (what anyone who clones gets):
+   (commit, file) pairs with the secret: 1
+   added or removed in: d118402 chore: remove local config and ignore it
+   added or removed in: 7078019 chore: local config
+
+3) rewrite the history (git filter-branch; GitHub recommends git-filter-repo, not installed here):
+93917c5 chore: remove local config and ignore it
+ed9a231 chore: local config
+f7b807d docs: readme
+   (commit, file) pairs with the secret, counting refs/original: 1
+   after deleting refs/original, expiring the reflog and gc: 0
+   objects still in the repository with the secret: 0
+
+4) the clone made before the rewrite:
+   (commit, file) pairs with the secret: 1
+
+=> rewriting fixes YOUR copy; the secret already left. Revoke/rotate it first (GitHub docs), then clean the history.

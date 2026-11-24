@@ -1,0 +1,89 @@
+mutant: none
+example | salary   | deduction (kind)      | base     | table tax | reduction | IRRF    | expected | result
+      1 |  3036.00 |   607.20 (simplified) |  2428.80 |      0.00 |      0.00 |    0.00 |     0.00 | OK
+      2 |  4000.00 |   607.20 (simplified) |  3392.80 |    114.76 |    114.76 |    0.00 |     0.00 | OK
+      3 |  5000.00 |   607.20 (simplified) |  4392.80 |    312.89 |    312.89 |    0.00 |     0.00 | OK
+      4 |  6000.00 |   649.60 (legal     ) |  5350.40 |    562.63 |    179.75 |  382.88 |   382.88 | OK
+      5 |  7607.20 |   607.20 (simplified) |  7000.00 |   1016.27 |      0.00 | 1016.27 |  1016.27 | OK
+INSS(  1621.00) =  121.58  expected  121.58  OK
+INSS(  2902.84) =  236.94  expected  236.94  OK
+INSS(  4354.27) =  411.11  expected  411.11  OK
+INSS(  8475.55) =  988.09  expected  988.09  OK
+INSS( 20000.00) =  988.09  expected  988.09  OK
+SELFTEST PASS (10 checks)
+
+mutant: reductionOnBase
+example | salary   | deduction (kind)      | base     | table tax | reduction | IRRF    | expected | result
+      1 |  3036.00 |   607.20 (simplified) |  2428.80 |      0.00 |      0.00 |    0.00 |     0.00 | OK
+      2 |  4000.00 |   607.20 (simplified) |  3392.80 |    114.76 |    114.76 |    0.00 |     0.00 | OK
+      3 |  5000.00 |   607.20 (simplified) |  4392.80 |    312.89 |    312.89 |    0.00 |     0.00 | OK
+      4 |  6000.00 |   649.60 (legal     ) |  5350.40 |    562.63 |    266.24 |  296.39 |   382.88 | FAIL
+      5 |  7607.20 |   607.20 (simplified) |  7000.00 |   1016.27 |     46.60 |  969.67 |  1016.27 | FAIL
+INSS(  1621.00) =  121.58  expected  121.58  OK
+INSS(  2902.84) =  236.94  expected  236.94  OK
+INSS(  4354.27) =  411.11  expected  411.11  OK
+INSS(  8475.55) =  988.09  expected  988.09  OK
+INSS( 20000.00) =  988.09  expected  988.09  OK
+SELFTEST FAIL: 2 of 10 checks
+
+mutant: alwaysSimplified
+example | salary   | deduction (kind)      | base     | table tax | reduction | IRRF    | expected | result
+      1 |  3036.00 |   607.20 (simplified) |  2428.80 |      0.00 |      0.00 |    0.00 |     0.00 | OK
+      2 |  4000.00 |   607.20 (simplified) |  3392.80 |    114.76 |    114.76 |    0.00 |     0.00 | OK
+      3 |  5000.00 |   607.20 (simplified) |  4392.80 |    312.89 |    312.89 |    0.00 |     0.00 | OK
+      4 |  6000.00 |   607.20 (simplified) |  5392.80 |    574.29 |    179.75 |  394.54 |   382.88 | FAIL
+      5 |  7607.20 |   607.20 (simplified) |  7000.00 |   1016.27 |      0.00 | 1016.27 |  1016.27 | OK
+INSS(  1621.00) =  121.58  expected  121.58  OK
+INSS(  2902.84) =  236.94  expected  236.94  OK
+INSS(  4354.27) =  411.11  expected  411.11  OK
+INSS(  8475.55) =  988.09  expected  988.09  OK
+INSS( 20000.00) =  988.09  expected  988.09  OK
+SELFTEST FAIL: 1 of 10 checks
+
+CLT month, gross 4,500.00
+  INSS 2026 (progressive)                  431.51
+  IR deduction (simplified)                 607.20
+  IR base                                3,892.80
+  IR by the table                          200.39
+  reduction (Lei 15.270/2025)             -200.39
+  IRRF withheld                              0.00
+  NET in the account                     4,068.49
+  net / gross                               90.4%
+
+CLT month, gross 12,000.00
+  INSS 2026 (progressive)                  988.09
+  IR deduction (legal)                      988.09
+  IR base                               11,011.91
+  IR by the table                        2,119.55
+  reduction (Lei 15.270/2025)                0.00
+  IRRF withheld                          2,119.55
+  NET in the account                     8,892.36
+  net / gross                               74.1%
+
+PREMISES (invented): CLT R$ 12,000.00/month + meal R$ 1,000.00 + health plan worth R$ 900.00;
+                     PJ R$ 16,000.00/month, 11 months billed, accountant R$ 400.00/month, own health plan R$ 900.00
+
+naive (monthly gross): PJ 16,000.00 vs CLT 12,000.00 -> PJ +33.3%
+
+CLT, one year                                                        R$
+  11 months net (8,892.36 each)                               97,815.96
+  vacation month net (salary + 1/3 = 16,000.00)               11,792.36
+  13th salary net (INSS 988.09, IRRF 2,119.55)                 8,892.36
+  = cash in the account                                      118,500.68
+  + FGTS 8% (restricted withdrawal)                           12,800.00
+  + meal + health plan (12 months)                            22,800.00
+  = CLT total                                                154,100.68
+
+PJ, one year, by effective tax rate on the invoice (DEPENDS on the regime: ask an accountant)
+  rate |  invoices (11) |          taxes | accountant+health |       PJ total | PJ - CLT total | PJ - CLT w/o FGTS
+    6% |     176,000.00 |      10,560.00 |         15,600.00 |     149,840.00 |      -4,260.68 |          8,539.32
+   10% |     176,000.00 |      17,600.00 |         15,600.00 |     142,800.00 |     -11,300.68 |          1,499.32
+   15% |     176,000.00 |      26,400.00 |         15,600.00 |     134,000.00 |     -20,100.68 |         -7,300.68
+   20% |     176,000.00 |      35,200.00 |         15,600.00 |     125,200.00 |     -28,900.68 |        -16,100.68
+  break-even: PJ only beats the CLT total if the effective rate is below 3.6%
+
+minimum PJ invoice per month to MATCH the CLT total (your reservation point for this offer)
+  at   6%: R$ 16,412.06  (+36.8% over the CLT monthly gross)
+  at  10%: R$ 17,141.48  (+42.8% over the CLT monthly gross)
+  at  15%: R$ 18,149.81  (+51.2% over the CLT monthly gross)
+  at  20%: R$ 19,284.17  (+60.7% over the CLT monthly gross)

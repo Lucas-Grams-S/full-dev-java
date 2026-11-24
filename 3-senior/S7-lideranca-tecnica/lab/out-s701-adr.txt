@@ -1,0 +1,38 @@
+ADR  | words | rules | findings
+0001 |   236 |     3 | W no-review-trigger
+0002 |   219 |     0 | W no-review-trigger
+0003 |   185 |     0 | W no-review-trigger
+0004 |   223 |     0 | W no-review-trigger
+0005 |   281 |     0 | W no-review-trigger
+0006 |   394 |     0 | W no-review-trigger
+0007 |   343 |     0 | W no-review-trigger
+0008 |   203 |     0 | W no-review-trigger
+0009 |   343 |     0 | W no-review-trigger
+0010 |   536 |     0 | W no-review-trigger
+0011 |   662 |     0 | W no-review-trigger
+0012 |   523 |     0 | OK
+0013 |   611 |     0 | OK
+0014 |  1399 |     9 | W bundle
+0015 |  1142 |    11 | W bundle
+0016 |  1140 |    11 | W bundle
+0017 |  1214 |    10 | W no-review-trigger, W bundle
+0018 |  1370 |    11 | W no-review-trigger, W bundle
+0019 |   871 |     9 | W no-review-trigger, W bundle
+0020 |  1592 |     8 | W no-review-trigger, W bundle
+0021 |  1517 |     8 | W no-review-trigger, W bundle
+0022 |  1606 |     7 | W no-review-trigger, W bundle
+0023 |   370 |     0 | W no-negative-consequence, E index-cells=2
+0024 |  1334 |    14 | W bundle, E index-cells=2
+0025 |  1172 |     8 | W bundle, E index-cells=2
+0026 |  1767 |    10 | W bundle
+0027 |  1012 |    12 | W bundle, E index-cells=2
+0028 |  1405 |    13 | W bundle, E index-cells=2
+0029 |  1568 |    15 | W bundle, E index-cells=2
+0030 |   340 |     0 | OK
+0031 |   262 |     0 | OK
+0032 |   264 |     0 | OK
+0033 |   272 |     0 | OK
+
+ADRs: 33 · bundles (> 3 rules or > 800 words): 15
+
+Result: 6 error(s), 33 warning(s) -> FAIL

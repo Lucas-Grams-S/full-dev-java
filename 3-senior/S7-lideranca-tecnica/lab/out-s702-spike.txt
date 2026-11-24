@@ -1,0 +1,41 @@
+### dates
+Schedule: day 31, first occurrence 2027-01-31
+n  | rule (YearMonth)  | chained plusMonths(1) | plusDays(30)
+0  | 2027-01-31 SUN    | 2027-01-31            | 2027-01-31
+1  | 2027-02-28 SUN    | 2027-02-28            | 2027-03-02 WRONG
+2  | 2027-03-31 WED    | 2027-03-28 WRONG      | 2027-04-01 WRONG
+3  | 2027-04-30 FRI    | 2027-04-28 WRONG      | 2027-05-01 WRONG
+4  | 2027-05-31 MON    | 2027-05-28 WRONG      | 2027-05-31
+5  | 2027-06-30 WED    | 2027-06-28 WRONG      | 2027-06-30
+6  | 2027-07-31 SAT    | 2027-07-28 WRONG      | 2027-07-30 WRONG
+7  | 2027-08-31 TUE    | 2027-08-28 WRONG      | 2027-08-29 WRONG
+8  | 2027-09-30 THU    | 2027-09-28 WRONG      | 2027-09-28 WRONG
+9  | 2027-10-31 SUN    | 2027-10-28 WRONG      | 2027-10-28 WRONG
+10 | 2027-11-30 TUE    | 2027-11-28 WRONG      | 2027-11-27 WRONG
+11 | 2027-12-31 FRI    | 2027-12-28 WRONG      | 2027-12-27 WRONG
+12 | 2028-01-31 MON    | 2028-01-28 WRONG      | 2028-01-26 WRONG
+Leap year: rule for day 29 in Feb 2028 = 2028-02-29; in Feb 2027 = 2027-02-28
+
+### zones
+tzdata version: 2026f
+due 2027-01-05 06:00 America/Sao_Paulo = 2027-01-05T09:00:00Z (offset -03:00)
+due 2027-07-05 06:00 America/Sao_Paulo = 2027-07-05T09:00:00Z (offset -03:00)
+DST in Sao Paulo between 2027 and 2030? no transition found
+job at 2027-02-05T01:30:00Z: LocalDate in UTC = 2027-02-05, in Sao Paulo = 2027-02-04
+-> a scheduler that uses the server's UTC date fires the 'day 5' schedules at 22:30 of day 4 (local).
+
+### burst
+Premises: 50,000 active schedules, 15,000 due on day 5 at 06:00, 20 ms per run
+workers | drain time | throughput (runs/s) | connections held
+      1 |   300.0 s  |                  50 | 1
+      2 |   150.0 s  |                 100 | 2
+      4 |    75.0 s  |                 200 | 4
+      8 |    37.5 s  |                 400 | 8
+SLO proposal: every run processed within 60 min of its due time -> even 1 worker fits (300 s)
+Little's law at 2 workers: L = lambda x W = 100 runs/s x 0.020 s = 2 runs in flight = 2 connections
+
+### keys
+10,000 occurrences, crash-after-commit probability 2% per attempt (seed 42)
+key = recurring:<schedule>:<due_date> -> duplicated transfers: 0
+key = random per attempt               -> duplicated transfers: 208
+

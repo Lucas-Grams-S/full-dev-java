@@ -214,3 +214,11 @@
 | S3.07 | BRIN de 48 kB × B-tree de 64 MB: em que coluna o BRIN **não** serve e por quê? | Correlação física |
 | S3.08 | Resumo diário perdeu 501 lançamentos: por que `+=` e marca-d'água falham e o que a janela recalculada garante? | Idempotência, atraso |
 | S3.09 | Mutante sem *trigger*: ~100 mil divergências. Quantas esperaria com 50% menos escritas do código antigo? | Deriva proporcional à escrita |
+
+## 🟣 Sênior (módulo S8)
+| Aula | Problema | Conceito |
+|---|---|---|
+| S8.03 | Marque transferências duplicadas (mesma origem, destino e valor a ≤ 60 s de uma anterior; entrada fora de ordem): força bruta, solução O(n log n) e teste diferencial | Ordenação estável, `HashMap` com `BigDecimal` normalizado, oráculo |
+| S8.03 | Mesma regra, mas "a ≤ 60 s **da primeira** do grupo": o que muda na cadeia 0, 50, 100? | Esclarecer antes de codificar |
+| S8.03 | A solução ignora a ordenação e passa em todos os exemplos escritos à mão: que exemplo a derruba? | Exemplos fora de ordem, diferença negativa |
+| S8.CP | Maior intervalo sem lançamentos por conta num dia, com lançamentos fora de ordem | Agrupar, ordenar, varrer; `LAG` |

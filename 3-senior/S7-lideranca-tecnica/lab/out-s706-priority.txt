@@ -1,0 +1,55 @@
+### debt cost of delay quantified
+item                                                    | CoD (R$ k/week) | weeks | CD3
+Recurring transfers v1 (RFC-0001)                       |             8.0 |  10.0 |  0.80
+Statement dashboard redesign                            |             3.0 |   4.0 |  0.75
+Minimal landing zone (FND01/FND02 HIGH)                 |             4.0 |   3.0 |  1.33
+Remove legacy /entries path (debt)                      |             1.5 |   2.0 |  0.75
+T21: 403 -> 503 when Keycloak is down                   |             3.0 |   0.5 |  6.00
+Spring Boot patch upgrade (CVE fixes)                   |             2.0 |   0.5 |  4.00
+
+order                           | total cost of delay | first three
+FIFO (as it arrived)            | R$    317.0 k       | Recurring > Statement > Minimal
+highest cost of delay first     | R$    301.5 k       | Recurring > Minimal > Statement
+shortest first                  | R$    222.0 k       | T21: > Spring > Remove(debt)
+CD3 (cost of delay / duration)  | R$    215.5 k       | T21: > Spring > Minimal
+
+Brute force over 720 orders: best R$ 215.5 k, worst R$ 324.0 k; CD3 order IS the best; 2 order(s) tie for the best (items with equal CD3 can swap)
+Debt item 'Remove legacy /entries path (debt)' is #6 of 6 in the CD3 order.
+
+### nobody quantified the debt
+item                                                    | CoD (R$ k/week) | weeks | CD3
+Recurring transfers v1 (RFC-0001)                       |             8.0 |  10.0 |  0.80
+Statement dashboard redesign                            |             3.0 |   4.0 |  0.75
+Minimal landing zone (FND01/FND02 HIGH)                 |             4.0 |   3.0 |  1.33
+Remove legacy /entries path (debt)                      |             0.0 |   2.0 |  0.00
+T21: 403 -> 503 when Keycloak is down                   |             3.0 |   0.5 |  6.00
+Spring Boot patch upgrade (CVE fixes)                   |             2.0 |   0.5 |  4.00
+
+order                           | total cost of delay | first three
+FIFO (as it arrived)            | R$    288.5 k       | Recurring > Statement > Minimal
+highest cost of delay first     | R$    271.5 k       | Recurring > Minimal > Statement
+shortest first                  | R$    217.5 k       | T21: > Spring > Remove(debt)
+CD3 (cost of delay / duration)  | R$    185.5 k       | T21: > Spring > Minimal
+
+Brute force over 720 orders: best R$ 185.5 k, worst R$ 321.0 k; CD3 order IS the best; 1 order(s) tie for the best (items with equal CD3 can swap)
+Debt item 'Remove legacy /entries path (debt)' is #6 of 6 in the CD3 order.
+
+### the same debt in two slices
+item                                                    | CoD (R$ k/week) | weeks | CD3
+Recurring transfers v1 (RFC-0001)                       |             8.0 |  10.0 |  0.80
+Statement dashboard redesign                            |             3.0 |   4.0 |  0.75
+Minimal landing zone (FND01/FND02 HIGH)                 |             4.0 |   3.0 |  1.33
+Deprecation+Sunset on /entries, usage metric (debt 1/2) |             1.0 |   0.5 |  2.00
+Remove /entries after clients moved (debt 2/2)          |             0.5 |   1.5 |  0.33
+T21: 403 -> 503 when Keycloak is down                   |             3.0 |   0.5 |  6.00
+Spring Boot patch upgrade (CVE fixes)                   |             2.0 |   0.5 |  4.00
+
+order                           | total cost of delay | first three
+FIFO (as it arrived)            | R$    315.5 k       | Recurring > Statement > Minimal
+highest cost of delay first     | R$    300.0 k       | Recurring > Minimal > Statement
+shortest first                  | R$    222.0 k       | Deprecation+Sunset(debt) > T21: > Spring
+CD3 (cost of delay / duration)  | R$    204.5 k       | T21: > Spring > Deprecation+Sunset(debt)
+
+Brute force over 5040 orders: best R$ 204.5 k, worst R$ 333.3 k; CD3 order IS the best; 1 order(s) tie for the best (items with equal CD3 can swap)
+Debt item 'Deprecation+Sunset on /entries, usage metric (debt 1/2)' is #3 of 7 in the CD3 order.
+Debt item 'Remove /entries after clients moved (debt 2/2)' is #7 of 7 in the CD3 order.

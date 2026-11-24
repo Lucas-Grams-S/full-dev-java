@@ -1,0 +1,14 @@
+WeakScheduleRulesTest    JaCoCo lines 100% branches 100% | PIT 6/18 mutants killed (33%)
+    SURVIVED line 19 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 19 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 22 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 25 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 25 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 28 ConditionalsBoundaryMutator            changed conditional boundary
+    SURVIVED line 19 NegateConditionalsMutator              negated conditional
+    SURVIVED line 19 NegateConditionalsMutator              negated conditional
+    SURVIVED line 22 NegateConditionalsMutator              negated conditional
+    SURVIVED line 25 NegateConditionalsMutator              negated conditional
+    SURVIVED line 25 NegateConditionalsMutator              negated conditional
+    SURVIVED line 28 NegateConditionalsMutator              negated conditional
+StrongScheduleRulesTest  JaCoCo lines 100% branches 100% | PIT 18/18 mutants killed (100%)

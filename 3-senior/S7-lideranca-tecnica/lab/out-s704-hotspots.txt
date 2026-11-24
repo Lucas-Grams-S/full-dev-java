@@ -1,0 +1,32 @@
+Repository at 500158f73241: 1047 commits (2013-01-09 .. 2026-09-29); 30 files under 'src/main/java' alive at the commit; 25 commits with > 20 files ignored for coupling
+
+Top 8 by revisions only (what 'git log | sort' shows):
+   52 revs    19 decisions  …/owner/PetController.java
+   52 revs    10 decisions  …/owner/OwnerController.java
+   42 revs     4 decisions  …/owner/VisitController.java
+   39 revs    14 decisions  …/owner/Owner.java
+   38 revs     0 decisions  …/owner/Pet.java
+   34 revs     0 decisions  …/owner/Visit.java
+   32 revs     2 decisions  …/vet/VetController.java
+   27 revs     0 decisions  …/owner/OwnerRepository.java
+
+Top 8 hotspots (revisions x decision points):
+  revs | churn | LOC | decisions | score | file
+    52 |   893 | 147 |        19 |   988 | …/owner/PetController.java
+    39 |   948 | 116 |        14 |   546 | …/owner/Owner.java
+    52 |   980 | 129 |        10 |   520 | …/owner/OwnerController.java
+    42 |   598 |  64 |         4 |   168 | …/owner/VisitController.java
+    19 |   187 |  29 |         6 |   114 | …/owner/PetValidator.java
+    32 |   337 |  48 |         2 |    64 | …/vet/VetController.java
+    19 |   250 |  29 |         3 |    57 | …/owner/PetTypeFormatter.java
+    38 |   677 |  48 |         0 |    38 | …/owner/Pet.java
+
+Concentration: top 3 of 30 files (10%) = 25% of all revisions of alive files
+
+Change coupling (pairs changed together in >= 8 commits; degree = shared / revisions of the less changed file):
+   21 shared ( 40%)  …/owner/OwnerController.java <-> …/owner/PetController.java
+   16 shared ( 38%)  …/owner/OwnerController.java <-> …/owner/VisitController.java
+   15 shared ( 36%)  …/owner/PetController.java <-> …/owner/VisitController.java
+   12 shared ( 35%)  …/owner/Pet.java <-> …/owner/Visit.java
+    8 shared ( 21%)  …/owner/OwnerController.java <-> …/owner/Pet.java
+    8 shared ( 21%)  …/owner/Owner.java <-> …/owner/Pet.java

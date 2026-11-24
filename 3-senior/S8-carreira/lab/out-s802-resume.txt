@@ -1,0 +1,72 @@
+== cv-junior-ruim.md: 89 words, 3 bullets in Experiência/Projetos
+WARN  L9     weak start 'Responsável': say what YOU did (Implementei, Medi, Reduzi...)
+WARN  L9     no number: what changed, and by how much?
+ERROR L9     study project claiming 'em produção': not true, and the interview will ask
+WARN  L10    weak start 'Participei': say what YOU did (Implementei, Medi, Reduzi...)
+WARN  L10    no number: what changed, and by how much?
+WARN  L11    '80%' without context: measured where, against what?
+WARN  doc    CPF: not needed to screen a developer (minimization, S5.05)
+WARN  doc    birth date / age: not needed to screen a developer (minimization, S5.05)
+WARN  doc    marital status: not needed to screen a developer (minimization, S5.05)
+WARN  doc    no GitHub link: where is the evidence?
+WARN  skills listed but never shown in a bullet: [Java, Spring Boot, Kafka, Docker, Kubernetes, AWS, Terraform, microservices]
+level signals (bullets with ...):
+   impact (number)                  1 of 3
+   scope (teams, clients, org)      0 of 3
+   decision (trade-off, ADR, RFC)   0 of 3
+   people (mentoring, reviews)      0 of 3
+FAIL: 1 error(s), 10 warning(s)
+
+== cv-junior.md: 267 words, 8 bullets in Experiência/Projetos
+WARN  skills listed but never shown in a bullet: [Java, Spring Boot, JPA/Hibernate, SQL, Docker, Git]
+level signals (bullets with ...):
+   impact (number)                  8 of 8
+   scope (teams, clients, org)      1 of 8
+   decision (trade-off, ADR, RFC)   1 of 8
+   people (mentoring, reviews)      1 of 8
+PASS: 0 error(s), 1 warning(s)
+
+== cv-senior.md: 214 words, 6 bullets in Experiência/Projetos
+WARN  L10    '99,9%' without context: measured where, against what?
+WARN  L13    no number: what changed, and by how much?
+WARN  skills listed but never shown in a bullet: [Java, Spring Boot, PostgreSQL, Kafka, Kubernetes, AWS, Terraform, observability]
+level signals (bullets with ...):
+   impact (number)                  5 of 6
+   scope (teams, clients, org)      2 of 6
+   decision (trade-off, ADR, RFC)   3 of 6
+   people (mentoring, reviews)      3 of 6
+PASS: 0 error(s), 3 warning(s)
+
+== cv-junior-ruim.md x vaga-pleno.md
+technology the job asks for | in the resume
+   Java                     | only listed
+   Spring Boot              | only listed
+   PostgreSQL               | MISSING
+   SQL                      | MISSING
+   automated tests          | MISSING
+   Kafka                    | only listed
+   RabbitMQ                 | MISSING
+   Docker                   | only listed
+   Kubernetes               | only listed
+   AWS                      | only listed
+   CI/CD                    | MISSING
+   observability            | MISSING
+   Git                      | MISSING
+coverage: 0 of 13 proven in a bullet, 6 only listed, 7 missing
+
+== cv-junior.md x vaga-pleno.md
+technology the job asks for | in the resume
+   Java                     | only listed
+   Spring Boot              | only listed
+   PostgreSQL               | proven in a bullet
+   SQL                      | only listed
+   automated tests          | proven in a bullet
+   Kafka                    | proven in a bullet
+   RabbitMQ                 | proven in a bullet
+   Docker                   | only listed
+   Kubernetes               | MISSING
+   AWS                      | proven in a bullet
+   CI/CD                    | MISSING
+   observability            | MISSING
+   Git                      | only listed
+coverage: 5 of 13 proven in a bullet, 5 only listed, 3 missing

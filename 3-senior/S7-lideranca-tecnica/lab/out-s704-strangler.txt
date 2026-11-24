@@ -1,0 +1,19 @@
+
+[correct] 24,390 ledger entries, 12,100 reads in parallel (10 simulated minutes, mean projector lag 150 ms)
+  naive equals()      :  1403 different (11.6%)
+  version-aware LAG   :  1403 (11.6%) -> expected, transient (would be a fallback with X-Min-Seq)
+  version-aware BUG   :     0
+  0 bugs in 12,100 reads -> 95% upper bound on the bug rate = 3/n = 0.025% (rule of three)
+  a bug that hits 1 read in 1,000 would show up at least once with probability 100.0%
+  a bug that hits 1 read in 10,000 would show up at least once with probability 70.2%
+  a bug that hits 1 read in 100,000 would show up at least once with probability 11.4%
+
+[m1] 24,390 ledger entries, 12,100 reads in parallel (10 simulated minutes, mean projector lag 150 ms)
+  naive equals()      : 12028 different (99.4%)
+  version-aware LAG   :    38 (0.3%) -> expected, transient (would be a fallback with X-Min-Seq)
+  version-aware BUG   : 11990  (first at read #35)
+
+[m2] 24,390 ledger entries, 12,100 reads in parallel (10 simulated minutes, mean projector lag 150 ms)
+  naive equals()      :  8216 different (67.9%)
+  version-aware LAG   :   475 (3.9%) -> expected, transient (would be a fallback with X-Min-Seq)
+  version-aware BUG   :  7741  (first at read #46)

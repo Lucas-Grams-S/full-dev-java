@@ -259,6 +259,18 @@
 | S6 | S6.04 | Como estimar o custo de um sistema novo? Quando comprar *Savings Plans*? Onde usar Spot? |
 | S6 | S6.05 | Por que separar ambientes em contas? O que uma SCP faz e não faz? Como testar um *guardrail*? |
 | S6 | S6.06 | A conta de nuvem dobrou: o que você faz? Por que detecção de anomalia por serviço? Como evitar ambientes esquecidos? |
+| S7 | S7.01 | Como você registra decisões de arquitetura? O que faz uma RFC dar errado? Quando NÃO escrever uma ADR? |
+| S7 | S7.02 | Como é um bom design doc? Como revisar um design com vários times? O que é um *spike* e quando usar? |
+| S7 | S7.03 | Como você estima uma tarefa? E um projeto de vários meses? Como gerencia riscos técnicos? |
+| S7 | S7.04 | Como convencer o negócio a pagar dívida técnica? Reescrever ou estrangular? Como garantir que o novo faz o mesmo que o velho? |
+| S7 | S7.05 | Como fazer uma boa revisão de código? Cobertura de 100% basta? Qual fluxo de *branches* e por quê? Como ajudar um júnior a crescer? |
+| S7 | S7.06 | Como explicar uma decisão técnica a alguém de negócio? Como priorizar dívida contra funcionalidade? E lançar com o orçamento de erro esgotado? |
+| S7 | S7.07 | Como você usa IA no desenvolvimento? Como proteger uma funcionalidade com LLM contra *prompt injection*? Como testar código que chama um LLM? |
+| S8 | S8.01 | Me apresente um projeto do seu GitHub. Você publicou uma senha: o que faz primeiro? Por que eu deveria confiar nesse número do seu README? |
+| S8 | S8.02 | Fale sobre você. Este número do seu currículo: como mediu? Por que está mudando de carreira (ou de empresa)? |
+| S8 | S8.03 | Como você sabe que sua solução está certa? Qual a complexidade e dá para melhorar? E se não couber em memória? |
+| S8 | S8.04 | Conte de quando discordou de uma decisão; conte de um erro seu. Como você começa um *system design*? |
+| S8 | S8.05 | Qual sua pretensão salarial? O teto é este: e agora? Onde quer estar em cinco anos (IC ou gestão)? |
 
 > Simulado de *system design* (45 min, rubrica de 100 pontos): `3-senior/S1-sistemas-distribuidos/checkpoint.md`, Parte 4.
 > Simulado de **investigação de performance** (60 min, rubrica de 100 pontos, **incidente sintético**): `3-senior/S2-performance-eficiencia/checkpoint.md`, Parte 4.
@@ -266,3 +278,6 @@
 > Simulado de **incidente e continuidade** (60 min, rubrica de 100 pontos, **cenário sintético**): `3-senior/S4-confiabilidade-sre/checkpoint.md`, Parte 4.
 > Simulado de **revisão de segurança antes de abrir o PayFlow a um parceiro** (60 min, rubrica de 100 pontos, **cenário sintético**): `3-senior/S5-seguranca-avancada/checkpoint.md`, Parte 4.
 > Simulado de **revisão de custo e arquitetura antes de ir para produção** (60 min, rubrica de 100 pontos, **cenário sintético**): `3-senior/S6-arquitetura-nuvem-custo/checkpoint.md`, Parte 4.
+> Simulado de **conduzir uma decisão grande** (60 min, rubrica de 100 pontos, **cenário sintético**): `3-senior/S7-lideranca-tecnica/checkpoint.md`, Parte 4.
+> Simulado do **dia de entrevistas** (apresentação, *live coding*, *system design*, comportamental e oferta; 90 min, rubrica de 100 pontos, **cenário sintético**): `3-senior/S8-carreira/checkpoint.md`, Parte 4.
+> 🟣 **Checkpoint de nível Sênior** ([`3-senior/checkpoint-senior.md`](../3-senior/checkpoint-senior.md)): **quiz integrador** de 20 questões que cruzam S1–S8, com respostas-modelo (Parte 3); **design doc "PayFlow 10×"** com rubrica (Parte 4); **incidente sintético e postmortem** (Parte 5); **simulado de *system design*** "entrega de *webhooks* a parceiros", 60 min, rubrica de 100 pontos (Parte 6).

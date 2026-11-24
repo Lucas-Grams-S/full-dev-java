@@ -1,0 +1,12 @@
+flaky tests | p per run | P(suite red) formula | simulated | with 1 retry | wasted builds/day (40 builds)
+          5 |      0.1% |                 0.5% |      0.5% |       0.000% | 0.2
+          5 |      0.5% |                 2.5% |      2.4% |       0.012% | 1.0
+          5 |      1.0% |                 4.9% |      4.9% |       0.050% | 2.0
+         20 |      0.1% |                 2.0% |      1.9% |       0.002% | 0.8
+         20 |      0.5% |                 9.5% |      9.5% |       0.050% | 3.8
+         20 |      1.0% |                18.2% |     18.8% |       0.200% | 7.3
+         50 |      0.1% |                 4.9% |      5.1% |       0.005% | 2.0
+         50 |      0.5% |                22.2% |     22.6% |       0.125% | 8.9
+         50 |      1.0% |                39.5% |     39.3% |       0.499% | 15.8
+
+A real intermittent bug failing 10% of runs: seen as red 10% of the time without retry, 1% with 1 retry, 0.1% with 2 retries.

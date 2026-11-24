@@ -156,3 +156,19 @@
 - *Building Microservices* (Newman): acoplamento e o custo de mudar (S6.03). Já listado no Pleno.
 - *Designing Data-Intensive Applications* (Kleppmann): formatos de dados e evolução de esquema, base da portabilidade dos dados (S6.03). Já listado.
 - *Site Reliability Engineering* (Google): postmortem sem culpa aplicado a custo (S6.06). Já listado no módulo S4.
+
+## Livros e leituras usados no módulo S7
+- *Fundamentals of Software Architecture* (Richards e Ford): decisões de arquitetura e ADRs; *trade-offs* como base do "alternativas consideradas" (S7.01, S7.02). Já listado no Pleno.
+- *Software Estimation: Demystifying the Black Art* (Steve McConnell): estimativa × meta × compromisso, cone da incerteza (S7.03). Citado de memória, **não conferido** (o fator de 4× do cone foi conferido na página da Construx).
+- *The Mythical Man-Month* (Fred Brooks): mais gente não encurta o prazo na mesma proporção; a lei de Conway citada no livro (S7.03, S7.06). Citado de memória.
+- *Your Code as a Crime Scene*, 2ª edição (Adam Tornhill): hotspots e acoplamento de mudança a partir do histórico do Git (S7.04). Página da editora conferida; conteúdo citado de memória.
+- *Working Effectively with Legacy Code* (Michael Feathers) e *Refactoring* (Martin Fowler): testes de caracterização e refatorações seguras na modernização (S7.04). Citados de memória.
+- *Team Topologies* (Matthew Skelton e Manuel Pais): tipos de time e modos de interação (S7.06). Conceitos conferidos no site; livro citado de memória.
+- *The Principles of Product Development Flow* (Donald Reinertsen): a origem do custo do atraso (S7.06). Citado de memória, **não conferido**.
+- *Site Reliability Engineering Workbook* (Google, gratuito online): o exemplo de política de *error budget* (S7.06). Conferido online.
+
+## Livros e leituras usados no módulo S8
+- *Getting to Yes* (Roger Fisher, William Ury e Bruce Patton): a origem do termo BATNA (S8.05). Citado de memória, **não conferido** (a definição usada na aula vem da página do PON/Harvard).
+- *The Staff Engineer's Path* (Tanya Reilly) e *Staff Engineer* (Will Larson; os arquétipos estão conferidos em staffeng.com): o caminho de contribuidor individual depois do sênior (S8.05). Livros citados de memória.
+- *The Manager's Path* (Camille Fournier): o caminho de gestão, degrau por degrau (S8.05). Citado de memória, **não conferido** (a página da editora respondeu 403).
+- *Tech Interview Handbook* (Yangshun Tay, gratuito online): currículo, *live coding*, comportamental e negociação (S8.02–S8.05). Conferido online.

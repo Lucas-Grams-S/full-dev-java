@@ -1,0 +1,6 @@
+repository HEAD 7f3d23d: 1387 tracked files
+ERROR  no-license         /: no LICENSE: by default nobody may reproduce, distribute or create derivative works (GitHub docs)
+REVIEW aws-access-key     5 line(s) in 3 file(s): values masked; files: 1-junior/J10-ci-nuvem-intro/J10.02-github-actions-analise-cache-e-seguranca-do-pipeline.md (1), 1-junior/J8-seguranca-essencial/J8.07-segredos-validacao-dependency-check-e-lgpd.md (2), 3-senior/S5-seguranca-avancada/lab/samples/trivy-iac/config.properties (2)
+REVIEW github-token       1 line(s) in 1 file(s): values masked; files: 3-senior/S5-seguranca-avancada/lab/samples/trivy-iac/config.properties (1)
+REVIEW password-value     81 line(s) in 55 file(s): values masked; files: 1-junior/J10-ci-nuvem-intro/lab/ci-lab/mvnw (1), 1-junior/J10-ci-nuvem-intro/lab/ci-lab/src/main/resources/application-dev.yml (2), 1-junior/J10-ci-nuvem-intro/lab/ci-lab/src/test/java/com/payflow/lite/AccountsApiTest.java (1), 1-junior/J3-banco-de-dados/J3.03-postgresql-docker-primeiros-comandos.md (2), 1-junior/J5-spring-boot/J5.02-spring-initializr-estrutura-e-starters.md (1), 1-junior/J5-spring-boot/J5.04-como-funciona-a-autoconfiguracao.md (1), ...
+FAIL: 1 error(s), 0 warning(s), 3 to review

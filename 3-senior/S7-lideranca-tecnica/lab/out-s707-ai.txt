@@ -1,0 +1,7 @@
+AI1 parsed=DELAYED needsHuman=false | format instruction added: Your response should be in JSON format.
+AI2 needsHuman=true reasons=[promise of money back ("estornar") needs a human, amount R$ 5.000,00 is not the transfer amount R$ 50,00]
+AI3 needsHuman=true reasons=[model output unusable: StreamReadException]
+AI4 tools offered=[transferStatus] | model asked transferStatus(t-1) -> "PENDING"
+AI5 manipulated model asked refundTransfer -> IllegalStateException: No ToolCallback found for tool name: refundTransfer
+AI6 ticket of u-ana asks for t-2 (owner u-bia) -> "NOT_FOUND"
+Tests: 6 green (mvn test exit 0)

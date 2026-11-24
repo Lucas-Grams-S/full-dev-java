@@ -1,0 +1,37 @@
+### examples
+case                             | brute force  | fast         | strictWindow | rawBigDecimal | noSort      
+empty                            | []           | []           | same         | same          | same        
+exactly 60 s apart (inclusive)   | [a2]         | [a2]         | []!          | same          | same        
+61 s apart                       | []           | []           | same         | same          | same        
+10.0 vs 10.00 (same money)       | [c2]         | [c2]         | same         | []!           | same        
+other target / other amount      | []           | []           | same         | same          | same        
+chain 0, 50, 100                 | [e2, e3]     | [e2, e3]     | same         | same          | same        
+same second twice                | [f2]         | [f2]         | same         | same          | same        
+mutant strictWindow: KILLED by 1 hand-made case(s)
+mutant rawBigDecimal: KILLED by 1 hand-made case(s)
+mutant noSort: SURVIVED all hand-made cases
+
+### fuzz
+fast           differs from brute force in    0 of 2000 random cases
+strictWindow   differs from brute force in   16 of 2000 random cases
+   smallest counterexample (3 transfers): brute=[t2] got=[]
+     t0 A0->A2 25.50 at 168
+     t1 A0->A1 10 at 111
+     t2 A0->A1 10.0 at 171
+rawBigDecimal  differs from brute force in  641 of 2000 random cases
+   smallest counterexample (2 transfers): brute=[t0] got=[]
+     t0 A1->A2 10 at 172
+     t1 A1->A2 10.0 at 155
+noSort         differs from brute force in  919 of 2000 random cases
+   smallest counterexample (2 transfers): brute=[t0] got=[t1]
+     t0 A1->A2 10 at 172
+     t1 A1->A2 10.0 at 155
+
+### scale
+n        | brute force: pair checks | fast: comparator calls + map ops | ratio
+1000     |                   999000 |                            10708 | 93 x
+5000     |                 24995000 |                            65192 | 383 x
+20000    |                399980000 |                           300691 | 1,330 x
+100000   |                (not run) |                          1734716 | brute force would need ~1.0e+10 pair checks
+1000000  |                (not run) |                         20641669 | brute force would need ~1.0e+12 pair checks
+

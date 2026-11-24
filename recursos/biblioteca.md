@@ -1139,3 +1139,79 @@
 | IAM: negar por região (exemplo) | 🟣 | https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html | NotAction de serviços globais (S6.05) | 2026-11-23 |
 | AWS Control Tower | 🟣 | https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html | Landing zone e controles (S6.05) | 2026-11-23 |
 | CloudWatch Logs: métricas | 🟣 | https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Monitoring-CloudWatch-Metrics.html | IncomingBytes por log group (S6.06) | 2026-11-23 |
+| Michael Nygard: Documenting Architecture Decisions | 🟣 | https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions | A origem da ADR; "uma decisão por ADR" (S7.01) | 2026-11-23 |
+| ADR (organização) e MADR | 🟣 | https://adr.github.io/madr/ | Modelo com *Considered Options* e *Decision Drivers* (S7.01) | 2026-11-23 |
+| Modelos de ADR (Joel Parker Henderson) | 🟣 | https://github.com/joelparkerhenderson/architecture-decision-record | Coleção de modelos e exemplos (S7.01) | 2026-11-23 |
+| AWS Prescriptive Guidance: processo de ADR | 🟣 | https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html | Ciclo de vida de uma ADR (S7.01) | 2026-11-23 |
+| Harmel-Law: Scaling the Practice of Architecture, Conversationally | 🟣 | https://martinfowler.com/articles/scaling-architecture-conversationally.html | *Advice process* (S7.01) | 2026-11-23 |
+| DACI (Atlassian) | 🟣 | https://www.atlassian.com/team-playbook/plays/daci | Um só *Approver* (S7.01) | 2026-11-23 |
+| JEP 1 (processo de JEPs) | 🟣 | https://openjdk.org/jeps/1 | O "processo de RFC" do JDK (S7.01) | 2026-11-23 |
+| RFC 2119 | 🟣 | https://www.rfc-editor.org/rfc/rfc2119 | MUST/SHOULD/MAY em requisitos (S7.01) | 2026-11-23 |
+| Malte Ubl: Design Docs at Google | 🟣 | https://www.industrialempathy.com/posts/design-docs-at-google/ | Estrutura, não-objetivos, quando não escrever (S7.02) | 2026-11-23 |
+| Spring Framework: propagação de transações | 🟣 | https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html | `UnexpectedRollbackException`, `REQUIRES_NEW` (S7.02) | 2026-11-23 |
+| Modelo C4 | 🟣 | https://c4model.com/ | Diagramas de arquitetura em níveis (S7.02) | 2026-11-23 |
+| Construx: o cone da incerteza | 🟣 | https://www.construx.com/books/the-cone-of-uncertainty/ | 4× para cada lado no início (S7.03) | 2026-11-23 |
+| Martin Fowler: PurposeOfEstimation | 🟣 | https://martinfowler.com/bliki/PurposeOfEstimation.html | Estimar quando ajuda uma decisão (S7.03) | 2026-11-23 |
+| Planning poker (Mountain Goat) | 🔵 | https://www.mountaingoatsoftware.com/agile/planning-poker | Estimativa relativa em grupo (S7.03) | 2026-11-23 |
+| Focused Objective (Troy Magennis) | 🟣 | https://www.focusedobjective.com/ | Previsão por Monte Carlo e vazão (S7.03) | 2026-11-23 |
+| Martin Fowler: TechnicalDebtQuadrant | 🟣 | https://martinfowler.com/bliki/TechnicalDebtQuadrant.html | Prudente/imprudente × deliberada/inadvertida (S7.04) | 2026-11-23 |
+| Patterns of Legacy Displacement | 🟣 | https://martinfowler.com/articles/patterns-legacy-displacement/ | Arquitetura de transição e outros padrões (S7.04) | 2026-11-23 |
+| Martin Fowler: BranchByAbstraction | 🟣 | https://martinfowler.com/bliki/BranchByAbstraction.html | Trocar um componente por trás de uma abstração (S7.04) | 2026-11-23 |
+| OpenRewrite | 🟣 | https://docs.openrewrite.org/ | Refatoração automatizada; receitas Java/Jakarta/Spring (S7.04) | 2026-11-23 |
+| Moderne Source Available License | 🟣 | https://docs.moderne.io/licensing/moderne-source-available-license | Licença das receitas do OpenRewrite (S7.04) | 2026-11-23 |
+| Your Code as a Crime Scene, 2ª ed. (Tornhill) | 🟣 | https://pragprog.com/titles/atcrime2/your-code-as-a-crime-scene-second-edition/ | Hotspots e acoplamento de mudança (S7.04) | 2026-11-23 |
+| code-maat | 🟣 | https://github.com/adamtornhill/code-maat | Ferramenta de análise do histórico do Git (S7.04) | 2026-11-23 |
+| RFC 9745 (cabeçalho Deprecation) | 🟣 | https://www.rfc-editor.org/rfc/rfc9745.html | Depreciação com `Sunset` (S7.04) | 2026-11-23 |
+| Google Engineering Practices: revisão de código | 🔵→🟣 | https://google.github.io/eng-practices/review/ | PR pequeno, um dia útil (S7.05) | 2026-11-23 |
+| Conventional Comments | 🔵→🟣 | https://conventionalcomments.org/ | Rótulos e decorações de comentários (S7.05) | 2026-11-23 |
+| GitHub: CODEOWNERS | 🔵 | https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners | Donos de código por pasta (S7.05) | 2026-11-23 |
+| Trunk Based Development | 🔵→🟣 | https://trunkbaseddevelopment.com/ | *Branches* curtos e *trunk* único (S7.05) | 2026-11-23 |
+| Git Flow (com a nota de 2020) | 🔵 | https://nvie.com/posts/a-successful-git-branching-model/ | Quando o Git Flow (não) serve (S7.05) | 2026-11-23 |
+| Martin Fowler: Patterns for Managing Source Code Branches | 🔵→🟣 | https://martinfowler.com/articles/branching-patterns.html | Comparação de fluxos de *branches* (S7.05) | 2026-11-23 |
+| PIT (teste de mutação) | 🔵→🟣 | https://pitest.org/ | Mutação × cobertura (S7.05) | 2026-11-23 |
+| Google Testing Blog: Flaky Tests at Google | 🟣 | https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html | 1,5% das execuções, ~16% dos testes (S7.05) | 2026-11-23 |
+| Martin Fowler: Eradicating Non-Determinism in Tests | 🔵→🟣 | https://martinfowler.com/articles/nonDeterminism.html | Quarentena e causas de instabilidade (S7.05) | 2026-11-23 |
+| CCL: SBI e intenção | 🟣 | https://www.ccl.org/articles/leading-effectively-articles/closing-the-gap-between-intent-vs-impact-sbii/ | *Feedback* específico (S7.05) | 2026-11-23 |
+| Black Swan Farming: CD3 | 🟣 | https://blackswanfarming.com/cost-of-delay-divided-by-duration/ | Custo do atraso ÷ duração (S7.06) | 2026-11-23 |
+| SRE Workbook: política de error budget | 🟣 | https://sre.google/workbook/error-budget-policy/ | Orçamento como contrato com produto (S7.06) | 2026-11-23 |
+| Team Topologies: conceitos-chave | 🟣 | https://teamtopologies.com/key-concepts | Tipos de time e modos de interação (S7.06) | 2026-11-23 |
+| Mel Conway: Conway's Law | 🟣 | https://www.melconway.com/Home/Conways_Law.html | A frase original (S7.06) | 2026-11-23 |
+| Spring AI (referência) | 🟣 | https://docs.spring.io/spring-ai/reference/ | `ChatClient`, saída estruturada, ferramentas (S7.07) | 2026-11-23 |
+| Spring AI 2.0: ferramentas | 🟣 | https://docs.spring.io/spring-ai/reference/2.0/api/tools.html | `throw-exception-on-error` (S7.07) | 2026-11-23 |
+| Spring AI 2.0: Anthropic | 🟣 | https://docs.spring.io/spring-ai/reference/2.0/api/chat/anthropic-chat.html | Propriedades e padrões (S7.07) | 2026-11-23 |
+| Claude: visão geral dos modelos | 🟣 | https://platform.claude.com/docs/en/about-claude/models/overview | IDs, esforço padrão, *thinking* (S7.07) | 2026-11-23 |
+| OWASP Top 10 para LLM (2025) | 🟣 | https://genai.owasp.org/llm-top-10/ | LLM01, LLM05, LLM06 (S7.07) | 2026-11-23 |
+| NIST AI RMF | 🟣 | https://www.nist.gov/itl/ai-risk-management-framework | Gestão de risco de IA (S7.07) | 2026-11-23 |
+| GitHub: sobre READMEs | 🟢→🟣 | https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes | Onde o GitHub procura o README e o que ele costuma ter (S8.01) | 2026-11-24 |
+| GitHub: diagramas Mermaid | 🟢→🟣 | https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams | Diagrama vivo no README (S8.01) | 2026-11-24 |
+| GitHub: README de perfil | 🟢→🟣 | https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme | Repositório com o nome do usuário (S8.01) | 2026-11-24 |
+| GitHub: fixar itens no perfil | 🟢→🟣 | https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/pinning-items-to-your-profile | Até seis itens (S8.01) | 2026-11-24 |
+| GitHub: topics | 🟢→🟣 | https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics | Regras de nome, limite de 20 (S8.01) | 2026-11-24 |
+| GitHub: badge de workflow | 🟢→🟣 | https://docs.github.com/en/actions/how-tos/monitor-workflows/add-a-status-badge | URL do *badge* de CI (S8.01) | 2026-11-24 |
+| GitHub: licenciar um repositório | 🟢→🟣 | https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository | Sem licença = direitos reservados (S8.01) | 2026-11-24 |
+| choosealicense.com (e 'No License') | 🟢→🟣 | https://choosealicense.com/ | Escolher licença; o que acontece sem ela (S8.01) | 2026-11-24 |
+| GitHub: remover dados sensíveis | 🔵→🟣 | https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository | Trocar o segredo primeiro; efeitos da reescrita (S8.01) | 2026-11-24 |
+| GitHub: push protection | 🔵→🟣 | https://docs.github.com/en/code-security/secret-scanning/introduction/about-push-protection | Bloqueio de segredos conhecidos (S8.01) | 2026-11-24 |
+| GitHub: e-mail dos commits | 🟢→🟣 | https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address | *No-reply*; commits antigos não mudam (S8.01) | 2026-11-24 |
+| git-filter-repo | 🔵→🟣 | https://github.com/newren/git-filter-repo | Reescrita de histórico recomendada (S8.01) | 2026-11-24 |
+| Tech Interview Handbook: currículo | 🟢→🟣 | https://www.techinterviewhandbook.org/resume/ | Formato de *bullet*, ATS, PDF (S8.02) | 2026-11-24 |
+| Tech Interview Handbook: autoapresentação | 🟢→🟣 | https://www.techinterviewhandbook.org/self-introduction/ | O *pitch* curto (S8.02) | 2026-11-24 |
+| LinkedIn: criar um bom perfil | 🟢→🟣 | https://www.linkedin.com/help/linkedin/answer/a554351 | Perfil completo e representativo (S8.02) | 2026-11-24 |
+| Tech Interview Handbook: rubricas de coding | 🟢→🟣 | https://www.techinterviewhandbook.org/coding-interview-rubrics/ | As 4 dimensões do *live coding* (S8.03) | 2026-11-24 |
+| Tech Interview Handbook: técnicas de coding | 🟢→🟣 | https://www.techinterviewhandbook.org/coding-interview-techniques/ | Esclarecer, abordar, otimizar (S8.03) | 2026-11-24 |
+| Tech Interview Handbook: comportamental e rubricas | 🔵→🟣 | https://www.techinterviewhandbook.org/behavioral-interview-rubrics/ | Áreas de foco; escopo por nível (S8.04) | 2026-11-24 |
+| Tech Interview Handbook: candidatos sêniores | 🟣 | https://www.techinterviewhandbook.org/behavioral-interview-senior-candidates/ | Erros comuns de sêniores (S8.04) | 2026-11-24 |
+| MIT CAPD: método STAR | 🟢→🟣 | https://capd.mit.edu/resources/the-star-method-for-behavioral-interviews/ | STAR com frases em primeira pessoa (S8.04) | 2026-11-24 |
+| Hello Interview: roteiro de system design | 🔵→🟣 | https://www.hellointerview.com/learn/system-design/in-a-hurry/delivery | Tempos por etapa (S8.04) | 2026-11-24 |
+| System Design Primer | 🔵→🟣 | https://github.com/donnemartin/system-design-primer | Repositório de estudo (S8.04) | 2026-11-24 |
+| Receita Federal: tabelas de 2026 | 🟢→🟣 | https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026 | IRRF mensal e redução (S8.05) | 2026-11-24 |
+| Receita Federal: exemplos da Lei 15.270/2025 | 🟢→🟣 | https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/exemplos-de-aplicacao-da-lei-15-270-2025 | 5 exemplos usados como teste (S8.05) | 2026-11-24 |
+| INSS: tabela de contribuição mensal | 🟢→🟣 | https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal | Faixas de 2026 (S8.05) | 2026-11-24 |
+| Ministério do Trabalho: FGTS | 🟢→🟣 | https://www.gov.br/trabalho-e-emprego/pt-br/servicos/trabalhador/fgts | Depósito de 8,0% (S8.05) | 2026-11-24 |
+| PON (Harvard): BATNA | 🔵→🟣 | https://www.pon.harvard.edu/daily/batna/translate-your-batna-to-the-current-deal/ | Definição e uso da BATNA (S8.05) | 2026-11-24 |
+| Patrick McKenzie: Salary Negotiation | 🔵→🟣 | https://www.kalzumeus.com/2012/01/23/salary-negotiation/ | Não dar o número primeiro (S8.05) | 2026-11-24 |
+| Haseeb Qureshi: Ten Rules for Negotiating a Job Offer | 🔵→🟣 | https://haseebq.com/my-ten-rules-for-negotiating-a-job-offer/ | As dez regras (S8.05) | 2026-11-24 |
+| StaffEng: arquétipos de staff | 🟣 | https://staffeng.com/guides/staff-archetypes/ | Tech Lead, Architect, Solver, Right Hand (S8.05) | 2026-11-24 |
+| Charity Majors: The Engineer/Manager Pendulum | 🟣 | https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/ | Gestão não é promoção (S8.05) | 2026-11-24 |
+| Dropbox Engineering Career Framework | 🔵→🟣 | https://dropbox.github.io/dbx-career-framework/ | Níveis IC1–IC7 (S8.02, S8.05) | 2026-11-24 |
+| Julia Evans: brag document | 🟢→🟣 | https://jvns.ca/blog/brag-documents/ | Registro datado do impacto (S8.05) | 2026-11-24 |

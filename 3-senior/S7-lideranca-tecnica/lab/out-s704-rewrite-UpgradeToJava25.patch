@@ -1,0 +1,39 @@
+diff --git a/pom.xml b/pom.xml
+index ba7c78e..48c2311 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -10,8 +10,8 @@ org.openrewrite.java.migrate.UpgradeToJava25
+   <artifactId>legacy-upgrade</artifactId>
+   <version>1.0.0</version>
+   <properties>
+-    <maven.compiler.source>1.8</maven.compiler.source>
+-    <maven.compiler.target>1.8</maven.compiler.target>
++    <maven.compiler.source>25</maven.compiler.source>
++    <maven.compiler.target>25</maven.compiler.target>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+   <dependencies>
+
+diff --git a/src/main/java/com/legacybank/LegacyFees.java b/src/main/java/com/legacybank/LegacyFees.java
+index da8bdcd..8e14b76 100644
+--- a/src/main/java/com/legacybank/LegacyFees.java
++++ b/src/main/java/com/legacybank/LegacyFees.java
+@@ -8,14 +8,13 @@ org.openrewrite.java.migrate.UpgradeToJava25
+ 
+     public static List<Integer> tiers() {
+         List<Integer> tiers = new ArrayList<Integer>();
+-        tiers.add(new Integer(100));
+-        tiers.add(new Integer(500));
++        tiers.add(Integer.valueOf(100));
++        tiers.add(Integer.valueOf(500));
+         return Collections.unmodifiableList(tiers);
+     }
+ 
+     public static String describe(Object value) {
+-        if (value instanceof String) {
+-            String s = (String) value;
++        if (value instanceof String s) {
+             return "text:" + s.trim();
+         }
+         StringBuffer sb = new StringBuffer();
+

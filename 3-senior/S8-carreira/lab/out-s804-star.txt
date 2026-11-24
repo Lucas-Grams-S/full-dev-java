@@ -1,0 +1,32 @@
+== 01-cobertura-que-mentia.md: 153 words (~1.2 min), parts [Situação, Tarefa, Ação, Resultado], themes [crescimento, iniciativa, perseverança]
+   PASS
+== 02-decidir-sem-todas-as-respostas.md: 135 words (~1.0 min), parts [Situação, Tarefa, Ação, Resultado], themes [ambiguidade, comunicação]
+   PASS
+== 03-conflito-no-atendimento.md: 136 words (~1.0 min), parts [Situação, Tarefa, Ação, Resultado], themes [conflito, empatia]
+   PASS
+== 04-ruim.md: 47 words (~0.4 min), parts [Situação, Ação, Resultado], themes [conflito]
+   ERROR missing part: Tarefa
+   ERROR blame: 'culpa' (blameless, S4.03)
+   WARN  the longest part is 'Situação', not 'Ação': tell what YOU did
+   WARN  Ação has 4 'nós/o time' x 0 'eu': use I statements (MIT CAPD)
+   WARN  Resultado without a number or a lesson
+   FAIL
+
+theme \ story          | 1  | 2  | 3  | 4  | usable stories
+motivação              |    |    |    |    | 0
+iniciativa             | x  |    |    |    | 1
+ambiguidade            |    | x  |    |    | 1
+perseverança           | x  |    |    |    | 1
+conflito               |    |    | x  | x! | 1
+empatia                |    |    | x  |    | 1
+crescimento            | x  |    |    |    | 1
+comunicação            |    | x  |    |    | 1
+liderança de pessoas   |    |    |    |    | 0
+stakeholders           |    |    |    |    | 0
+(x! = the story covers the theme but FAILS the lint: it does not count)
+BANK FAIL: no usable story for [motivação, liderança de pessoas, stakeholders]
+
+### mutant: story 1 told with 'nós' (same facts)
+== 01-mutante-nos.md: 153 words (~1.2 min), parts [Situação, Tarefa, Ação, Resultado], themes [crescimento, iniciativa, perseverança]
+   WARN  Ação has 6 'nós/o time' x 0 'eu': use I statements (MIT CAPD)
+   PASS

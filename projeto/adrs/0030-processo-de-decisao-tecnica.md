@@ -1,0 +1,10 @@
+# ADR 0030 — Processo de decisão técnica: ADR curta por decisão, RFC para o que cruza fronteiras, design doc para o "como" e *linter* no CI
+
+- **Status:** aceita (S7, 2026-11-23); evidência: `3-senior/S7-lideranca-tecnica/lab/DocLab.java` executado sobre as 29 ADRs reais (6 erros no índice, 15 ADRs com mais de 3 regras ou 800 palavras) e sobre RFCs e design docs bons, ruins e mutantes.
+- **Contexto:** até a S6, cada módulo gerou **uma** ADR grande (7 a 15 regras, até 1.767 palavras). Elas resumem bem o módulo, mas não podem ser **substituídas em parte** e são difíceis de achar por assunto. O índice das ADRs tem 6 linhas quebradas que ninguém viu em 6 módulos. Nenhuma decisão que afeta outros times tinha prazo ou decisor explícito.
+- **Opções:** (A) manter o formato atual; (B) reescrever as 15 ADRs grandes em ADRs pequenas; (C) daqui em diante, **uma decisão por ADR**, RFC com prazo e um decisor quando a decisão cruza módulos ou times, design doc para o "como" de mudanças com risco, e verificação de forma no CI; as ADRs antigas ficam imutáveis.
+- **Decisão:** (C). ADR: contexto, opções (≥ 2, com "não fazer nada" quando couber), decisão, status do vocabulário `proposta | aceita | rejeitada | substituída | obsoleta`, consequências **(+) e (−)** e "revisar quando". RFC: DACI com **um** decisor, prazo de comentários, alternativas, riscos e perguntas com dono, e a ADR resultante. `DocLab` no CI: erros de índice e de campos **reprovam**; tamanho é **aviso** (3 regras ou 800 palavras, proposta). Decisões 260 e 261.
+- **Consequências:**
+  - (+) Cada decisão pode ser substituída sozinha; o índice deixa de quebrar em silêncio; decisões de vários times ganham prazo e dono.
+  - (−) Mais arquivos; o *linter* só vê forma (uma ADR que passa pode estar errada); o índice antigo precisa de correção manual (Correções pendentes).
+- **Revisar quando:** o *linter* der o primeiro falso positivo no CI (ajustar a regra, não desligá-la); houver mais de um time escrevendo ADRs (avaliar o *advice process*); 6 meses de uso.

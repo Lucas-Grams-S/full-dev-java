@@ -1,0 +1,26 @@
+### good design doc
+Design doc: design-transferencias-recorrentes.md (1608 words)
+
+Result: 0 error(s), 0 warning(s) -> PASS
+
+### bad design doc
+Design doc: design-ruim.md (92 words)
+E empty-non-goals        say what you will NOT do
+W goals-without-number   a goal without a number cannot be checked
+E alternatives           1 alternative(s); need >= 2
+W alternative-without-why 1 alternative(s) without "porque"
+E no-rollback            how do we go back?
+E risk-without-owner     1 risk(s) without "dono:"
+W question-without-owner 1 question(s) without "dono:"
+W no-slo-number          SLO with a number
+W cost-without-money     cost in currency, dated
+W no-diagram             one diagram saves a meeting
+W placeholders           1 TODO/TBD/a definir
+
+Result: 4 error(s), 7 warning(s) -> FAIL
+
+### mutant: good design doc without the word 'reversão'
+Design doc: design-mutant.md (1608 words)
+E no-rollback            how do we go back?
+
+Result: 1 error(s), 0 warning(s) -> FAIL

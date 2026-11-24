@@ -778,3 +778,55 @@
 | AWS Control Tower / IAM Identity Center | Orquestrador de *landing zone* com controles prontos / acesso de pessoas a várias contas (antigo AWS SSO) | S6.05 |
 | Papel vinculado a serviço | Papel do IAM usado por um serviço da AWS; não é afetado por SCP | S6.05 |
 | Vazamento lento (de custo) | Aumento gradual que nenhum detector diário acusa; aparece na revisão mensal e no custo unitário | S6.06 |
+| ADR (*Architecture Decision Record*) | Registro curto e imutável de **uma** decisão: contexto, opções, decisão, status, consequências (+/−) e gatilho de revisão; mudou → ADR nova que **substitui** | S7.01 |
+| RFC (*Request for Comments*) | Proposta escrita posta em revisão **antes** da decisão, com prazo de comentários e um decisor; termina numa ADR | S7.01 |
+| DACI | Papéis de decisão: *Driver* (conduz), *Approver* (**uma** pessoa decide), *Contributors* (voz), *Informed* | S7.01 |
+| *Advice process* | Qualquer pessoa pode decidir, depois de consultar os afetados e os especialistas, e registra a decisão | S7.01 |
+| Design doc | Documento do "como": contexto, objetivos com número, **não-objetivos**, desenho, alternativas, segurança, observabilidade, custo, plano com reversão, riscos | S7.02 |
+| Não-objetivo | Algo **razoável** que se escolheu não fazer (≠ objetivo negado como "não pode cair") | S7.02 |
+| *Spike* | Experimento curto, com prazo e descartável, que responde uma pergunta técnica antes de estimar | S7.02 |
+| Estimativa × meta × compromisso | Previsão com incerteza / desejo do negócio / promessa negociada num percentil escolhido | S7.03 |
+| Cone da incerteza | A faixa de erro da estimativa é larga no início (até 4× para cada lado) e estreita com as definições | S7.03 |
+| Três pontos / PERT | Otimista, mais provável, pessimista; média PERT ≈ (o + 4m + p) / 6 | S7.03 |
+| Monte Carlo (estimativa) | Sortear muitas vezes as durações (ou semanas de vazão) e ler percentis da soma | S7.03 |
+| p85 (compromisso) | Valor que é cumprido em 85% dos cenários simulados: compromisso com folga declarada | S7.03 |
+| Registro de riscos | Risco, probabilidade, impacto, exposição (P × I), resposta, custo da mitigação, dono, gatilho | S7.03 |
+| Dívida técnica (juros × principal) | Custo recorrente em cada mudança na área / esforço para pagar; quadrante prudente/imprudente × deliberada/inadvertida | S7.04 |
+| Hotspot | Arquivo muito alterado **e** complexo: onde a dívida cobra juros | S7.04 |
+| Acoplamento de mudança | Arquivos que mudam juntos nos mesmos *commits* | S7.04 |
+| *Branch by abstraction* | Pôr uma abstração na frente do componente a trocar, migrar os clientes para ela e trocar a implementação atrás | S7.04 |
+| Leitura em paralelo (por versão) | As duas implementações respondem, uma vale e as diferenças são comparadas na mesma versão dos dados (separa atraso de *bug*) | S7.04 |
+| Regra de três (estatística) | 0 eventos em *n* tentativas → taxa < 3/*n* com 95% de confiança | S7.04 |
+| Arquitetura de transição | Peças criadas para facilitar uma substituição e que serão **removidas** quando ela acabar | S7.04 |
+| OpenRewrite (receita, *dry run*) | Refatoração automatizada por árvore com tipos; *dry run* gera o *patch* sem alterar arquivos | S7.04 |
+| Conventional Comments | Rótulos de comentário de revisão (`praise:`, `nitpick:`, `issue:`…) com `(blocking)`/`(non-blocking)` | S7.05 |
+| CODEOWNERS | Arquivo do GitHub que define quem revisa cada pasta | S7.05 |
+| *Trunk-based development* | Todos integram num único *branch*; *branches* curtos; trabalho grande atrás de *flags* | S7.05 |
+| Teste de mutação (PIT) | A ferramenta altera o *bytecode* (mutantes) e vê se algum teste falha; sobreviventes = defeitos que os testes não percebem | S7.05 |
+| Teste instável (*flaky*) / quarentena | Passa e falha com o mesmo código / fora do portão, medido, com dono e prazo | S7.05 |
+| Mentor / *coach* / patrocinador | Compartilha experiência / pergunta para a pessoa achar a resposta / abre portas | S7.05 |
+| SBI (*feedback*) | Situação → Comportamento → Impacto (e a pergunta da intenção) | S7.05 |
+| Custo do atraso / CD3 | Quanto se perde por semana de atraso / ordenar por custo do atraso ÷ duração (uma forma de WSJF) | S7.06 |
+| *One-pager* / BLUF | Uma página com a recomendação primeiro (*bottom line up front*) | S7.06 |
+| Lei de Conway | O desenho do sistema copia a estrutura de comunicação da organização | S7.06 |
+| *Team Topologies* (modos de interação) | Colaboração, X-como-serviço, facilitação; times alinhados ao fluxo, habilitadores, subsistema complicado, plataforma | S7.06 |
+| Spring AI (`ChatModel`, `ChatClient`) | Abstração do modelo de linguagem / API fluente de *prompt* e resposta | S7.07 |
+| Saída estruturada | O Spring AI acrescenta instruções de formato JSON ao *prompt* e converte a resposta num tipo Java | S7.07 |
+| Ferramenta (*tool calling*) | Método `@Tool` que o modelo **pede** e a aplicação **executa** (`ToolCallingManager`) | S7.07 |
+| *Prompt injection* / agência excessiva | Texto de entrada que altera o comportamento do modelo / dar ao sistema ferramentas e permissões demais (OWASP LLM01/LLM06) | S7.07 |
+| README de portfólio | README que apresenta o projeto a quem avalia: o que é, o que demonstra (competência → evidência), arquitetura, como rodar e testar, decisões, **limitações**, licença | S8.01 |
+| *Topics* / repositórios fixados / README de perfil | Etiquetas públicas do repositório (≤ 20) / até seis itens em destaque no perfil / `README.md` do repositório com o nome do usuário | S8.01 |
+| *Push protection* | Bloqueio do GitHub ao enviar tipos conhecidos de segredo (ligado por padrão para usuários em repositórios públicos) | S8.01 |
+| `git-filter-repo` / `refs/original` | Ferramenta recomendada para reescrever o histórico / referências de *backup* que o `filter-branch` deixa (mantêm o segredo alcançável) | S8.01 |
+| ATS (*applicant tracking system*) | Sistema de rastreamento de candidatos que lê e filtra currículos antes de um humano | S8.02 |
+| *Bullet* de impacto | Linha do currículo: verbo na 1ª pessoa + o que você fez + resultado com número + onde foi medido | S8.02 |
+| *Live coding* / *take-home* | Programar ao vivo com o entrevistador / projeto pequeno feito em casa | S8.03 |
+| Teste diferencial (oráculo) | Comparar a solução com uma versão simples e correta (força bruta) em entradas aleatórias com semente fixa | S8.03 |
+| Ordenação estável | Ordenação que não troca a ordem de elementos iguais (`List.sort`) | S8.03 |
+| STAR | Situação, Tarefa, Ação, Resultado: estrutura de resposta comportamental (Ação na 1ª pessoa, a parte mais longa) | S8.04 |
+| Banco de histórias | Conjunto de histórias reais marcadas por tema, conferido para não deixar tema sem história | S8.04 |
+| BATNA / ponto de reserva | Melhor alternativa a um acordo negociado / o mínimo aceitável **nesta** oferta, derivado da BATNA | S8.05 |
+| CLT × PJ | Emprego com carteira (13º, férias + 1/3, FGTS 8%, INSS/IRRF na fonte) × prestação de serviço por empresa (fatura, impostos do regime, sem esses direitos) | S8.05 |
+| Desconto simplificado / redução do IRRF (2026) | R$ 607,20 no lugar das deduções legais, se melhor / redução que zera o imposto até R$ 5.000 e decresce até R$ 7.350 (Lei 15.270/2025) | S8.05 |
+| *Staff*/principal × *engineering manager* | Trilha técnica de contribuidor individual (arquétipos *Tech Lead*, *Architect*, *Solver*, *Right Hand*) × trilha de gestão de pessoas | S8.05 |
+| *Brag document* | Registro datado do que você fez e do impacto, para avaliações e promoção | S8.05 |

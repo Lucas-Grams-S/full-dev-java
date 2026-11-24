@@ -460,3 +460,29 @@ Fontes: execução local (**medido**), `dl.k8s.io`, API de *releases* do GitHub,
 | Terraform / provedor AWS | **1.17.1** / **6.73.0** (cache da P8) | `validate` em `finops` e `organization` + mutante; `aws_ce_cost_allocation_tag`, `aws_budgets_budget`, `aws_ce_anomaly_monitor`/`_subscription`, `aws_organizations_*` | execução |
 | AWS SDK for Java v2 | **2.59.1** (`~/.m2`, P9): SNS, SQS, Secrets Manager | 7 classes de exemplo **compiladas**; S3 não estava no cache | execução |
 | Bibliotecas novas no PayFlow | **nenhuma** (artefatos de arquitetura e custo; ArchUnit já existe desde a P4) | | — |
+
+## Referências do módulo S7 (verificadas em 2026-11-23)
+| Tecnologia | Versão / fato | Observação | Fonte |
+|---|---|---|---|
+| JDK | **OpenJDK 25.0.5.1**; *tzdata* da JVM **2026f** (`America/Sao_Paulo` sem transição de horário de verão encontrada até 2030) | o `java` padrão da máquina é o 17: use `JAVA_HOME` | execução |
+| **Spring Boot 4.2.0** | publicado no Maven Central em **19/11/2026** (gerencia Spring Framework 7.1) | **não adotado**: a decisão 2 (4.1.x, 4.1.2) continua até o aluno decidir | Maven Central |
+| **Spring AI** | **2.0.2** (compilado contra o Boot **4.1.2**; `anthropic-java-core` 2.72.0) e **2.1.0** (19/11/2026, compilado contra o Boot **4.2.0**; `anthropic-java-core` 3.8.0); a página "Getting Started" da 2.1.0 diz "2.0.x suporta Boot 4.0.x e 4.1.x" | PayFlow (se adotar): **2.0.2** sob o BOM do Boot; propriedades `spring.ai.anthropic.chat.model`/`max-tokens` (padrões `claude-haiku-4-5`/4096; `chat.options.*` obsoleto desde 2.0.0); `spring.ai.tools.throw-exception-on-error` padrão `false` | Maven Central; *sources*; docs.spring.io/spring-ai |
+| Claude (Anthropic) | **`claude-opus-5-5`**: *thinking* adaptativo **sempre ligado**, esforço padrão **`medium`**; sem parâmetros de amostragem | **nenhuma chamada** feita | platform.claude.com (página de modelos) |
+| OpenRewrite | `rewrite-maven-plugin` **6.46.1** (Apache 2.0); receitas `rewrite-migrate-java` **3.42.1** e `rewrite-spring` **6.37.1** (**Moderne Source Available License**); receitas `UpgradeToJava25`, `JavaxMigrationToJakarta`, `UpgradeSpringBoot_3_0`, `UpgradeSpringBoot_4_0` | executado em *dry run* (Java 25, Jakarta); Spring **não** executado | Maven Central; JARs; docs.moderne.io |
+| PIT | `pitest-maven` **1.30.2** + `pitest-junit5-plugin` **1.2.3** | funcionou com **JUnit 6.1.3** (com ou sem o *launcher* declarado) | execução |
+| JaCoCo | **0.8.16** | | execução |
+| JUnit | **6.1.3** (o BOM mais novo é 6.2.0-M1, *milestone*) | | Maven Central |
+| ArchUnit | **1.5.1** no Maven Central (o PayFlow usa a 1.4.2 da P4 via Modulith) | não usado na S7 | Maven Central |
+| `spring-petclinic` | *commit* `500158f732419217507c7656904b8e6aa1bcc0d6` (29/09/2026), 1.047 *commits* | histórico analisado pelo `HotspotLab` | github.com |
+| Bibliotecas novas no PayFlow | **nenhuma** obrigatória (PIT como *plugin* de CI; Spring AI **não** adotado) | | — |
+
+## Referências do módulo S8 (verificadas em 2026-11-24)
+| Tecnologia | Versão / fato | Observação | Fonte |
+|---|---|---|---|
+| JDK | **OpenJDK 25.0.5.1**; `List.sort` é **estável** (Javadoc do Java 25) | o `java` padrão da máquina é o 17: use `JAVA_HOME` | execução; docs.oracle.com |
+| git | **2.53.0**; `git filter-branch` (aviso de "armadilhas" no manual); `git-filter-repo` **não instalado** | o GitHub recomenda o `git-filter-repo` para remover dados sensíveis | execução; git-scm.com; docs.github.com |
+| GitHub | README em raiz/`.github`/`docs`; Mermaid; *topics* ≤ 20 (≤ 50 caracteres); até 6 fixados; README de perfil; sem licença = direitos reservados; *push protection* do usuário ligada por padrão para repositórios públicos; e-mail *no-reply* | lido em 23/11/2026 | docs.github.com |
+| INSS 2026 (empregado) | 7,5% até R$ 1.621,00; 9% até R$ 2.902,84; 12% até R$ 4.354,27; 14% até R$ 8.475,55 (teto) | Portaria Interministerial MPS/MF nº 13, de 09/01/2026 | gov.br/inss |
+| IRRF 2026 (mensal) | isento até R$ 2.428,80; 7,5%/15%/22,5%/27,5% com parcelas R$ 182,16/394,16/675,49/908,73; desconto simplificado R$ 607,20; **redução** até R$ 5.000 (zera, até R$ 312,89) e de R$ 5.000,01 a R$ 7.350 (R$ 978,62 − 0,133145 × rendimento) | Leis 15.191/2025 e 15.270/2025; **5 exemplos oficiais** usados como teste (o exemplo 1 imprime a base 2.428,00; a conta dá 2.428,80) | gov.br/receitafederal |
+| FGTS | depósito de **8,0%** do salário | texto da Lei 8.036 **não** aberto (planalto.gov.br sem resposta) | gov.br/trabalho-e-emprego |
+| Bibliotecas novas no PayFlow | **nenhuma** | | — |
