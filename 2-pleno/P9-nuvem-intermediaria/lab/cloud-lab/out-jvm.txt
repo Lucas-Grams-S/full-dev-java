@@ -1,0 +1,13 @@
+$ docker run --memory=1024m --cpus=0.5 java -XX:MaxRAMPercentage=70            (NO explicit collector)
+ size_t MaxHeapSize = 752877568  
+ size_t SoftMaxHeapSize = 752877568  
+ bool UseG1GC = false  
+ bool UseSerialGC = true  
+$ docker run --memory=1024m --cpus=0.5 java -XX:+UseG1GC -XX:MaxRAMPercentage=70   (what the task definition sets)
+ size_t MaxHeapSize = 752877568  
+ size_t SoftMaxHeapSize = 752877568  
+ bool UseG1GC = true  
+ bool UseSerialGC = false  
+max heap = 718 MiB of 1024 MiB -> 306 MiB left for metaspace, code cache, thread stacks, direct buffers and the OS
+$ the same with the 768 MiB limit of the Kubernetes manifests (P7.02), 1 CPU
+max heap = 538 MiB of 768 MiB -> 230 MiB left

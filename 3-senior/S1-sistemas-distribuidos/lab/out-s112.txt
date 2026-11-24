@@ -1,0 +1,7 @@
+== Conciliacao de 100000 pagamentos (extrato do PSP com anomalias plantadas) ==
+encontradas por categoria: {DUPLICADO_NO_PSP=10, FALTA_NO_PSP=30, SO_NO_PSP=5, VALOR_DIFERENTE=20} em 20 ms (inclui geracao dos mapas)
+plantadas = 30 FALTA_NO_PSP + 20 VALOR_DIFERENTE + 10 DUPLICADO_NO_PSP + 5 SO_NO_PSP; encontradas exatamente as plantadas: true
+
+== Partidas dobradas: cada transferencia gera um debito e um credito de mesmo valor ==
+soma dos debitos = 5020068914; soma dos creditos = 5020068914; invariante global (soma = 0): true
+com UM credito perdido de 1 centavo: soma dos debitos - creditos = 1 -> o invariante detecta, mesmo sem saber qual lancamento

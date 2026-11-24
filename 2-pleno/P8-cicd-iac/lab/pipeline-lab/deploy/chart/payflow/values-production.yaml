@@ -1,0 +1,12 @@
+image:
+  repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/payflow
+ingress:
+  host: payflow.example.com
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+pdb:
+  enabled: true
+  minAvailable: 2

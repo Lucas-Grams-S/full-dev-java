@@ -1,0 +1,2 @@
+BAD: validate=4373123 ops/s  report=824 ops/s  counters=351133 ops/s
+FIXED: validate=11150125 ops/s  report=162013 ops/s  counters=1790216 ops/s

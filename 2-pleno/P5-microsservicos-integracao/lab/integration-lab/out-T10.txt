@@ -1,0 +1,5 @@
+T10 COM protecao, 0,5 s depois: /ping = Result[status=200, ms=3]
+T10 COM protecao: 30 checkouts -> 30/30 com 200; mediana 37 ms; maior 665 ms; chamadas ao servico lento=8
+T10 saudavel: /ping = Result[status=200, ms=63]
+T10 SEM protecao, 0,5 s depois: /ping (nao tem nada a ver com notificacoes) = Result[status=-1, ms=1000]  <- NAO respondeu em 1 s
+T10 SEM protecao: 30 checkouts -> 30/30 com 200; mediana 4024 ms; maior 6034 ms; chamadas ao servico lento=30

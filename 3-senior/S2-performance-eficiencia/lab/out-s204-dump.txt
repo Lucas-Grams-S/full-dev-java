@@ -1,0 +1,3 @@
+2397380:
+Dumping heap to <dir>/live.hprof ...
+Heap dump file created [91658265 bytes in 0.057 secs]

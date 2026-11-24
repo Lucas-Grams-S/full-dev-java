@@ -1,0 +1,25 @@
+MODEL: throwaway CA made with keytool (EC P-256); server = JDK HttpsServer with needClientAuth; clients = java.net.http.HttpClient.
+Server trusts ONLY payflow-ca. /internal/ping allows only CN=api (authorization is a separate list).
+
+1. api cert issued by payflow-ca                                     -> 200 pong to CN=api
+2. reporting cert (valid, same CA, NOT on the list)                  -> 403 forbidden: CN=reporting is not allowed on /internal/ping
+3. no client certificate                                             -> FAILED (SocketException: Connection reset)
+4. api cert issued by rogue-ca (same CN=api!)                        -> FAILED (SocketException: Connection reset)
+5. api cert already expired (issued 3 days ago, valid 1 day)         -> FAILED (SocketException: Connection reset)
+6. client forced to TLSv1.2                                          -> 200 pong to CN=api
+7. client forced to TLSv1.1                                          -> FAILED (SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate))
+8. client does not trust payflow-ca (trusts rogue-ca only)           -> FAILED (SunCertPathBuilderException: unable to find valid certification path to requested target)
+9. valid cert from payflow-ca but extendedKeyUsage = serverAuth only -> FAILED (SSLHandshakeException: (certificate_unknown) Received fatal alert: certificate_unknown)
+10. server cert has SAN ledger.internal, client calls localhost      -> FAILED (CertificateException: No subject alternative DNS name matching localhost found.)
+11. server WITHOUT needClientAuth, client sends no cert (plain TLS)  -> 403 forbidden: anonymous is not allowed on /internal/ping
+
+Negotiated parameters (api -> ledger):
+  protocol      = TLSv1.3
+  cipher suite  = TLS_AES_256_GCM_SHA384
+  server cert   = CN=ledger, key = EC, sigalg = SHA384withECDSA
+  client cert   = CN=api (sent in the handshake)
+  disabled algorithms (jdk.tls.disabledAlgorithms) start with: SSLv3, TLSv1, TLSv1.1, DTLSv1.0, RC4, DES, MD5withRSA, DH ke...
+
+Expiry check (what a monitor would compute from the keystores):
+  api-by-payflow-ca.p12            notAfter in 167 h
+  api-expired-by-payflow-ca.p12    notAfter in -48 h  <-- EXPIRED

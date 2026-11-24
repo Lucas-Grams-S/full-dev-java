@@ -1,0 +1,14 @@
+== 1. Limite 100 por minuto: rajada na virada da janela (tempo virtual) ==
+janela fixa      : aceitou 200 em ~0,2 s (limite configurado 100/min)
+janela deslizante: aceitou 100
+balde de fichas  : aceitou 100 (capacidade 100 = a rajada maxima permitida)
+
+== 2. Limite 100 req/s por cliente, 5 instancias, 1.000 req/s do mesmo cliente, balanceador aleatorio (tempo virtual, 10 s) ==
+(a) cada no limita 100/s sozinho           : 5000 aceitas em 10 s = 500/s (o limite real virou ~500/s)
+(b) contador central atomico                : 1000 aceitas = 100/s
+(c) cota local de 20/s por no, balanceio uniforme   : 100/s (correto)
+(d) cota local de 20/s, cliente so em 2 nos         : 40/s (cliente legitimo recusado com folga ociosa nos outros 3 nos)
+
+== 3. O armazenamento central cai por 10% do tempo: fail-open x fail-closed (1.000.000 pedidos, 1 cliente abusivo = 50%) ==
+fail-open  : 50110 pedidos do cliente abusivo passaram sem limite (10.0% dos abusivos)
+fail-closed: 50061 pedidos LEGITIMOS recusados (10.0% dos legitimos)

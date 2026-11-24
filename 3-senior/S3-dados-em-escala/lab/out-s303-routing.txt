@@ -1,0 +1,13 @@
+## C) Spring routing (Java, spring-jdbc 7.0.10) against the REAL primary and replica
+--- C1) which node serves a read-only transaction
+WITHOUT LazyConnectionDataSourceProxy read-only transactions served by the REPLICA: 0 of 10
+with LazyConnectionDataSourceProxy read-only transactions served by the REPLICA: 10 of 10
+write transaction served by the PRIMARY: true
+--- C2) read right after a write: natural replication lag (same host)
+notoken  read right after the write: 0 of 100 did NOT see it | fallbacks to the primary: 0 | read latency avg 12.8 ms
+token    read right after the write: 0 of 100 did NOT see it | fallbacks to the primary: 0 | read latency avg 19.5 ms
+--- C3) replica 2 s behind (recovery_min_apply_delay = 2s, only to make the lag visible)
+notoken  read right after the write: 20 of 20 did NOT see it | fallbacks to the primary: 0 | read latency avg 15.4 ms
+token    read right after the write: 0 of 20 did NOT see it | fallbacks to the primary: 20 | read latency avg 330.9 ms
+--- C4) replica stopped (docker stop)
+replica stopped: 20 of 20 reads succeeded | fallbacks to the primary: 20 | slowest read 318 ms

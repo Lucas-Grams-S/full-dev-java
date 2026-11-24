@@ -1,0 +1,38 @@
+$ aws ec2 describe-subnets (name, CIDR, free IPs, public IP on launch)
+payflow-public-us-east-1a  10.20.0.0/24   251  False
+payflow-public-us-east-1b  10.20.1.0/24   251  False
+payflow-app-us-east-1a     10.20.10.0/24  245  False
+payflow-app-us-east-1b     10.20.11.0/24  251  False
+payflow-data-us-east-1a    10.20.20.0/24  251  False
+payflow-data-us-east-1b    10.20.21.0/24  251  False
+$ non-local routes of each route table (destination -> target)
+(main table, unused)     (only the local VPC route)
+payflow-app-us-east-1a   (S3 prefix list) -> vpce-407faa99b0e7cbdb2
+payflow-app-us-east-1b   (S3 prefix list) -> vpce-407faa99b0e7cbdb2
+payflow-data             (S3 prefix list) -> vpce-407faa99b0e7cbdb2
+payflow-public           0.0.0.0/0 -> igw-f6cec410f6dd20b45
+$ aws ec2 describe-vpc-endpoints (service, type, network interfaces)
+ecr.api         Interface  1
+ecr.dkr         Interface  1
+logs            Interface  1
+s3              Gateway    0
+secretsmanager  Interface  1
+sns             Interface  1
+sqs             Interface  1
+NAT gateways in this VPC: 0
+$ egress rules of the application security group
+tcp  443   443   <s3-prefix-list>
+tcp  443   443   <sg>
+tcp  5432  5432  <sg>
+
+$ check-network.sh   (the real network, not the code)
+ok: no app/data subnet routes to the internet gateway (igw-f6cec410f6dd20b45)
+# someone "fixes" a deploy problem in the console: a route from the app route table to the internet gateway
+$ check-network.sh
+VIOLATION: app subnet subnet-e1ac40dfa9b05c89c (route table rtb-eab13f3c01f495111) has a route to the internet gateway igw-f6cec410f6dd20b45
+(exit 1)
+# route removed again
+ok: no app/data subnet routes to the internet gateway (igw-f6cec410f6dd20b45)
+
+$ terraform console   cidrsubnet("10.20.0.0/16", 8, 10)
+"10.20.10.0/24"

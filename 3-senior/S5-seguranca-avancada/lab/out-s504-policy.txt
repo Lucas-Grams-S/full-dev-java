@@ -1,0 +1,9 @@
+MODEL: the CI gate. Blocks HIGH/CRITICAL findings that HAVE a fix, unless a waiver (with a reason and an expiry date) covers them.
+
+today = 2026-11-23 -> PASS
+today = 2026-12-20 -> FAIL (2)
+   SYN-0001 HIGH: waiver EXPIRED on 2026-12-15 (not reachable until the parser feature ships; ticket SEC-88)
+   SYN-0011 CRITICAL: waiver EXPIRED on 2026-12-10 (upgrade scheduled)
+
+SYN-0002 (MEDIUM) never blocks; SYN-0010 (CRITICAL, no fix) does not block either (nothing to do but mitigate: a ticket, not a red build).
+A waiver that never expires is a hidden decision to accept the risk forever.

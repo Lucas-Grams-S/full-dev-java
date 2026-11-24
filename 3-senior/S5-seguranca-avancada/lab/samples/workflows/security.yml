@@ -1,0 +1,72 @@
+name: security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * *"        # every day: a NEW advisory can turn an old, unchanged build red
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TRIVY_IMAGE: ghcr.io/aquasecurity/trivy:0.76.2
+
+jobs:
+  secrets-and-iac:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Secrets and misconfiguration (fails on HIGH/CRITICAL)
+        run: |
+          docker run --rm -v "$PWD:/work:ro" "$TRIVY_IMAGE" fs \
+            --scanners secret,misconfig --severity HIGH,CRITICAL --exit-code 1 /work
+
+  sast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+      - name: Unit tests of the policy table (S5.01) and the audit linter (S5.06)
+        run: ./mvnw -B -ntp -Dtest='AuthorizationPolicyTest,AuditEventLintTest' test
+
+  sca:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Dependencies (fails on fixable HIGH/CRITICAL not covered by a waiver)
+        run: |
+          docker run --rm -v "$PWD:/work:ro" "$TRIVY_IMAGE" fs \
+            --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            --ignorefile /work/security/waivers.trivyignore.yaml /work
+      - name: Waivers must not be expired
+        run: python3 security/check-waivers.py security/waivers.yml
+
+  dast:
+    if: github.event_name == 'push'
+    needs: [secrets-and-iac, sast, sca]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Start the app with test data (docker compose, S5-only profile)
+        run: docker compose -f compose.yaml -f compose.security.yaml up -d --wait
+      - name: Baseline scan against the STAGING-like stack (never production)
+        run: |
+          docker run --rm --network host -v "$PWD/security:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t http://localhost:8080 -c zap-baseline.conf -I
+      - name: Stop
+        if: always()
+        run: docker compose -f compose.yaml -f compose.security.yaml down -v

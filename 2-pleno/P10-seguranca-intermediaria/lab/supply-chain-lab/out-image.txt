@@ -1,0 +1,26 @@
+$ trivy image --input image.tar --severity HIGH,CRITICAL --ignore-unfixed
+Report Summary
+
+┌────────────────────────────────┬──────────┬─────────────────┬─────────┐
+│             Target             │   Type   │ Vulnerabilities │ Secrets │
+├────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ /work/image.tar (ubuntu 26.04) │  ubuntu  │        2        │    -    │
+├────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ app/app.jar                    │   jar    │        0        │    -    │
+├────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ usr/bin/pebble                 │ gobinary │        0        │    -    │
+└────────────────────────────────┴──────────┴─────────────────┴─────────┘
+Legend:
+
+$ trivy image --input image.tar --format cyclonedx --output image-sbom.json
+CycloneDX 1.7: 177 components in total
+by type:
+application: 1
+library: 175
+operating-system: 1
+
+$ "o libssl da imagem?" (sem reescanear)
+libssl3t64 3.5.5-1ubuntu3.7
+
+$ "a nimbus-jose-jwt dentro da imagem?" (o Trivy achou a biblioteca DENTRO do jar)
+nimbus-jose-jwt 10.9.1

@@ -1,0 +1,6 @@
+JDK 25.0.5.0.3+1-1-26.04.1-Ubuntu | núcleos=12
+HttpClient.Version = HTTP_1_1 (um cliente NOVO por variante: o pool de conexões não pode favorecer ninguém)
+sequencial bloqueante, 20 chamadas:         2048 ms
+bloqueante, pool de 10 threads, 200 chamadas:  2049 ms
+não bloqueante (sendAsync), 200 chamadas:     1144 ms  (nenhuma thread esperando)
+bloqueante em threads virtuais, 200 chamadas:  1107 ms  (código bloqueante simples)

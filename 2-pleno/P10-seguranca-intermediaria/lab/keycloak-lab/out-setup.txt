@@ -1,0 +1,14 @@
+keycloak ready after ~18s
+create scope payflow-api-audience 201
+create scope transfers:read 201
+create scope transfers:write 201
+create scope internal:notify 201
+payflow-web: default scope payflow-api-audience -> 204
+payflow-web: optional scope transfers:read -> 204
+payflow-web: optional scope transfers:write -> 204
+payflow-lab-direct: default scope payflow-api-audience -> 204
+payflow-lab-direct: optional scope transfers:read -> 204
+payflow-lab-direct: optional scope transfers:write -> 204
+payflow-notifications: default scope payflow-api-audience -> 204
+payflow-notifications: optional scope internal:notify -> 204
+payflow-reporting: default scope payflow-api-audience -> 204

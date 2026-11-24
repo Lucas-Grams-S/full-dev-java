@@ -1,0 +1,57 @@
+$ aws ecs describe-services
+{"status":"ACTIVE","desired":2,"launchType":"FARGATE","net":{"subnets":["subnet-2f707d640e080b01d","subnet-5bf3920cc09c78d34"],"securityGroups":["sg-b03d26c2173006f24"],"assignPublicIp":"DISABLED"}}
+$ aws ecs describe-task-definition (what the container receives)
+{
+  "family": "payflow",
+  "cpu": "512",
+  "memory": "1024",
+  "networkMode": "awsvpc",
+  "runtimePlatform": {
+    "cpuArchitecture": "ARM64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "taskRole": "payflow-ecs-task",
+  "executionRole": "payflow-ecs-execution",
+  "container": {
+    "image": "000000000000.dkr.ecr.us-east-1.amazonaws.com/payflow@sha256:887615a1d994...",
+    "readonlyRootFilesystem": true,
+    "user": "10001",
+    "stopTimeout": 45,
+    "environment": [
+      "JAVA_TOOL_OPTIONS",
+      "PAYFLOW_EVENTS_TOPIC_ARN",
+      "PAYFLOW_PARAM_PREFIX",
+      "PAYFLOW_QUEUE_ANTIFR_URL",
+      "PAYFLOW_QUEUE_NOTIFS_URL",
+      "SPRING_DATASOURCE_URL"
+    ],
+    "secrets": {
+      "PAYFLOW_SECURITY_JWT_SECRET": "arn:aws:secretsmanager:us-east-1:123456789012:secret:payflow/study/jwt-signing-key-xxxxxx",
+      "SPRING_DATASOURCE_PASSWORD": "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds!db-1464df2a-f04a-42be-be57-1a0e47f97a58-xxxxxx:password::",
+      "SPRING_DATASOURCE_USERNAME": "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds!db-1464df2a-f04a-42be-be57-1a0e47f97a58-xxxxxx:username::"
+    }
+  }
+}
+$ IAM: attached and inline policies of the execution role vs the task role
+[payflow-ecs-execution] attached: AmazonECSTaskExecutionRolePolicy  inline: read-injected-secrets
+[payflow-ecs-task] attached:   inline: application
+$ task role policy (what YOUR code may do)
+["PublishTransferEvents","sns:Publish","<sns>:payflow-transfers"]
+["ConsumeOwnQueues",["sqs:ReceiveMessage","sqs:GetQueueUrl","sqs:GetQueueAttributes","sqs:DeleteMessage","sqs:ChangeMessageVisibility"],["<sqs>:payflow-notifications","<sqs>:payflow-antifraud"]]
+$ aws elbv2 describe-target-groups (health check)
+{"type":"ip","port":8080,"hcPort":"8081","hcPath":"/actuator/health/readiness","matcher":"200","interval":15,"healthy":2,"unhealthy":3}
+deregistration_delay.timeout_seconds: 30
+$ scripts/ci/ecs-deploy.sh <cluster> <service> <repo> sha256:... (ECS_WAIT=0: moto runs no tasks, so the service never "becomes stable")
+current task definition: payflow:1
+registered: payflow:2  image=000000000000.dkr.ecr.us-east-1.amazonaws.com/payflow@sha256:c61c51fdb762...
+deployed payflow:2
+the service now points to: payflow:2
+image of that revision:    000000000000.dkr.ecr.us-east-1.amazonaws.com/payflow@sha256:c61c51fdb762...
+$ the same script with a TAG instead of a digest
+::error::not a digest (a tag is mutable): latest
+(exit 2)
+$ terraform plan after the pipeline moved the service to revision 2: what would Terraform change on the ECS service?
+module.app.aws_ecs_service.app: actions=update attributes=health_check_grace_period_seconds
+# task_definition is NOT in the list: the pipeline owns it (ignore_changes). The attribute listed is an emulator artifact (moto does not echo health_check_grace_period_seconds).
+$ aws logs describe-log-groups (retention in days)
+/ecs/payflow	30

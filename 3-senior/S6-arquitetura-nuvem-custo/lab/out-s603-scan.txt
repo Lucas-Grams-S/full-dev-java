@@ -1,0 +1,20 @@
+scan samples/lockin/good: 8 classes
+  ok    SqsTransferConsumer.java     com.payflow.notification.adapter.in.sqs          3 vendor import(s): [aws:sqs]
+  ok    S3ArchiveStore.java          com.payflow.reporting.adapter.out.s3             3 vendor import(s): [aws:core, aws:s3]
+  ok    SecretsConfig.java           com.payflow.shared.adapter.out.secrets           2 vendor import(s): [aws:secretsmanager]
+  ok    SnsEventPublisher.java       com.payflow.transfer.adapter.out.sns             3 vendor import(s): [aws:sns]
+vendor services referenced: {aws:core=1, aws:s3=2, aws:secretsmanager=2, aws:sns=3, aws:sqs=3}
+classes to rewrite to change provider: 4 adapter(s) + 0 leak(s) outside adapters
+RESULT: PASS (provider SDK only in adapters)
+exit=0
+
+scan samples/lockin/leaky: 7 classes
+  ok    SqsTransferConsumer.java     com.payflow.notification.adapter.in.sqs          3 vendor import(s): [aws:sqs]
+  LEAK  MonthlyExporter.java         com.payflow.reporting.application                3 vendor import(s): [aws:core, aws:s3]
+  ok    SecretsConfig.java           com.payflow.shared.adapter.out.secrets           2 vendor import(s): [aws:secretsmanager]
+  ok    SnsEventPublisher.java       com.payflow.transfer.adapter.out.sns             3 vendor import(s): [aws:sns]
+  LEAK  Transfer.java                com.payflow.transfer.domain                      2 vendor import(s): [aws:dynamodb-enhanced]
+vendor services referenced: {aws:core=1, aws:dynamodb-enhanced=2, aws:s3=2, aws:secretsmanager=2, aws:sns=3, aws:sqs=3}
+classes to rewrite to change provider: 3 adapter(s) + 2 leak(s) outside adapters
+RESULT: FAIL (2 class(es) outside adapters import a provider SDK)
+exit=1

@@ -1,0 +1,15 @@
+## MODE=mutant
+-- load: old code writing users.phone (4 clients, 90% UPDATE / 10% INSERT) for 30 s; the migration steps run during it
+-- step 1 (V18, expand) as the MUTANT: ADD COLUMN + function, but WITHOUT the trigger
+   V18 applied after 0 retries in 100 ms
+-- step 2: backfill in batches of 10,000 by id (keyset), COMMIT per batch, 100 ms pause
+NOTICE:  backfill: 167 batches, 219408 rows
+   backfill took 26020 ms
+-- wait for the load to finish, then verify
+   pgbench: number of transactions actually processed: 193028
+   pgbench: number of failed transactions: 0 (0.000%)
+   pgbench: latency average = 0.622 ms
+   pgbench: max latency 303.8 ms over 193028 transactions
+-- step 3 (verify): drift between the stored column and the function applied to the old column
+users: 219408 | with phone: 202702 | stored phone_e164 not null: 182332 | invalid (go to review): 796
+DRIFT rows (phone_e164 IS DISTINCT FROM normalize_phone_br(phone)): 104939

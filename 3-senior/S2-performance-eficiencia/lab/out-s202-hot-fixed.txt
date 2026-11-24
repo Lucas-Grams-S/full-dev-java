@@ -1,0 +1,12 @@
+
+                            Java Methods that Execute the Most
+
+Method                                                                     Samples Percent
+-------------------------------------------------------------------------- ------- -------
+java.lang.StringLatin1.hashCode(byte[])                                      2,734  47.46%
+jdk.internal.util.DecimalDigits.uncheckedGetCharsLatin1(int, int, byte[])      970  16.84%
+java.util.regex.Pattern$BmpCharProperty.match(Matcher, int, CharSequence)      364   6.32%
+ProfileApp.lambda$main$0(long, boolean, AtomicLong)                            325   5.64%
+java.lang.AbstractStringBuilder.ensureCapacitySameCoder(byte[], byte, int)     250   4.34%
+java.lang.AbstractStringBuilder.append(String)                                 185   3.21%
+ProfileApp.lambda$main$1(long, boolean, AtomicLong)                            151   2.62%

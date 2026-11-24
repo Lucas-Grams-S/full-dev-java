@@ -1,0 +1,14 @@
+### t = 5 s
+ num     #instances         #bytes  class name (module)
+-------------------------------------------------------
+   1:         46532       32366568  [B
+   2:         30641         735384  java.lang.String
+   3:         17979         575328  java.util.HashMap$Node
+   4:         14900         476800  LeakLab$Session
+### t = 12 s
+ num     #instances         #bytes  class name (module)
+-------------------------------------------------------
+   1:         89132       77178328  [B
+   2:         39279        1256928  java.util.HashMap$Node
+   3:         51941        1246584  java.lang.String
+   4:         36200        1158400  LeakLab$Session

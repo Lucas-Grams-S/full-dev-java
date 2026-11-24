@@ -1,0 +1,126 @@
+groups:
+  - name: payflow-slo-recording
+    interval: 1m
+    rules:
+      # SLI de disponibilidade: fração de respostas 5xx (4xx é o cliente errando e conta como "bom")
+      - record: payflow:slo_transfers_errors:ratio_rate5m
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers", status=~"5.."}[5m]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[5m]))
+      - record: payflow:slo_transfers_errors:ratio_rate30m
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers", status=~"5.."}[30m]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[30m]))
+      - record: payflow:slo_transfers_errors:ratio_rate1h
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers", status=~"5.."}[1h]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[1h]))
+      - record: payflow:slo_transfers_errors:ratio_rate6h
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers", status=~"5.."}[6h]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[6h]))
+      - record: payflow:slo_transfers_errors:ratio_rate3d
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers", status=~"5.."}[3d]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[3d]))
+      # SLI de latência: fração MAIS LENTA que 500 ms (o balde le="0.5" existe: slo 500ms, P6.02)
+      - record: payflow:slo_transfers_slow:ratio_rate5m
+        expr: |
+          1 - (
+            sum(rate(http_server_requests_seconds_bucket{job="payflow", method="POST", uri="/api/v1/transfers", le="0.5"}[5m]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[5m]))
+          )
+      - record: payflow:slo_transfers_slow:ratio_rate30m
+        expr: |
+          1 - (
+            sum(rate(http_server_requests_seconds_bucket{job="payflow", method="POST", uri="/api/v1/transfers", le="0.5"}[30m]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[30m]))
+          )
+      - record: payflow:slo_transfers_slow:ratio_rate1h
+        expr: |
+          1 - (
+            sum(rate(http_server_requests_seconds_bucket{job="payflow", method="POST", uri="/api/v1/transfers", le="0.5"}[1h]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[1h]))
+          )
+      - record: payflow:slo_transfers_slow:ratio_rate6h
+        expr: |
+          1 - (
+            sum(rate(http_server_requests_seconds_bucket{job="payflow", method="POST", uri="/api/v1/transfers", le="0.5"}[6h]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[6h]))
+          )
+      - record: payflow:slo_transfers_slow:ratio_rate3d
+        expr: |
+          1 - (
+            sum(rate(http_server_requests_seconds_bucket{job="payflow", method="POST", uri="/api/v1/transfers", le="0.5"}[3d]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[3d]))
+          )
+      - record: payflow:slo_transfers_requests:rate1h
+        expr: sum(rate(http_server_requests_seconds_count{job="payflow", method="POST", uri="/api/v1/transfers"}[1h]))
+
+  - name: payflow-slo-alerts
+    rules:
+      - alert: PayflowTransfersAvailabilityBurnFast
+        # queima 14,4x: gasta 2% do orçamento de 30 dias em 1 h (SRE Workbook, tabela 5-8); janela curta 5m = "ainda está queimando"
+        expr: |
+          (payflow:slo_transfers_errors:ratio_rate1h > (14.4 * 0.001) and payflow:slo_transfers_errors:ratio_rate5m > (14.4 * 0.001))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: page, slo: availability}
+        annotations:
+          summary: "Orçamento de availability queimando a 14,4x ou mais: 2% do mês em 1 hora"
+          runbook: "docs/runbooks/slo-queima-rapida.md"
+      - alert: PayflowTransfersAvailabilityBurnSlow
+        # queima 6x: 5% do orçamento em 6 h; janela curta 30m
+        expr: |
+          (payflow:slo_transfers_errors:ratio_rate6h > (6 * 0.001) and payflow:slo_transfers_errors:ratio_rate30m > (6 * 0.001))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: page, slo: availability}
+        annotations:
+          summary: "Orçamento de availability queimando a 6x ou mais: 5% do mês em 6 horas"
+          runbook: "docs/runbooks/slo-queima-rapida.md"
+      - alert: PayflowTransfersAvailabilityBurnDrift
+        # queima 1x: 10% do orçamento em 3 dias; janela curta 6h; vira TICKET, não página
+        expr: |
+          (payflow:slo_transfers_errors:ratio_rate3d > (1 * 0.001) and payflow:slo_transfers_errors:ratio_rate6h > (1 * 0.001))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: ticket, slo: availability}
+        annotations:
+          summary: "Orçamento de availability gasto no ritmo exato de 1x ou mais há 3 dias"
+          runbook: "docs/runbooks/slo-queima-lenta.md"
+
+      - alert: PayflowTransfersLatencyBurnFast
+        # queima 14,4x: gasta 2% do orçamento de 30 dias em 1 h (SRE Workbook, tabela 5-8); janela curta 5m = "ainda está queimando"
+        expr: |
+          (payflow:slo_transfers_slow:ratio_rate1h > (14.4 * 0.01) and payflow:slo_transfers_slow:ratio_rate5m > (14.4 * 0.01))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: page, slo: latency}
+        annotations:
+          summary: "Orçamento de latency queimando a 14,4x ou mais: 2% do mês em 1 hora"
+          runbook: "docs/runbooks/slo-queima-rapida.md"
+      - alert: PayflowTransfersLatencyBurnSlow
+        # queima 6x: 5% do orçamento em 6 h; janela curta 30m
+        expr: |
+          (payflow:slo_transfers_slow:ratio_rate6h > (6 * 0.01) and payflow:slo_transfers_slow:ratio_rate30m > (6 * 0.01))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: page, slo: latency}
+        annotations:
+          summary: "Orçamento de latency queimando a 6x ou mais: 5% do mês em 6 horas"
+          runbook: "docs/runbooks/slo-queima-rapida.md"
+      - alert: PayflowTransfersLatencyBurnDrift
+        # queima 1x: 10% do orçamento em 3 dias; janela curta 6h; vira TICKET, não página
+        expr: |
+          (payflow:slo_transfers_slow:ratio_rate3d > (1 * 0.01) and payflow:slo_transfers_slow:ratio_rate6h > (1 * 0.01))
+          and payflow:slo_transfers_requests:rate1h > 0.1
+        labels: {severity: ticket, slo: latency}
+        annotations:
+          summary: "Orçamento de latency gasto no ritmo exato de 1x ou mais há 3 dias"
+          runbook: "docs/runbooks/slo-queima-lenta.md"

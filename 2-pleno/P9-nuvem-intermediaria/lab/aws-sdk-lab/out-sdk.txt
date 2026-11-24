@@ -1,0 +1,43 @@
+$ mvn test   (5 test classes against moto; the clients have NO endpoint/credentials in code: AWS_ENDPOINT_URL does it)
+T9.1 notifications received 3 (TransferCompleted + TransferFailed)
+T9.1 antifraud received     2 (TransferCompleted only)
+T9.1 raw body (no SNS envelope): {"amount":"10.00"}
+T9.2 processed normally: [ok-1, ok-2]
+T9.2 poison handler attempts before the DLQ: 3 (maxReceiveCount=3)
+T9.2 dead-letter queue holds: [poison]
+T9.3 first receive : id=b96c43ad receiveCount=1
+T9.3 while hidden  : nothing (message is invisible)
+T9.3 second receive: id=b96c43ad receiveCount=2
+T9.3 handler ran for delivery 1: true, for delivery 2: false -> effects=[transfer-42]
+T9.3 a naive consumer (no id check) would have produced: [transfer-42, transfer-42]
+T9.4 sent 6 messages (1 duplicate dedup id), received 5
+T9.4 acc-1 in order: [acc-1:deposit-1, acc-1:deposit-2, acc-1:deposit-3]
+T9.4 acc-2 in order: [acc-2:deposit-1, acc-2:deposit-2]
+T9.6 before rotation          : key-v1 (API calls so far: 1)
+T9.6 after rotation, in TTL   : key-v1  <- STALE, no API call
+T9.6 after rotation, TTL over : key-v2 (API calls so far: 2)
+T9.6 AWSPREVIOUS still readable: key-v1
+T9.6 after invalidate()       : key-v3 (reloaded at once)
+handler failed (receiveCount=1): cannot parse event
+handler failed (receiveCount=2): cannot parse event
+handler failed (receiveCount=3): cannot parse event
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 -- in com.payflow.cloud.PoisonMessageTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 -- in com.payflow.cloud.SecretRotationTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 -- in com.payflow.cloud.FifoOrderingTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 -- in com.payflow.cloud.VisibilityTimeoutTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 -- in com.payflow.cloud.FanOutTest
+BUILD SUCCESS
+
+# MUTANT 1: the handler forgets to remember message ids (no idempotency) -> VisibilityTimeoutTest must FAIL
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.858 s <<< FAILURE! -- in com.payflow.cloud.VisibilityTimeoutTest
+Expecting actual:
+but some elements were not expected:
+Expecting actual:
+but some elements were not expected:
+
+# MUTANT 2: the worker DELETES the message even when the handler failed -> PoisonMessageTest must FAIL (the poison never reaches the DLQ)
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 20.63 s <<< FAILURE! -- in com.payflow.cloud.PoisonMessageTest
+Expecting actual:
+Expecting actual:
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE

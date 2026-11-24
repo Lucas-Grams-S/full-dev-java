@@ -1,0 +1,56 @@
+### G1 -Xmx1g (execucao 1)
+req=30000 (3000/s)  p50=0.13 ms  p99=0.28  p99.9=3.17  max=4.0
+heap max=1024 MB  coletas(total)=58  tempo de GC (MXBean)=166 ms  CPU do processo=5220 ms
+Total Pause Time: 167 ms Number of Pauses: 58 Maximum Pause Time: 15.3 ms 
+### G1 -Xmx1g (execucao 2)
+req=30000 (3000/s)  p50=0.15 ms  p99=0.29  p99.9=3.25  max=4.2
+heap max=1024 MB  coletas(total)=56  tempo de GC (MXBean)=180 ms  CPU do processo=5360 ms
+Total Pause Time: 181 ms Number of Pauses: 56 Maximum Pause Time: 16.8 ms 
+### G1 -Xmx700m (execucao 1)
+req=30000 (3000/s)  p50=0.17 ms  p99=1.12  p99.9=58.28  max=67.4
+heap max=700 MB  coletas(total)=360  tempo de GC (MXBean)=375 ms  CPU do processo=7810 ms
+Total Pause Time: 379 ms Number of Pauses: 360 Maximum Pause Time: 66.4 ms 
+### G1 -Xmx700m (execucao 2)
+req=30000 (3000/s)  p50=0.15 ms  p99=1.13  p99.9=61.92  max=71.1
+heap max=700 MB  coletas(total)=365  tempo de GC (MXBean)=384 ms  CPU do processo=7620 ms
+Total Pause Time: 387 ms Number of Pauses: 365 Maximum Pause Time: 70.2 ms 
+### G1 -Xmx1536m (execucao 1)
+req=30000 (3000/s)  p50=0.14 ms  p99=0.28  p99.9=3.58  max=4.9
+heap max=1536 MB  coletas(total)=49  tempo de GC (MXBean)=167 ms  CPU do processo=5310 ms
+Total Pause Time: 169 ms Number of Pauses: 49 Maximum Pause Time: 19.6 ms 
+### G1 -Xmx1536m (execucao 2)
+req=30000 (3000/s)  p50=0.16 ms  p99=0.28  p99.9=3.69  max=4.8
+heap max=1536 MB  coletas(total)=49  tempo de GC (MXBean)=173 ms  CPU do processo=5260 ms
+Total Pause Time: 174 ms Number of Pauses: 49 Maximum Pause Time: 19.3 ms 
+### Parallel -Xmx1g (execucao 1)
+req=30000 (3000/s)  p50=0.16 ms  p99=28.01  p99.9=71.60  max=77.3
+heap max=910 MB  coletas(total)=62  tempo de GC (MXBean)=772 ms  CPU do processo=9320 ms
+Total Pause Time: 776 ms Number of Pauses: 62 Maximum Pause Time: 102 ms 
+### Parallel -Xmx1g (execucao 2)
+req=30000 (3000/s)  p50=0.18 ms  p99=29.08  p99.9=72.72  max=77.4
+heap max=910 MB  coletas(total)=62  tempo de GC (MXBean)=778 ms  CPU do processo=9460 ms
+Total Pause Time: 782 ms Number of Pauses: 62 Maximum Pause Time: 101 ms 
+### Serial -Xmx1g (execucao 1)
+req=30000 (3000/s)  p50=0.17 ms  p99=48.05  p99.9=91.49  max=96.6
+heap max=989 MB  coletas(total)=34  tempo de GC (MXBean)=1007 ms  CPU do processo=5290 ms
+Total Pause Time: 1.01 s Number of Pauses: 34 Maximum Pause Time: 99.3 ms 
+### Serial -Xmx1g (execucao 2)
+req=30000 (3000/s)  p50=0.15 ms  p99=50.99  p99.9=94.65  max=101.8
+heap max=989 MB  coletas(total)=34  tempo de GC (MXBean)=1029 ms  CPU do processo=5060 ms
+Total Pause Time: 1.03 s Number of Pauses: 34 Maximum Pause Time: 101 ms 
+### ZGC -Xmx1g (execucao 1)
+req=30000 (3000/s)  p50=0.15 ms  p99=0.27  p99.9=0.29  max=1.6
+heap max=1024 MB  coletas(total)=190  tempo de GC (MXBean)=416 ms  CPU do processo=4570 ms
+Total Pause Time: 1.34 ms Number of Pauses: 150 Maximum Pause Time: 0.0278 ms 
+### ZGC -Xmx1g (execucao 2)
+req=30000 (3000/s)  p50=0.16 ms  p99=0.27  p99.9=0.33  max=2.9
+heap max=1024 MB  coletas(total)=194  tempo de GC (MXBean)=410 ms  CPU do processo=4870 ms
+Total Pause Time: 1.32 ms Number of Pauses: 153 Maximum Pause Time: 0.0222 ms 
+### ZGC -Xmx700m (execucao 1)
+OutOfMemoryError registrado 6 vez(es) na saida (threads de servico morreram)
+Total Pause Time: 27.5 ms Number of Pauses: 5,230 Maximum Pause Time: 0.0405 ms 
+### ZGC -Xmx700m (execucao 2)
+req=29995 (3000/s)  p50=27.78 ms  p99=592.51  p99.9=603.73  max=618.4
+heap max=700 MB  coletas(total)=12312  tempo de GC (MXBean)=11053 ms  CPU do processo=29790 ms
+OutOfMemoryError registrado 5 vez(es) na saida (threads de servico morreram)
+Total Pause Time: 48.9 ms Number of Pauses: 9,896 Maximum Pause Time: 0.0400 ms 

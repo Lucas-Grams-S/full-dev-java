@@ -1,0 +1,24 @@
+  api           (process  ) analisou STRIDE ainda sem análise: -
+  auth-code     (process  ) analisou STID   ainda sem análise: RE
+  database      (datastore) analisou TIE    ainda sem análise: RD
+  infra         (datastore) analisou I      ainda sem análise: TRD
+  internal      (process  ) analisou SE     ainda sem análise: TRID
+  supply-chain  (process  ) analisou T      ainda sem análise: SRIDE
+  lacunas de análise (letra aplicável sem ameaça registrada): 16
+ameaças: 26  {'mitigated': 22, 'accepted': 2, 'open': 2}
+  api           (process  ) analisou STRIDE ainda sem análise: -
+  auth-code     (process  ) analisou STID   ainda sem análise: RE
+  database      (datastore) analisou TIE    ainda sem análise: RD
+  infra         (datastore) analisou I      ainda sem análise: TRD
+  internal      (process  ) analisou SE     ainda sem análise: TRID
+  supply-chain  (process  ) analisou T      ainda sem análise: SRIDE
+  lacunas de análise (letra aplicável sem ameaça registrada): 16
+self-test (teste renomeado): acusou ['T14: mitigada, mas a evidência não existe (test:ResourceServerTest#idor_bobCannotReadAlicesAccount_404)']
+  api           (process  ) analisou STRIDE ainda sem análise: -
+  auth-code     (process  ) analisou STID   ainda sem análise: RE
+  database      (datastore) analisou TIE    ainda sem análise: RD
+  infra         (datastore) analisou I      ainda sem análise: TRD
+  internal      (process  ) analisou SE     ainda sem análise: TRID
+  supply-chain  (process  ) analisou T      ainda sem análise: SRIDE
+  lacunas de análise (letra aplicável sem ameaça registrada): 16
+self-test (data futura): acusou ['T07: revisão vencida (2027-02-14)', 'T13: revisão vencida (2026-12-15)']

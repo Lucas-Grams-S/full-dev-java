@@ -1,0 +1,9 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: payflow
+  namespace: payflow
+spec:
+  minAvailable: 1                 # com 2 réplicas, um "drain" de nó nunca derruba as duas
+  selector:
+    matchLabels: {app.kubernetes.io/name: payflow}

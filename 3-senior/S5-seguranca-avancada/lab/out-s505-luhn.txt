@@ -1,0 +1,12 @@
+MODEL: how many RANDOM digit strings look like a card number? (seed 7, 1,000,000 strings per row)
+  16 digits: Luhn alone flags  10.05% | Luhn + issuer prefix + length 13-19 flags  2.21%
+  15 digits: Luhn alone flags   9.96% | Luhn + issuer prefix + length 13-19 flags  2.19%
+  12 digits: Luhn alone flags  10.02% | Luhn + issuer prefix + length 13-19 flags  0.00%
+
+Public test numbers (the payment industry's own, not real cards):
+  4111111111111111 luhn=true plausible=true
+  5555555555554444 luhn=true plausible=true
+  378282246310005 luhn=true plausible=true
+  4111111111111112 luhn=false plausible=false
+Reading: Luhn is a typo check (1 in 10 random strings pass). A scrubber that uses only Luhn will mangle order ids, phone numbers and timestamps;
+prefix + length cut the noise but do not remove it; a long numeric id that happens to pass is still masked (cost of failing safe).

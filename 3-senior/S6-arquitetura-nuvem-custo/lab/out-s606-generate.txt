@@ -1,0 +1,1 @@
+generated samples/cur-synthetic.csv: 3187 rows, 2026-08-01 to 2026-10-31, region sa-east-1, real unit prices, SYNTHETIC usage and causes

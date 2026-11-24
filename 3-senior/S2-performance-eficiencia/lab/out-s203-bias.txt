@@ -1,0 +1,32 @@
+### padrao (JDK 25)
+amostrador de pobre (Thread.getStackTrace, 1941 amostras): 
+  heavy     1719   88.6%
+  light      222   11.4%
+JFR:
+Method                                                          Samples Percent
+--------------------------------------------------------------- ------- -------
+BiasLab.heavy()                                                     872  88.35%
+BiasLab.light()                                                     114  11.55%
+
+### sem pontos de seguranca em lacos contados (-XX:-UseCountedLoopSafepoints)
+amostrador de pobre (Thread.getStackTrace, 1773 amostras): 
+  lambda$main$0  1770   99.8%
+  heavy        1    0.1%
+  light        1    0.1%
+  scopedValueBindings     1    0.1%
+JFR:
+Method                                                          Samples Percent
+--------------------------------------------------------------- ------- -------
+BiasLab.lambda$main$0(long)                                         983  99.90%
+BiasLab.light()                                                       1   0.10%
+
+### idem + -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints
+amostrador de pobre (Thread.getStackTrace, 1784 amostras): 
+  lambda$main$0  1782   99.9%
+  heavy        1    0.1%
+  scopedValueBindings     1    0.1%
+JFR:
+Method                                                          Samples Percent
+--------------------------------------------------------------- ------- -------
+BiasLab.heavy()                                                     873  88.63%
+BiasLab.light()                                                     111  11.27%

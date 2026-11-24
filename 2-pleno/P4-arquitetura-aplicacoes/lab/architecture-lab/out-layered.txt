@@ -1,0 +1,5 @@
+LAYERED -> violations=4
+   Constructor <com.payflow.fixtures.bad.web.BadController.<init>()> calls constructor <com.payflow.fixtures.bad.repository.BadRepository.<init>()>
+   Field <com.payflow.fixtures.bad.web.BadController.repository> has type <com.payflow.fixtures.bad.repository.BadRepository>
+   Layer 'Service' is empty
+   Method <com.payflow.fixtures.bad.web.BadController.get()> calls method <com.payflow.fixtures.bad.repository.BadRepository.find()>

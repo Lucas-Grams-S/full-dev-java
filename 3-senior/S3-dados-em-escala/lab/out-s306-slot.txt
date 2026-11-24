@@ -1,0 +1,60 @@
+## E) the dangerous part: an abandoned slot makes the primary keep WAL (1M-row UPDATE ~ 390 MB of WAL)
+        ?column?         
+-------------------------
+ slot created: idle_slot
+(1 row)
+
+                      ?column?                      
+----------------------------------------------------
+ before: retained WAL 56 bytes, wal_status reserved
+(1 row)
+
+                                  ?column?                                   
+-----------------------------------------------------------------------------
+ after 1M-row UPDATE: retained WAL 375 MB, wal_status reserved, active=false
+(1 row)
+
+         ?column?          
+---------------------------
+ pg_wal directory: 1904 MB
+(1 row)
+
+-- the protection: max_slot_wal_keep_size = 64MB (slot is INVALIDATED instead of filling the disk)
+ pg_reload_conf 
+----------------
+ t
+(1 row)
+
+ pg_sleep 
+----------
+ 
+(1 row)
+
+                           ?column?                           
+--------------------------------------------------------------
+ right after the checkpoint: wal_status lost, safe_wal_size -
+(1 row)
+
+                      ?column?                      
+----------------------------------------------------
+ wal_status: lost, invalidation_reason: wal_removed
+(1 row)
+
+         ?column?          
+---------------------------
+ pg_wal directory: 1904 MB
+(1 row)
+
+-- a consumer that comes back to an invalidated slot:
+ERROR:  can no longer access replication slot "idle_slot"
+DETAIL:  This replication slot has been invalidated due to "wal_removed".
+ pg_drop_replication_slot 
+--------------------------
+ 
+(1 row)
+
+ pg_reload_conf 
+----------------
+ t
+(1 row)
+

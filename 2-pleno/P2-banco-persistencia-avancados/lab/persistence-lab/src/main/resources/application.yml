@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:55432/payflow_jpa?reWriteBatchedInserts=true
+    username: postgres
+    password: lab
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 56379
+logging:
+  level:
+    org.hibernate.orm.deprecation: warn

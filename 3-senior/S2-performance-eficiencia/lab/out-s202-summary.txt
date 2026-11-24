@@ -1,0 +1,6 @@
+ Duration: 12 s
+ Event Type                              Count  Size (bytes) 
+ jdk.JavaMonitorEnter                     8978        209683
+ jdk.ExecutionSample                      5548         58973
+ jdk.ObjectAllocationSample               3549         54649
+ jdk.GarbageCollection                     281          5773

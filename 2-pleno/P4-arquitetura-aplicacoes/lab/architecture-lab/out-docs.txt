@@ -1,0 +1,11 @@
+components.puml
+module-account.adoc
+module-account.puml
+module-antifraud.adoc
+module-antifraud.puml
+module-notification.adoc
+module-notification.puml
+module-shared.adoc
+module-shared.puml
+module-transfer.adoc
+module-transfer.puml

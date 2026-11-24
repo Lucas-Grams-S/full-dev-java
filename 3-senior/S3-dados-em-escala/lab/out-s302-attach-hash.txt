@@ -1,0 +1,21 @@
+## E) migrating the EXISTING table without a rewrite: ATTACH PARTITION, with and without a validated CHECK (1 year = ~1.4M rows)
+-- E1) ATTACH without a CHECK: PostgreSQL scans the table to prove every row fits the bound
+Time: 77.741 ms
+                                  ?column?                                  
+----------------------------------------------------------------------------
+ E1 locks: ledger_p=ShareUpdateExclusiveLock, ledger_y1=AccessExclusiveLock
+(1 row)
+
+-- E2) with a validated CHECK equal to the bound: the scan is skipped
+Time: 1.123 ms
+        ?column?        
+------------------------
+ attached rows: 1501714
+(1 row)
+
+
+## F) hash partitioning by account_id (16 partitions): the statement of ONE account WITHOUT a date
+-- ONE account, no date, hash by account_id:
+partitions read: 1 | planning 1.344 ms | execution 0.484 ms
+-- the month-sized aggregate by DATE on the hash table:
+partitions read: 16 | planning 1.998 ms | execution 647.440 ms

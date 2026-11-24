@@ -1,0 +1,34 @@
+Bill of materials bom-payflow.csv: 40 lines; prices from the AWS Price List (published 2026-11-08 to 2026-11-23)
+On demand, no free tier, no taxes, no support plan, no Savings Plans. Quantities are premises.
+
+env             us-east-1      sa-east-1
+prod           US$ 690.26   US$ 1,085.37
+staging        US$ 159.33     US$ 298.86
+shared          US$ 38.30      US$ 40.05
+TOTAL          US$ 887.89   US$ 1,424.28   (sa-east-1 = x1.60)
+
+By service (sorted by sa-east-1):
+  RDS                US$ 409.66   US$ 627.83   44.1%
+  VPC                US$ 149.00   US$ 293.54   20.6%
+  ECS Fargate         US$ 97.33   US$ 167.40   11.8%
+  CloudWatch          US$ 65.20   US$ 110.70    7.8%
+  ELB                 US$ 45.70    US$ 67.31    4.7%
+  Data transfer       US$ 42.00    US$ 66.00    4.6%
+  S3                  US$ 18.80    US$ 31.30    2.2%
+  SQS                 US$ 24.00    US$ 24.00    1.7%
+  Config              US$ 15.00    US$ 15.00    1.1%
+  KMS                 US$ 13.00    US$ 13.00    0.9%
+  SNS                  US$ 5.00     US$ 5.00    0.4%
+  Secrets Manager      US$ 3.20     US$ 3.20    0.2%
+
+Top 5 lines (sa-east-1):
+  prod     db.m7g.large Multi-AZ (primário)                          US$ 322.66
+  prod     6 endpoints de interface x 2 AZs                          US$ 183.96
+  prod     réplica do reporting db.t4g.medium                        US$ 100.01
+  staging  db.t4g.medium Single-AZ                                   US$ 100.01
+  prod     vCPU (opção B da S6.01: 114 tarefas-hora/dia x 0,5 vCPU)    US$ 96.58
+
+us-east-1: fixed US$ 606.25 (68%), variable US$ 281.64; traffic x2 -> US$ 1,169.53 (x1.32, not x2)
+sa-east-1: fixed US$ 1,006.93 (71%), variable US$ 417.35; traffic x2 -> US$ 1,841.63 (x1.29, not x2)
+Unit cost (sa-east-1, prod only): US$ 0.11 per 1,000 transfers (premise: 10,000,000 transfers/month)
+Unit cost (sa-east-1, all envs):  US$ 0.14 per 1,000 transfers

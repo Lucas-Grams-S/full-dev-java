@@ -1,0 +1,14 @@
+id;type;monthly_usd;tags
+ecs/payflow-api;ecs-service;77.50;app=payflow|env=prod|owner=time-pagamentos|cost-center=CC-1001
+rds/payflow-prod;rds;366.46;app=payflow|env=prod|owner=time-pagamentos|cost-center=CC-1001|data-class=financial
+rds/payflow-reporting;rds;121.91;app=payflow|env=prod|owner=time-dados|cost-center=CC-1002|data-class=financial
+alb/payflow-prod;alb;46.80;app=payflow|env=prod|owner=time-pagamentos|cost-center=CC-1001
+s3/payflow-archive;s3;20.25;app=payflow|env=prod|owner=time-dados|cost-center=CC-1002|data-class=financial
+s3/payflow-anchors;s3;1.10;app=payflow|env=prod|owner=time-seguranca|cost-center=CC-1003
+ecs/payflow-api-staging;ecs-service;44.70;app=payflow|Env=staging|owner=time-pagamentos|cost-center=CC-1001
+rds/payflow-staging;rds;110.96;app=payflow|env=homolog|owner=time-pagamentos|cost-center=CC-1001|data-class=personal
+ecs/loadtest-joao;ecs-service;89.40;
+sqs/payflow-transfers;sqs;12.00;app=payflow|env=prod|owner=time-pagamentos|cost-center=1001
+kms/payflow-field;kms;1.00;app=payflow|env=prod|cost-center=CC-1003
+UNTAGGABLE/data-transfer;data-transfer;66.00;
+UNTAGGABLE/support-and-tax;other;40.00;

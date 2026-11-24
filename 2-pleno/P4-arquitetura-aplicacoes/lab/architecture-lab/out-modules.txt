@@ -1,0 +1,3 @@
+MODULES = [account, antifraud, notification, shared, transfer]
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.216 s -- in com.payflow.lab.ModularityTests
+[INFO] Running com.payflow.lab.DomainTests

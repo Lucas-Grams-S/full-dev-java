@@ -1,0 +1,5 @@
+NOTICE:  table "lab_acc" does not exist, skipping
+NOTICE:  relation "idx_ledger_entries_account_created" already exists, skipping
+S0 (índice antigo)        tps: 9613.623512 10234.124423 5813.574900 
+S1 (antigo + coberto)     tps: 4696.378544 7524.534868 4417.630295 
+S2 (só o coberto)         tps: 9599.209427 9402.403556 7954.076549 

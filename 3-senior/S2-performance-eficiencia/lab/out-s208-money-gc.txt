@@ -1,0 +1,7 @@
+Benchmark                                      (n)  Mode  Cnt       Score      Error   Units
+MoneySumBench.bigDecimal:gc.alloc.rate.norm    100  avgt    5    4000.003 ±    0.001    B/op
+MoneySumBench.bigDecimal:gc.alloc.rate.norm  10000  avgt    5  400000.285 ±    0.041    B/op
+MoneySumBench.doubleSum:gc.alloc.rate.norm     100  avgt    5      ≈ 10⁻⁴               B/op
+MoneySumBench.doubleSum:gc.alloc.rate.norm   10000  avgt    5       0.032 ±    0.001    B/op
+MoneySumBench.longCents:gc.alloc.rate.norm     100  avgt    5      ≈ 10⁻⁴               B/op
+MoneySumBench.longCents:gc.alloc.rate.norm   10000  avgt    5       0.016 ±    0.001    B/op

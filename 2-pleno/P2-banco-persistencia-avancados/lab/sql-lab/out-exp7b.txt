@@ -1,0 +1,19 @@
+ 22:59:48 up 7 days, 13:55,  1 user,  load average: 1.82, 12.68, 16.96
+=== transfer.pgbench ===
+clientes=1    tps=1460.335695 latência média=0.685 ms
+clientes=2    tps=3188.719539 latência média=0.627 ms
+clientes=4    tps=5633.791195 latência média=0.710 ms
+clientes=8    tps=6981.912529 latência média=1.146 ms
+clientes=16   tps=12187.007512 latência média=1.313 ms
+clientes=32   tps=11381.506840 latência média=2.812 ms
+clientes=64   tps=6318.957285 latência média=10.128 ms
+clientes=128  tps=5052.406645 latência média=25.334 ms
+=== transfer-with-wait.pgbench ===
+clientes=1    tps=82.748004 latência média=12.085 ms
+clientes=2    tps=171.505246 latência média=11.661 ms
+clientes=4    tps=337.265180 latência média=11.860 ms
+clientes=8    tps=627.592692 latência média=12.747 ms
+clientes=16   tps=1284.196798 latência média=12.459 ms
+clientes=32   tps=2209.927816 latência média=14.480 ms
+clientes=64   tps=3252.674212 latência média=19.676 ms
+clientes=128  tps=4813.737036 latência média=26.591 ms

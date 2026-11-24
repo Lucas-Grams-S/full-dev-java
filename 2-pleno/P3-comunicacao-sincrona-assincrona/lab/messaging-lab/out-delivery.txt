@@ -1,0 +1,4 @@
+AT_MOST_ONCE processou=[m0, m1, m2] depois_da_queda_recebeu=[] (perdidas=7)
+AT_LEAST_ONCE antes_da_queda=[m0, m1, m2, m3, m4, m5] depois_recebeu=[m0, m1, m2, m3, m4, m5, m6, m7, m8, m9]
+TX_ABERTA read_uncommitted=[aborted-1, aborted-2] read_committed=[]
+TX_FIM read_committed=[committed-1] read_uncommitted=[aborted-1, aborted-2, committed-1]

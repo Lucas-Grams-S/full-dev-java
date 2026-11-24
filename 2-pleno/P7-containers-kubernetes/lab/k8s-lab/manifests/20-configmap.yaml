@@ -1,0 +1,21 @@
+# Configuração NÃO secreta. Os segredos vêm do Secret "payflow-app" (montado em /run/secrets).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payflow-config
+  namespace: payflow
+  labels: {app.kubernetes.io/name: payflow, app.kubernetes.io/part-of: payflow}
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://db.payflow.svc.cluster.local:5432/payflow
+  SPRING_DATASOURCE_USERNAME: payflow
+  SPRING_CONFIG_IMPORT: configtree:/run/secrets/app/
+  SPRING_FLYWAY_LOCATIONS: classpath:db/migration      # sem seed em produção (decisão 31)
+  MANAGEMENT_SERVER_PORT: "8081"
+  MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "0.1"
+  LOGGING_STRUCTURED_FORMAT_CONSOLE: ecs
+  SERVER_SHUTDOWN: graceful
+  SPRING_LIFECYCLE_TIMEOUT_PER_SHUTDOWN_PHASE: 20s
+  # memória da JVM: ver P7.02 (heap = 70% do limite do contêiner)
+  JAVA_TOOL_OPTIONS: >-
+    -XX:+UseG1GC -XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError
+    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/dumps

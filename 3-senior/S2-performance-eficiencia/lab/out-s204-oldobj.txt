@@ -1,0 +1,16 @@
+eventos OldObjectSample: 229
+  object =  [
+    byte[2048]
+    payload : LeakLab$Session
+    value : java.util.HashMap$Node
+    next : java.util.HashMap$Node
+    [30746] : java.util.HashMap$Node[65536]
+    table : java.util.HashMap Size: 48000
+    CACHE : java.lang.Class Class Name: LeakLab
+    appClass : java.lang.Class Class Name: sun.launcher.LauncherHelper
+  ]
+  arrayElements = 2048
+  stackTrace = [
+    LeakLab.handle(boolean, long) line: 27
+    LeakLab.main(String[]) line: 39
+  ]

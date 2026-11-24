@@ -1,0 +1,10 @@
+capacidade total = 333.3 req/s; carga oferecida = 250.0 req/s (75%); servidor 3 e 3x mais lento
+aleatorio          p50=   29.4 ms  p99=1332730.0 ms  p99.9=1384004.2 ms  pedidos por servidor=[100174, 99689, 100417, 99720]
+round-robin        p50=   20.1 ms  p99=1340639.9 ms  p99.9=1392261.8 ms  pedidos por servidor=[100000, 100000, 100000, 100000]
+menos conexoes     p50=   13.5 ms  p99=   116.3 ms  p99.9=   222.2 ms  pedidos por servidor=[134496, 121468, 103852, 40184]
+2 escolhas (P2C)   p50=   20.3 ms  p99=   243.7 ms  p99.9=   386.7 ms  pedidos por servidor=[116337, 115994, 116149, 51520]
+
+Amdahl: S(n) = 1 / ((1-p) + p/n), p = fracao paralelizavel (formula, nao medicao)
+p=0.90  n=2:1.8x  n=4:3.1x  n=8:4.7x  n=16:6.4x  n=64:8.8x  n=1024:9.9x  limite=10x
+p=0.95  n=2:1.9x  n=4:3.5x  n=8:5.9x  n=16:9.1x  n=64:15.4x  n=1024:19.6x  limite=20x
+p=0.99  n=2:2.0x  n=4:3.9x  n=8:7.5x  n=16:13.9x  n=64:39.3x  n=1024:91.2x  limite=100x

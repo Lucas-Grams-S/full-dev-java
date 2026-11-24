@@ -1,0 +1,4 @@
+JVM (G1, JIT)        #1: lotes (ms): 279 137 106 122 108 101 95 116 96 97 98 98  | total 1453 ms
+native image         #1: lotes (ms): 281 262 262 263 267 268 270 267 268 267 266 267  | total 3208 ms
+JVM (G1, JIT)        #2: lotes (ms): 264 128 120 102 97 96 118 95 95 97 98 108  | total 1418 ms
+native image         #2: lotes (ms): 275 251 256 257 261 264 263 262 262 261 261 261  | total 3134 ms

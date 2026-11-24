@@ -1,0 +1,80 @@
+{
+  "consumer": {
+    "name": "payflow-monolith"
+  },
+  "interactions": [
+    {
+      "description": "a request for the preferences of an unknown user",
+      "providerStates": [
+        {
+          "name": "user ghost does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/internal/v1/users/ghost/preferences"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "description": "a request for the preferences of u1",
+      "providerStates": [
+        {
+          "name": "user u1 has preferences"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/internal/v1/users/u1/preferences"
+      },
+      "response": {
+        "body": {
+          "channels": [
+            "EMAIL",
+            "EMAIL"
+          ],
+          "userId": "u1"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.channels": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.channels[*]": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "EMAIL|PUSH|SMS"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.7.7"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "notifications"
+  }
+}

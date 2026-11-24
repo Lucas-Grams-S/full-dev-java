@@ -1,0 +1,12 @@
+open connection after the change: single_app (still works)
+first NEW connection with the old password failed after 1503 ms
+as app_a: DROP TABLE accounts -> denied
+as app_a: ALTER TABLE accounts ADD COLUMN x int -> denied
+as app_a: CREATE TABLE evil (id int) -> denied
+as app_a: DELETE FROM ledger_entries -> denied
+as app_a: UPDATE ledger_entries SET amount = 0 -> denied
+as app_a: TRUNCATE ledger_entries -> denied
+WRONG order: ok=56 failed=1
+stored verifier starts with: SCRAM-SHA-256$
+after the switch, new connections run as: app_b
+queries during the rotation: ok=197 failed=0

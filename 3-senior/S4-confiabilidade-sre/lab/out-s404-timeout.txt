@@ -1,0 +1,4 @@
+variant=timeout  load=40 req/s  request threads=16  fault=3000 ms injected into notifications  (MODEL)
+1 steady state (no fault)          n=240  p50=   15 ms  p99=   72 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS
+2 fault injected                   n=240  p50=  209 ms  p99=  251 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS
+3 after the fault is removed       n=240  p50=   96 ms  p99=   99 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS

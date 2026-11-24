@@ -1,0 +1,2 @@
+ASYNC LISTENER FAILED -> transfer ok, saldo b=40.00, ouvinte chamado 1x (erro só no log)
+SYNC LISTENER FAILED -> saldo a=100.00 b=0.00

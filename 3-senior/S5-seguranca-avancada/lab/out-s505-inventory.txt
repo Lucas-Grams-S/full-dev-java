@@ -1,0 +1,11 @@
+MODEL: a data inventory (what personal data, why, how long, who owns it) with a linter. The rows are the PayFlow's PROPOSED columns; legal bases and retention are DRAFTS for legal review.
+
+proposed inventory (5 rows): 0 problems
+
+broken inventory (3 rows, written to FAIL): 4 problem(s)
+  users.email: no valid legal basis
+  heap_dumps.any: no retention period
+  heap_dumps.any: no owner
+  marketing_events.device_id: purge overdue (last purge 2026-06-01, job should run monthly)
+
+Reading: the linter checks that the fields exist and the purge ran; it cannot say whether 'legitimate interest' is the right basis. That is a legal judgement (DPO/jurídico).

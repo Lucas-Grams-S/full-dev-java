@@ -1,0 +1,13 @@
+IO 1000 chamadas de 100 ms: pool_plataforma_50=2005 ms | threads_virtuais=107 ms | reactor_flatMap=123 ms
+IO 100 chamadas BLOQUEANTES dentro do Reactor: sem_subscribeOn=10027 ms (≈100×100) | boundedElastic=110 ms
+STACK threads_virtuais: frames_totais=6 frames_do_nosso_codigo=3 suprimidas=0
+   com.payflow.lab.ReactiveVsVirtualIT.level2(ReactiveVsVirtualIT.java:82)
+   com.payflow.lab.ReactiveVsVirtualIT.level1(ReactiveVsVirtualIT.java:81)
+   com.payflow.lab.ReactiveVsVirtualIT.lambda$stackTracesAreEasierToReadWithBlockingCode$0(ReactiveVsVirtualIT.java:68)
+   java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+STACK reactor: frames_totais=95 frames_do_nosso_codigo=4 suprimidas=1
+   com.payflow.lab.ReactiveVsVirtualIT.level2(ReactiveVsVirtualIT.java:82)
+   com.payflow.lab.ReactiveVsVirtualIT.level1b(ReactiveVsVirtualIT.java:83)
+   com.payflow.lab.ReactiveVsVirtualIT.lambda$stackTracesAreEasierToReadWithBlockingCode$1(ReactiveVsVirtualIT.java:71)
+   reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:114)
+CPU 24 tarefas: pool_de_N_nucleos=84 ms | threads_virtuais=75 ms | reactor_parallel=101 ms

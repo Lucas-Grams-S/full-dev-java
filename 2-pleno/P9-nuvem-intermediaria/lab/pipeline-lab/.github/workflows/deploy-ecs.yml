@@ -1,0 +1,76 @@
+name: Deploy to ECS
+
+on:
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: "Image digest to deploy (sha256:...), from the Release run"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-ecs
+  cancel-in-progress: false
+
+jobs:
+  staging:
+    name: staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: staging
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DIGEST: ${{ inputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Register a new task definition revision with the digest and wait for a stable service
+        env:
+          CLUSTER: ${{ vars.ECS_CLUSTER }}
+          SERVICE: ${{ vars.ECS_SERVICE }}
+          REPOSITORY_URI: ${{ vars.ECR_REPOSITORY_URI }}
+        run: bash scripts/ci/ecs-deploy.sh "$CLUSTER" "$SERVICE" "$REPOSITORY_URI" "$DIGEST"
+      - name: Smoke test through the public entry point
+        env:
+          BASE_URL: ${{ vars.STAGING_URL }}
+        run: bash scripts/ci/smoke-test.sh "$BASE_URL"
+
+  production:
+    name: production (after staging, with a human approval)
+    needs: staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DIGEST: ${{ inputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Deploy
+        env:
+          CLUSTER: ${{ vars.ECS_CLUSTER }}
+          SERVICE: ${{ vars.ECS_SERVICE }}
+          REPOSITORY_URI: ${{ vars.ECR_REPOSITORY_URI }}
+        run: bash scripts/ci/ecs-deploy.sh "$CLUSTER" "$SERVICE" "$REPOSITORY_URI" "$DIGEST"
+      - name: Smoke test
+        env:
+          BASE_URL: ${{ vars.PRODUCTION_URL }}
+        run: bash scripts/ci/smoke-test.sh "$BASE_URL"

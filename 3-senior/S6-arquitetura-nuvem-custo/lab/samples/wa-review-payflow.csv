@@ -1,0 +1,21 @@
+id;pillar;question;risk;evidence;owner;due;action
+FND01;FND;Contas separadas por ambiente e para backup/auditoria?;HIGH;tudo numa conta (P9), S4.05 e S5.03 pedem backup em outra conta;@tech-lead;2026-12-31;landing zone mínima da S6.05 (Organizations, OUs, 6 contas)
+FND02;FND;Guardrails de organização (SCP) e acesso humano centralizado?;HIGH;sem SCP, usuários IAM da J10;@tech-lead;2026-12-31;SCPs testadas da S6.05 + IAM Identity Center
+FND04;FND;Política de tags e inventário?;MEDIUM;tags só no default_tags do Terraform (P8);@dev-payflow;2027-01-31;política de tags da S6.04 com linter no CI
+FND06;FND;Orçamento, alertas e atribuição de custo por ambiente?;HIGH;só o orçamento de US$ 10 da J10.04 (conta inteira);@dev-payflow;2026-12-15;budgets por conta + detecção de anomalia (S6.04)
+OPS01;OPS;Runbooks e alertas com dono?;NONE;decisão 220 (11 runbooks verificados por máquina);;;
+OPS02;OPS;Os alertas e runbooks já foram ensaiados no PayFlow real?;HIGH;nada do PayFlow foi executado (testes práticos no fim);@dev-payflow;2027-02-15;ordem da decisão 182 + game day E1-E6 (decisão 222)
+SEC01;SEC;Autorização negada por padrão e testada?;NONE;decisão 230 (16 casos, 3 mutantes);;;
+SEC02;SEC;mTLS entre serviços?;NONE;decisão 232 (não agora, com gatilhos escritos);;;
+SEC03;SEC;Trilha de auditoria à prova de adulteração?;MEDIUM;decisão 242 (cadeia de HMAC), selador e âncora ainda não existem;@dev-payflow;2027-01-31;selador + bucket com Object Lock na conta de auditoria (S6.05)
+REL01;REL;Sobrevive à perda de uma AZ sem estourar o SLO?;MEDIUM;S4.06 opções A/B/C, out-s601-tradeoff.txt mostra 110% na B com número ímpar;@tech-lead;2027-01-15;decidir B ou B2 e medir com o E6 (decisão 222)
+REL02;REL;Backup restaurável e com RPO/RTO definidos?;MEDIUM;decisão 223 (RTO do PITR a medir);@dev-payflow;2027-01-31;ensaio de restauração com tempo medido
+REL03;REL;Recuperação regional?;NONE;decisão 225 (backup e restauração, multirregião não adotado, com gatilhos);;;
+PERF01;PERF;Capacidade medida por teste de carga?;MEDIUM;S2 mediu programas pequenos, não o PayFlow;@dev-payflow;2027-02-15;k6 em modelo aberto contra o PayFlow (S2.06)
+PERF02;PERF;Escolha de computação justificada?;NONE;decisão 165 (Fargate ARM) e S6.02;;;
+COST01;COST;Estimativa de custo com premissas e preços datados?;NONE;out-s604-estimate.txt (S6.04);;;
+COST02;COST;Custo por unidade de negócio (por 1.000 transferências)?;MEDIUM;estimado, não medido;@dev-payflow;2027-03-31;métrica de custo unitário com dados do CUR 2.0
+COST03;COST;Compromissos (Savings Plans/reservas)?;NA;NA: sem 3 meses de uso real ainda, decidir pelo piso medido (S6.04);;;
+COST04;COST;Ambientes não produtivos desligam fora do horário?;MEDIUM;staging ligado 24x7 no desenho da P9;@dev-payflow;2027-01-31;agenda de desligamento do staging (S6.04)
+SUS01;SUS;Processador e tamanho eficientes?;NONE;decisão 165 (ARM64/Graviton) e S6.02;;;
+SUS02;SUS;Retenção de dados e logs com prazo?;NONE;decisão 170 (logs 30 dias) e S3.04 (arquivamento);;;

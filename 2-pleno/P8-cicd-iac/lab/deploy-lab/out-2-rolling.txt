@@ -1,0 +1,9 @@
+>> 4000 requests / 4 threads; at t=1s the rolling update starts (BAD_ROLLOUT=0)
+  [rollout] step 1/4 done: pool = lab-p8-app-2 lab-p8-app-3 lab-p8-app-4 lab-p8-app-new1
+  [rollout] step 2/4 done: pool = lab-p8-app-new1 lab-p8-app-3 lab-p8-app-4 lab-p8-app-new2
+  [rollout] step 3/4 done: pool = lab-p8-app-new1 lab-p8-app-new2 lab-p8-app-4 lab-p8-app-new3
+  [rollout] step 4/4 done: pool = lab-p8-app-new1 lab-p8-app-new2 lab-p8-app-new3 lab-p8-app-new4
+[action ran at t=1.00s, took 8.69s]
+total=4000 failures=0 duration=10.9s
+  version=v1    status=200                     1945 (48.6%)
+  version=v2    status=200                     2055 (51.4%)

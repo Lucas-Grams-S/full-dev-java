@@ -1,0 +1,5 @@
+variant=timeout-async  load=100 req/s  request threads=16  fault=3000 ms injected into notifications  (MODEL)
+1 steady state (no fault)          n=600  p50=    9 ms  p99=   59 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS
+2 fault injected                   n=600  p50=   49 ms  p99=   50 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS
+3 after the fault is removed       n=600  p50=   49 ms  p99=   50 ms  success= 100.0%  hypothesis(p99<400ms & >=99%): HOLDS
+   notifications dropped by the bulkhead: 556

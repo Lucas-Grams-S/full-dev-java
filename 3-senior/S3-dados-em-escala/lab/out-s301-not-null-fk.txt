@@ -1,0 +1,62 @@
+## C) NOT NULL and FOREIGN KEY: the lock each step takes (pg_locks inside the transaction) and its time (1M rows)
+-- C0) the append-only trigger of the ledger (V5) also blocks a BACKFILL of ledger_entries
+NOTICE:  ledger UPDATE failed: ledger_entries is append-only (UPDATE blocked)
+-- C1) direct SET NOT NULL: scans the whole table while holding the strongest lock
+Time: 0.076 ms
+Time: 245.858 ms
+             ?column?              
+-----------------------------------
+ C1 lock held: AccessExclusiveLock
+(1 row)
+
+-- C2) CHECK (channel IS NOT NULL) NOT VALID, VALIDATE, then SET NOT NULL
+                     ?column?                     
+--------------------------------------------------
+ C2a ADD ... NOT VALID holds: AccessExclusiveLock
+(1 row)
+
+Time: 0.011 ms
+Time: 53.806 ms
+                   ?column?                   
+----------------------------------------------
+ C2b VALIDATE holds: ShareUpdateExclusiveLock
+(1 row)
+
+C2c SET NOT NULL with the validated CHECK in place (no scan):
+Time: 0.481 ms
+-- C2d) PostgreSQL 18: the NOT NULL constraint itself can be NOT VALID
+                         ?column?                          
+-----------------------------------------------------------
+ C2d ADD NOT NULL ... NOT VALID holds: AccessExclusiveLock
+(1 row)
+
+a NEW row with channel NULL is refused at once, even though the constraint is not validated yet:
+ERROR:  null value in column "channel" of relation "transfers" violates not-null constraint
+DETAIL:  Failing row contains (01a1dcf3-6772-7061-b958-87702cd61bdc, 82bdfc54-b5cd-4dc2-bd46-74ae3557b2a9, cf5eafea-4f80-4f28-a1db-5e688e159f01, 1.00, NEW, k-null-test, 2026-11-15 02:05:01.68118+00, null).
+Time: 0.068 ms
+Time: 83.164 ms
+                   ?column?                   
+----------------------------------------------
+ C2d VALIDATE holds: ShareUpdateExclusiveLock
+(1 row)
+
+-- C3) FOREIGN KEY transfers -> accounts: plain x NOT VALID + VALIDATE
+Time: 0.091 ms
+Time: 451.594 ms
+                                      ?column?                                       
+-------------------------------------------------------------------------------------
+ C3a plain FK holds: accounts=ShareRowExclusiveLock, transfers=ShareRowExclusiveLock
+(1 row)
+
+                                          ?column?                                           
+---------------------------------------------------------------------------------------------
+ C3b FK ... NOT VALID holds: accounts=ShareRowExclusiveLock, transfers=ShareRowExclusiveLock
+(1 row)
+
+Time: 0.012 ms
+Time: 276.603 ms
+                        ?column?                        
+--------------------------------------------------------
+ C3c VALIDATE holds: transfers=ShareUpdateExclusiveLock
+(1 row)
+

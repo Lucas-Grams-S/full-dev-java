@@ -1,0 +1,5 @@
+# Every entry needs a reason AND an expiry (statement + expired_at): an exception that never expires is a hole.
+vulnerabilities:
+  - id: CVE-2026-109518
+    statement: "apt/libapt are in the base image but nothing runs apt in the container; the fix arrives with the next base-image rebuild"
+    expired_at: 2026-12-15

@@ -1,0 +1,61 @@
+## A) "volume per day and type" straight on the 3M-row ledger (the OLTP table)
+                            QUERY PLAN                             
+-------------------------------------------------------------------
+ HashAggregate (actual rows=1460.00 loops=1)
+   Group Key: (created_at)::date, type
+   Batches: 1  Memory Usage: 1169kB
+   ->  Seq Scan on ledger_entries (actual rows=3000000.00 loops=1)
+ Planning Time: 0.886 ms
+ Execution Time: 800.098 ms
+(6 rows)
+
+
+## B) materialized view: build, refresh and read
+Time: 627.960 ms
+Time: 1.665 ms
+REFRESH (blocks readers while it runs):
+Time: 642.568 ms
+REFRESH ... CONCURRENTLY (readers keep reading the old copy; needs the unique index):
+Time: 626.329 ms
+read one month of the view:
+    day     |  type  | entries |  amount  
+------------+--------+---------+----------
+ 2026-10-01 | CREDIT |    2057 | 62573.94
+ 2026-10-01 | DEBIT  |    2058 | 62604.36
+ 2026-10-02 | CREDIT |    2058 | 44391.06
+ 2026-10-02 | DEBIT  |    2057 | 44369.49
+(4 rows)
+
+Time: 0.265 ms
+        ?column?         
+-------------------------
+ view: 1460 rows, 208 kB
+(1 row)
+
+
+## C) summary table fed by an incremental job and the late-data trap
+                                ?column?                                
+------------------------------------------------------------------------
+ after the first full load: summary = 3000000 entries, ledger = 3000000
+(1 row)
+
+-- 100 on-time entries arrive (2026-11-01 08:00) ...
+-- 500 entries commit LATE: created_at is yesterday-ish (2026-10-30) but they arrive after the job ran; 1 entry is MUCH later (2026-09-01)
+-- job v1: "add everything with created_at > watermark (the max created_at of the last run)" (+= semantics)
+                         ?column?                         
+----------------------------------------------------------
+ job v1: summary = 3000100, ledger = 3000601, MISSING 501
+(1 row)
+
+-- job v2: recompute the last 2 days from scratch (idempotent upsert with =, not +=)
+                        ?column?                        
+--------------------------------------------------------
+ job v2: summary = 3000600, ledger = 3000601, MISSING 1
+(1 row)
+
+-- the 1 entry outside the window is caught only by the reconciliation (full compare, day by day):
+    day     |  type  | ledger_entries | summary_entries 
+------------+--------+----------------+-----------------
+ 2026-09-01 | CREDIT |           2058 |            2057
+(1 row)
+

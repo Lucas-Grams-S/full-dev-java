@@ -1,0 +1,25 @@
+$ actionlint samples/workflows/security.yml
+exit=0
+
+$ actionlint (mutant: unknown job in needs + runner label typo)
+samples/workflows/security.yml:22:14: label "ubuntu-24.0" is unknown. available labels are "windows-latest", "windows-latest-8-cores", "windows-2025", "windows-2025-vs2026", "windows-2022", "windows-1
+   |
+22 |     runs-on: ubuntu-24.0
+   |              ^~~~~~~~~~~
+samples/workflows/security.yml:32:14: label "ubuntu-24.0" is unknown. available labels are "windows-latest", "windows-latest-8-cores", "windows-2025", "windows-2025-vs2026", "windows-2022", "windows-1
+   |
+32 |     runs-on: ubuntu-24.0
+   |              ^~~~~~~~~~~
+samples/workflows/security.yml:45:14: label "ubuntu-24.0" is unknown. available labels are "windows-latest", "windows-latest-8-cores", "windows-2025", "windows-2025-vs2026", "windows-2022", "windows-1
+   |
+45 |     runs-on: ubuntu-24.0
+   |              ^~~~~~~~~~~
+samples/workflows/security.yml:57:3: job "dast" needs job "nope" which does not exist in this workflow [job-needs]
+   |
+57 |   dast:
+   |   ^~~~~
+samples/workflows/security.yml:60:14: label "ubuntu-24.0" is unknown. available labels are "windows-latest", "windows-latest-8-cores", "windows-2025", "windows-2025-vs2026", "windows-2022", "windows-1
+   |
+60 |     runs-on: ubuntu-24.0
+   |              ^~~~~~~~~~~
+exit=1

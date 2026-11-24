@@ -1,0 +1,27 @@
+us-east-1: m7g.large on demand US$ 0.0816/h; Spot Advisor saving 58% -> US$ 0.0343/h (interruption frequency >20%)
+  job: 4 h of work, deadline 8 h; on demand = US$ 0.33, always on time
+  hazard/hour    checkpoint       mean cost   p95 time    late runs
+  1%             every 15 min      US$ 0.14       4.0h         0.0%
+  1%             none              US$ 0.14       4.0h         0.2%
+  5%             every 15 min      US$ 0.14       4.3h         0.0%
+  5%             none              US$ 0.15       7.3h         2.1%
+  20%            every 15 min      US$ 0.14       4.6h         0.0%
+  20%            none              US$ 0.21      12.8h        19.9%
+  50%            every 15 min      US$ 0.15       5.1h         0.0%
+  50%            none              US$ 0.46      34.0h        60.9%
+  x 500 runs/month (e.g. a nightly fleet): on demand US$ 163.20 vs Spot with checkpoints at 5%/h ~US$ 69.26
+
+sa-east-1: m7g.large on demand US$ 0.1301/h; Spot Advisor saving 38% -> US$ 0.0807/h (interruption frequency >20%)
+  job: 4 h of work, deadline 8 h; on demand = US$ 0.52, always on time
+  hazard/hour    checkpoint       mean cost   p95 time    late runs
+  1%             every 15 min      US$ 0.32       4.0h         0.0%
+  1%             none              US$ 0.33       4.0h         0.2%
+  5%             every 15 min      US$ 0.33       4.3h         0.0%
+  5%             none              US$ 0.36       7.3h         2.1%
+  20%            every 15 min      US$ 0.34       4.6h         0.0%
+  20%            none              US$ 0.50      12.8h        19.9%
+  50%            every 15 min      US$ 0.36       5.1h         0.0%
+  50%            none              US$ 1.07      34.0h        60.9%
+  x 500 runs/month (e.g. a nightly fleet): on demand US$ 260.20 vs Spot with checkpoints at 5%/h ~US$ 163.00
+
+(hazard per hour is a PREMISE; the Advisor gives a monthly frequency bucket, not a per-hour rate)

@@ -1,0 +1,59 @@
+spring:
+  http:
+    clients:
+      connect-timeout: 500ms
+      read-timeout: 600ms          # vale para o cliente que o gateway usa para falar com os destinos? (testado)
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          trusted-proxies: .*
+          routes:
+            - id: notifications
+              uri: ${lab.notifications.url}
+              predicates:
+                - Path=/notifications/**
+              filters:
+                - StripPrefix=1
+                - AddRequestHeader=X-Gateway, payflow
+                - name: CircuitBreaker
+                  args:
+                    id: notif-cb
+                    fallbackUri: forward:/fallback/notifications
+                    statusCodes: 503   # sem isto, uma resposta 503 NÃO conta como falha para o breaker do gateway
+            - id: notifications-retry
+              uri: ${lab.notifications.url}
+              predicates:
+                - Path=/retry/**
+              filters:
+                - StripPrefix=1
+                - name: Retry
+                  args:
+                    retries: 3
+                    statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                    methods: GET,POST
+            - id: dead
+              uri: http://127.0.0.1:9
+              predicates:
+                - Path=/dead/**
+              filters:
+                - StripPrefix=1
+            - id: monolith
+              uri: ${lab.monolith.url}
+              predicates:
+                - Path=/api/**
+              filters:
+                - AddRequestHeader=X-Gateway, payflow
+resilience4j:
+  circuitbreaker:
+    instances:
+      notif-cb:
+        sliding-window-size: 4
+        minimum-number-of-calls: 4
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

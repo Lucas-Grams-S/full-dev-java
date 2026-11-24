@@ -1,0 +1,25 @@
+== 1. Quorum N=3, 100000 pares escrita-leitura, leitura IMEDIATA (antes da replicacao assincrona) ==
+W=1 R=1  W+R=2 <= N  leituras velhas:  66547 de 100000 (66.55%)
+W=1 R=2  W+R=3 <= N  leituras velhas:  33418 de 100000 (33.42%)
+W=2 R=1  W+R=3 <= N  leituras velhas:  33343 de 100000 (33.34%)
+W=2 R=2  W+R=4 > N  leituras velhas:      0 de 100000 (0.00%)
+W=3 R=1  W+R=4 > N  leituras velhas:      0 de 100000 (0.00%)
+W=1 R=3  W+R=4 > N  leituras velhas:      0 de 100000 (0.00%)
+
+== 2. Um cliente escreve v1..v50 (1 por tick) no lider; 3 replicas seguidoras recebem com atraso 0-4 ticks; ele le 1 replica ALEATORIA por tick ==
+leituras que voltaram no tempo (versao menor que a ja vista): 7 de 50; leituras defasadas em relacao ao lider: 40
+lendo SEMPRE da mesma replica (sticky): leituras que voltaram no tempo = 0
+
+== 3. Particao de rede: {A,B} de um lado e {C} do outro; clientes dos dois lados tentam gravar saldo ==
+CP (so a maioria grava)
+   A grava 80: aceita
+   C grava 60: RECUSADA (sem quorum)
+   B grava 70: aceita
+   C grava 50: RECUSADA (sem quorum)
+   gravacoes aceitas=2 recusadas=2; apos curar (LWW) todos ficam com 70
+AP (todos gravam, LWW ao curar)
+   A grava 80: aceita
+   C grava 60: aceita
+   B grava 70: aceita
+   C grava 50: aceita
+   gravacoes aceitas=4 recusadas=0; apos curar (LWW) todos ficam com 50  <- as gravacoes 80, 60 e 70 foram DESCARTADAS silenciosamente

@@ -1,0 +1,22 @@
+== 1. capacity left after losing one of 2 AZs (CPU target 60% before the loss) ==
+tasks | per AZ | after loss: tasks | CPU util after loss | verdict
+    2 |      1 |                 1 |               120% | OVERLOADED until it scales
+    3 |      1 |                 1 |               180% | OVERLOADED until it scales
+    4 |      2 |                 2 |               120% | OVERLOADED until it scales
+    6 |      3 |                 3 |               120% | OVERLOADED until it scales
+
+Rule: to survive losing 1 of 2 AZs at <= 85% CPU you need  tasks_before * 0.60 / (tasks_before/2) <= 0.85  ->  60%*2 = 120% > 85%: ALWAYS fails with 2 AZs at 60% target.
+=> with 2 AZs the steady CPU must be <= 42% (0.85/2) to ride out an AZ loss WITHOUT scaling; or use 3 AZs: 60% * 3/2 = 90%.
+   with 3 AZs and equal spread: after the loss util = 60% * 3/2 = 90%  (still hot); steady <= 56% keeps it <= 85%.
+
+== 2. the autoscaler needs time: how long is the service hot after the loss? ==
+t=0 min: AZ lost, 2 tasks left, CPU 120%
+t=3 min: first scale-out lands, 4 tasks, CPU 60%
+(the minutes between the loss and the scale-out are spent above 100% -> queueing, timeouts, 5xx: the budget is spent HERE)
+
+== 3. the connection count after the loss and during a deploy (decisions 171/181) ==
+4 tasks, maximum_percent=100 -> up to 40 connections (limit 90) ok
+4 tasks, maximum_percent=200 -> up to 80 connections (limit 90) ok
+6 tasks, maximum_percent=100 -> up to 60 connections (limit 90) ok
+6 tasks, maximum_percent=200 -> up to 120 connections (limit 90) EXCEEDS
+A deploy DURING the recovery from an AZ loss (6 tasks x 200%) = 120 connections > 90: the safe rule is 'no deploy while degraded'.

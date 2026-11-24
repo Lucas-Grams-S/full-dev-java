@@ -1,0 +1,12 @@
+>> canary at 5% (BAD=0): 4000 requests
+total=4000 failures=0 duration=10.8s
+  version=v1    status=200                     3789 (94.7%)
+  version=v2    status=200                      211 (5.3%)
+  canary: 211 requests, 0 errors -> 0.0% ; rule: abort above 2%
+  DECISION: promote to the next step
+>> canary at 25% (BAD=0): 4000 requests
+total=4000 failures=0 duration=10.8s
+  version=v1    status=200                     3006 (75.2%)
+  version=v2    status=200                      994 (24.9%)
+  canary: 994 requests, 0 errors -> 0.0% ; rule: abort above 2%
+  DECISION: promote to the next step

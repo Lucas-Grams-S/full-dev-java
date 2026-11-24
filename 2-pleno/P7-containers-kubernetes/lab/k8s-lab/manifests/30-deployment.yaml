@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payflow
+  namespace: payflow
+  labels: {app.kubernetes.io/name: payflow, app.kubernetes.io/part-of: payflow}
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}   # nunca menos capacidade que o desejado
+  selector:
+    matchLabels: {app.kubernetes.io/name: payflow}
+  template:
+    metadata:
+      labels: {app.kubernetes.io/name: payflow, app.kubernetes.io/part-of: payflow}
+      annotations:
+        # a porta de gestão é lida pelo Prometheus (P6): não vai para o Service
+        prometheus.io/scrape-note: "porta 8081, caminho /actuator/prometheus, papel METRICS"
+    spec:
+      # 45 s > 20 s de timeout-per-shutdown-phase (P6.06) + 5 s do preStop, com folga
+      terminationGracePeriodSeconds: 45
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001            # o mesmo uid da imagem (J9.02)
+        runAsGroup: 10001
+        fsGroup: 10001              # dono de grupo dos arquivos do Secret
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: {app.kubernetes.io/name: payflow}
+      containers:
+        - name: payflow
+          image: payflow:p7           # no kind: "kind load docker-image payflow:p7 --name payflow"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - {name: http, containerPort: 8080}
+            - {name: mgmt, containerPort: 8081}
+          envFrom:
+            - configMapRef: {name: payflow-config}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 250m, memory: 768Mi}
+            limits: {cpu: "1", memory: 768Mi}   # memória: limite = requisição (decisão 151)
+          startupProbe:                 # dá até 5 s x 36 = 180 s para subir
+            httpGet: {path: /actuator/health/liveness, port: mgmt}
+            periodSeconds: 5
+            failureThreshold: 36
+          livenessProbe:                # SÓ o processo (decisão 143)
+            httpGet: {path: /actuator/health/liveness, port: mgmt}
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:               # banco + estado da aplicação
+            httpGet: {path: /actuator/health/readiness, port: mgmt}
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              sleep: {seconds: 5}       # dá tempo de o endpoint sair dos Services antes do SIGTERM
+          volumeMounts:
+            - {name: app-secret, mountPath: /run/secrets/app, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: app-secret
+          secret:
+            secretName: payflow-app
+            defaultMode: 0440
+        - name: tmp
+          emptyDir: {sizeLimit: 512Mi}

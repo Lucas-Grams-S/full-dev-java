@@ -1,0 +1,17 @@
+# A) the default of the PayFlow image (eclipse-temurin:25-jre): no networkaddress.cache.ttl set
+networkaddress.cache.ttl (security property) = null
+t= 0s  resolves to 10.0.0.1   (the primary)
+t= 0s  [DNS record now points to the standby: this is the failover]
+t= 1s  still 10.0.0.1   (cached)
+t= 2s  still 10.0.0.1   (cached)
+t=10s  still 10.0.0.1   (cached)
+t=20s  still 10.0.0.1   (cached)
+t=30s  resolves to 10.0.0.2   <- the JVM finally saw the new address (30 s after the change)
+
+# B) with -Djava.security.properties=ttl.props (networkaddress.cache.ttl=5; AWS recommends <= 60 s in production)
+networkaddress.cache.ttl (security property) = 5
+t= 0s  resolves to 10.0.0.1   (the primary)
+t= 0s  [DNS record now points to the standby: this is the failover]
+t= 1s  still 10.0.0.1   (cached)
+t= 2s  still 10.0.0.1   (cached)
+t= 5s  resolves to 10.0.0.2   <- the JVM finally saw the new address (5 s after the change)

@@ -1,0 +1,17 @@
+MODEL: severity = likelihood (1-5) x impact (1-5): >=20 CRITICAL, >=12 HIGH, >=6 MEDIUM, else LOW. A PROPOSED rubric; the number is a conversation starter, not a measurement.
+
+L \ I       1         2         3         4         5         
+5           LOW       MED       HIGH      CRIT      CRIT      
+4           LOW       MED       HIGH      HIGH      CRIT      
+3           LOW       MED       MED       HIGH      HIGH      
+2           LOW       LOW       MED       MED       MED       
+1           LOW       LOW       LOW       LOW       LOW       
+
+SLA to fix (days, proposed): CRITICAL 7 | HIGH 30 | MEDIUM 90 | LOW 365
+
+Worked examples:
+  L=5 I=4 -> CRITICAL IDOR on GET /accounts/{id} found, trivially exploitable, other customers' balances
+  L=2 I=2 -> LOW      missing CSP header on a page with no user content
+  L=2 I=5 -> MEDIUM   DB port open to 0.0.0.0/0 but needs the DB password (strong, rotated)
+  L=3 I=5 -> HIGH     heap dump with personal data left in a shared bucket
+Reading: the same finding moves with its context (the 5432 example is MEDIUM here, because of the password; it would be HIGH or worse if the password were weak). Write the assumption next to the score.

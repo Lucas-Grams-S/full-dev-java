@@ -1,0 +1,14 @@
+== 1. Mover chaves ao ir de 4 para 5 nos (100000 chaves) ==
+hash mod N      : 79979 chaves mudam de no (80.0%)
+anel vnodes=  1 :  22634 chaves mudam (22.6%); com 5 nos: maior no=57047 menor no=3219 (ideal 20000; maior/ideal=2.85)
+anel vnodes= 16 :  16405 chaves mudam (16.4%); com 5 nos: maior no=24216 menor no=16405 (ideal 20000; maior/ideal=1.21)
+anel vnodes=128 :  19205 chaves mudam (19.2%); com 5 nos: maior no=22018 menor no=18192 (ideal 20000; maior/ideal=1.10)
+anel vnodes=512 :  21417 chaves mudam (21.4%); com 5 nos: maior no=21417 menor no=18018 (ideal 20000; maior/ideal=1.07)
+(ideal ao acrescentar o 5o no: 1/5 = 20,0% das chaves)
+
+== 2. Chave quente: 1.000.000 acessos a 10.000 contas com distribuicao Zipf (s=1,1), 8 shards por hash da conta ==
+acessos por shard = [89913, 94880, 207869, 110413, 114152, 215890, 73979, 92904]; maior/media = 1.73; a conta mais quente sozinha = 151438 acessos (15.1% do total)
+
+== 3. Chave monotonica (tempo) x hash: 1.000.000 escritas durante a hora 14, 8 shards ==
+particao por FAIXA do tempo : [0, 0, 0, 0, 1000000, 0, 0, 0]
+particao por HASH da chave  : [125084, 124725, 125209, 125029, 124985, 124661, 125230, 125077]

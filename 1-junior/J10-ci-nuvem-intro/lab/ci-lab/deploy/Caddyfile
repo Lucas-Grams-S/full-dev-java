@@ -1,0 +1,15 @@
+{$PAYFLOW_DOMAIN} {
+	encode zstd gzip
+
+	# O teto do CORPO da requisicao e da borda (J8.07, decisao 63): 64 KB basta para a API do PayFlow
+	request_body {
+		max_size 64KB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	reverse_proxy app:8080
+}

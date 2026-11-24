@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Entrar · PayFlow</title><link rel="stylesheet" href="/static/app.css"></head>
+<body>
+<main>
+  <h1>Entrar</h1>
+  <p role="alert" th:if="${message != null}" th:text="${message}">Mensagem</p>
+  <form th:action="|/login|" method="post">
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" autocomplete="username" required>
+    <label for="password">Senha</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+  </form>
+</main>
+</body>
+</html>

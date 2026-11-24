@@ -1,0 +1,17 @@
+synthetic disk usage: day 0 = 400 GB, day 89 = 503 GB; limit = 600 GB (PREMISE: volume size)
+true trend: +0.9 GB/day (+25 GB one-off bulk load on day 40, the kind of step a short window misreads)
+
+window used for the fit        | slope GB/day | days until the limit (from day 89)
+days 60-89 (30 d, after the step)    |         0.92 | 105
+days 75-89 (15 d)                    |         0.90 | 108
+days 82-89 (7 d)                     |         0.92 | 105
+days 86-89 (4 d, half a week)        |        -0.40 | never (negative slope: WRONG)
+days 0-89 (whole, includes the step) |         1.31 | 74
+days 41-89 (49 d, after the step)    |         0.90 | 107
+true answer (known by construction): 107 days
+
+Prometheus predict_linear(v[range], secs) does exactly this least-squares line over `range`: the RANGE is the whole decision.
+A window that contains the step sees a slope that was never there; a window shorter than the weekly cycle sees the wiggle as trend.
+
+WAL retained by a stuck replication slot (S3.06 measured ~375 MB per 1M updated rows):
+free 120 GB, WAL 3.0 GB/h -> disk full in 40.0 h if a slot stops consuming; max_slot_wal_keep_size must stay well below 120 GB

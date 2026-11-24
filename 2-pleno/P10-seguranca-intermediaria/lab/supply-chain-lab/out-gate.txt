@@ -1,0 +1,9 @@
+$ verify-before-deploy.sh <repo>:1                          # por tag
+REFUSED: '127.0.0.1:5001/payflow/identity-lab:1' is not a digest reference (tags are mutable)
+exit=2
+$ verify-before-deploy.sh <repo>@<digest ORIGINAL, assinado>
+OK: signature valid for sha256:683475d8fad74e58ac557815ecdb2fabd64162c26df0c6689102deec283dba8d
+exit=0
+$ verify-before-deploy.sh <repo>@<digest da imagem trocada, sem assinatura>
+REFUSED: no valid signature for sha256:0e709d06e72109229b97b78aefd784cee6adfc8dc19638e0c9bf8dd318295900
+exit=1

@@ -1,0 +1,9 @@
+MODEL: encrypted columns cannot be searched. A BLIND INDEX = HMAC-SHA256(secret, normalized value): equal values -> equal tags (lookup works), and that is also the leak.
+1000 users, 3 distinct phones (a shared family/office line is common). What a DB dump shows in phone_idx:
+  0bb66e3e17e8  x 700
+  35842f9aaa03  x 100
+  a25f783792a4  x 200
+-> the dump leaks WHO shares a value and HOW MANY (700/200/100) without the key; encrypting the column alone leaks neither.
+lookup of +5511999990001 -> tag a25f783792a4 -> 200 row(s) found by equality (no decryption).
+Without normalization the same phone has two tags: a25f783792a4 vs c589301b7d0f (phone_e164 from S3.09 is the normalized input).
+Unlike a plain SHA-256, the HMAC needs the secret: a 10^10-phone dictionary attack needs the key too.

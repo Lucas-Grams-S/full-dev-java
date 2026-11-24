@@ -1,0 +1,34 @@
+NOTICE:  index "idx_ledger_entries_account_created_cov" does not exist, skipping
+NOTICE:  index "idx_transfers_pending" does not exist, skipping
+--- S0: índices da V4 apenas ---
+1_primeira_pagina                 0.048 ms
+2_pagina_20001_offset           290.770 ms
+3_pagina_20001_keyset             0.059 ms
+4_total_de_linhas                20.198 ms
+5_resumo_30_dias                  6.032 ms
+6_resumo_2_anos_por_mes         273.978 ms
+7_dia_com_date_cast              19.634 ms
+8_dia_com_intervalo               0.094 ms
+tamanho dos índices de ledger_entries: 377 MB
+>>> CREATE INDEX CONCURRENTLY (covering)
+Time: 2782.740 ms (00:02.783)
+--- S1: V4 + índice coberto (INCLUDE type, amount) ---
+1_primeira_pagina                 0.050 ms
+2_pagina_20001_offset           237.118 ms
+3_pagina_20001_keyset             0.064 ms
+4_total_de_linhas                19.887 ms
+5_resumo_30_dias                  3.783 ms
+6_resumo_2_anos_por_mes         192.031 ms
+7_dia_com_date_cast              19.272 ms
+8_dia_com_intervalo               0.094 ms
+tamanho dos índices de ledger_entries: 658 MB
+--- S2: só o índice coberto (o antigo foi removido) ---
+1_primeira_pagina                 0.047 ms
+2_pagina_20001_offset           236.154 ms
+3_pagina_20001_keyset             0.056 ms
+4_total_de_linhas                21.749 ms
+5_resumo_30_dias                  3.756 ms
+6_resumo_2_anos_por_mes         192.886 ms
+7_dia_com_date_cast              21.902 ms
+8_dia_com_intervalo               0.094 ms
+tamanho dos índices de ledger_entries: 464 MB

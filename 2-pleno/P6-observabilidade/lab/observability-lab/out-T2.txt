@@ -1,0 +1,24 @@
+T2 150 ids, 1 série: http_server_requests_seconds_count{application="payflow-obs-lab",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/api/v1/accounts/{id}"} 150
+T2 404: http_server_requests_seconds_count{application="payflow-obs-lab",error="none",exception="none",method="GET",outcome="CLIENT_ERROR",status="404",uri="/**"} 1
+T2 /actuator/prometheus na porta da aplicação: 404
+T2 bucket: http_server_requests_seconds_bucket{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/transfers",le="0.05"} 3
+T2 bucket: http_server_requests_seconds_bucket{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/transfers",le="0.25"} 4
+T2 cliente HTTP: http_client_requests_seconds_count{application="payflow-obs-lab",client_name="localhost",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/internal/v1/risk?account={a}"} 10
+T2 com maximumAllowableTags(10): 10 linhas
+T2 Content-Type do scrape: text/plain;version=0.0.4;charset=utf-8
+T2 log vira métrica: logback_events_total{application="payflow-obs-lab",level="debug"} 0.0
+T2 log vira métrica: logback_events_total{application="payflow-obs-lab",level="error"} 1.0
+T2 log vira métrica: logback_events_total{application="payflow-obs-lab",level="info"} 26.0
+T2 log vira métrica: logback_events_total{application="payflow-obs-lab",level="trace"} 0.0
+T2 log vira métrica: logback_events_total{application="payflow-obs-lab",level="warn"} 6.0
+T2 medidores antes -> depois de 1000 contas como tag: 101 -> 1101 (linhas no scrape: 1000)
+T2 outbox parado: [payflow_outbox_pending{application="payflow-obs-lab"} 4.0] [payflow_outbox_published_total{application="payflow-obs-lab"} 0.0]
+T2 prefixos das famílias: [application, disk, executor, http, jvm, logback, payflow, process, system, tomcat]
+T2 RED (taxa e erros): http_server_requests_seconds_count{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="CLIENT_ERROR",status="422",uri="/api/v1/transfers"} 1
+T2 RED (taxa e erros): http_server_requests_seconds_count{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="SERVER_ERROR",status="500",uri="/api/v1/transfers"} 1
+T2 RED (taxa e erros): http_server_requests_seconds_count{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/transfers"} 8
+T2 séries no scrape / famílias de medidores: 672 / 63
+T2 timer de negócio: payflow_transfer_seconds_count{application="payflow-obs-lab",error="IllegalStateException",outcome="failed"} 1
+T2 timer de negócio: payflow_transfer_seconds_count{application="payflow-obs-lab",error="none",outcome="completed"} 8
+T2 timer de negócio: payflow_transfer_seconds_count{application="payflow-obs-lab",error="none",outcome="rejected"} 1
+T2 total de buckets desse timer (uma série): 75

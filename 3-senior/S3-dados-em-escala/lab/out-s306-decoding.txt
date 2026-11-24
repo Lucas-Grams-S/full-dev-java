@@ -1,0 +1,72 @@
+      ?column?       
+---------------------
+ wal_level = logical
+(1 row)
+
+      ?column?      
+--------------------
+ slot created: s306
+(1 row)
+
+
+## A) INSERT / UPDATE / DELETE as the slot delivers them (default REPLICA IDENTITY = primary key)
+    lsn     |  xid  |                                                  data                                                   
+------------+-------+---------------------------------------------------------------------------------------------------------
+ 1/AD426C30 | 66939 | BEGIN 66939
+ 1/AD426C30 | 66939 | table public.cdc_users: INSERT: id[bigint]:1 email[text]:'ana@example.test' bio[text]:'short bio'
+ 1/AD426D60 | 66939 | COMMIT 66939
+ 1/AD426D60 | 66940 | BEGIN 66940
+ 1/AD426D60 | 66940 | table public.cdc_users: UPDATE: id[bigint]:1 email[text]:'ana.silva@example.test' bio[text]:'short bio'
+ 1/AD426E00 | 66940 | COMMIT 66940
+ 1/AD426E00 | 66941 | BEGIN 66941
+ 1/AD426E00 | 66941 | table public.cdc_users: DELETE: id[bigint]:1
+ 1/AD426E78 | 66941 | COMMIT 66941
+(9 rows)
+
+
+## B) the same UPDATE with REPLICA IDENTITY FULL (old row values travel too)
+                                                                                             data                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ table public.cdc_users: UPDATE: old-key: id[bigint]:2 email[text]:'bob@example.test' bio[text]:'short bio' new-tuple: id[bigint]:2 email[text]:'bob.souza@example.test' bio[text]:'short bio'
+(1 row)
+
+
+## C) a big (TOASTed) column that does not change is NOT sent
+                                                        data                                                        
+--------------------------------------------------------------------------------------------------------------------
+ table public.cdc_users: UPDATE: id[bigint]:3 email[text]:'carla.lima@example.test' bio[text]:unchanged-toast-datum
+(1 row)
+
+
+## D) transactions: committed ones arrive whole, rolled-back ones never arrive; at-least-once with peek
+-- peek #1 (does not advance the slot)
+                                           data                                           
+------------------------------------------------------------------------------------------
+ BEGIN 66948
+ table public.cdc_users: INSERT: id[bigint]:10 email[text]:'a@example.test' bio[text]:'x'
+ table public.cdc_users: INSERT: id[bigint]:11 email[text]:'b@example.test' bio[text]:'x'
+ COMMIT 66948
+(4 rows)
+
+-- peek #2 (a consumer that crashed before confirming sees the SAME events again)
+ events_seen_again 
+-------------------
+                 4
+(1 row)
+
+-- get (consume + confirm)
+ events_consumed 
+-----------------
+               4
+(1 row)
+
+ events_left 
+-------------
+           0
+(1 row)
+
+ pg_drop_replication_slot 
+--------------------------
+ 
+(1 row)
+

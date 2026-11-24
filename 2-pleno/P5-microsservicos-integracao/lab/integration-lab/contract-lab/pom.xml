@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>com.payflow</groupId><artifactId>integration-lab</artifactId><version>0.0.1</version></parent>
+  <artifactId>contract-lab</artifactId>
+  <properties><pact.version>4.7.7</pact.version></properties>
+  <dependencies>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc</artifactId></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc-test</artifactId><scope>test</scope></dependency>
+    <dependency><groupId>au.com.dius.pact.consumer</groupId><artifactId>junit5</artifactId><version>${pact.version}</version><scope>test</scope></dependency>
+    <dependency><groupId>au.com.dius.pact.provider</groupId><artifactId>junit5</artifactId><version>${pact.version}</version><scope>test</scope></dependency>
+  </dependencies>
+  <build><plugins>
+    <plugin>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <configuration>
+        <excludedGroups>breaks</excludedGroups>
+        <systemPropertyVariables><pact_do_not_track>true</pact_do_not_track></systemPropertyVariables>
+      </configuration>
+    </plugin>
+  </plugins></build>
+</project>

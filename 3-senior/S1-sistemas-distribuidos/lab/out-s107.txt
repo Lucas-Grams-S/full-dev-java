@@ -1,0 +1,18 @@
+== 1. Saga orquestrada: pagar 100 (saldo 500). Falhas injetadas em cada passo ==
+caminho feliz                                -> COMPLETA                                         pagador=400 lojista=100 reservado=0 dinheiro conservado=true
+saldo insuficiente (saldo 50)                -> COMPENSADA (saldo insuficiente)                  pagador=50 lojista=0 reservado=0 dinheiro conservado=true
+antifraude recusa                            -> COMPENSADA (antifraude recusou)                  pagador=500 lojista=0 reservado=0 dinheiro conservado=true
+falha em 'creditar'                          -> COMPENSADA (falha injetada no passo creditar)    pagador=500 lojista=0 reservado=0 dinheiro conservado=true
+falha em 'notificar' tratada como compensavel -> COMPENSADA (falha injetada no passo notificar)   pagador=500 lojista=0 reservado=0 dinheiro conservado=true
+idem, e o estorno de 'creditar' falha 3x     -> COMPENSADA (falha injetada no passo notificar)   pagador=500 lojista=0 reservado=0 dinheiro conservado=true
+   log: OK reservar | OK antifraude | OK creditar | FALHA falha injetada no passo notificar | DESFEZ creditar (apos 3 tentativa(s) falha(s)) | DESFEZ antifraude | DESFEZ reservar
+falha em 'notificar' REPETIDA (apos o pivo)  -> COMPLETA                                         pagador=400 lojista=100 reservado=0 dinheiro conservado=true
+
+log da ultima saga: [OK reservar, OK antifraude, OK creditar, FALHOU notificar 2x e foi REPETIDO (passo apos o pivo nao se compensa), OK notificar]
+
+== 2. Queda do orquestrador no meio: recuperacao pelo log de passos ==
+QUEDA apos 'antifraude'. Estado: pagador=400 reservado=100 lojista=0 ; log durável=[OK reservar, OK antifraude]
+apos a recuperacao: pagador=400 reservado=0 lojista=100 ; log=[OK reservar, OK antifraude, OK creditar, OK notificar]
+
+== 3. 2PC: coordenador cai DEPOIS do PREPARE; os participantes ficam bloqueados ==
+participantes votaram SIM e nao podem decidir sozinhos: bloqueados por 500 de 1000 ticks; 137 operacoes novas na mesma conta esperaram (ou falharam) nesse intervalo

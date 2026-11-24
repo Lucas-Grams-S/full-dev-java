@@ -1,0 +1,14 @@
+### lab.break=additive
+      has a matching body (OK)
+### lab.break=rename
+    1.1) body: $ Actual map is missing the following keys: channels
+1) Verifying a pact between payflow-monolith and notifications - a request for the preferences of u1 has a matching body
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.328 s <<< FAILURE! -- in com.payflow.lab.contract.ProviderPactVerificationTest
+      has a matching body (FAILED)
+      has a matching body (OK)
+### lab.break=type
+    1.1) body: $.channels Type mismatch: Expected 'EMAIL,PUSH' (String) to be the same type as ["EMAIL","EMAIL"] (Array)
+1) Verifying a pact between payflow-monolith and notifications - a request for the preferences of u1 has a matching body
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.363 s <<< FAILURE! -- in com.payflow.lab.contract.ProviderPactVerificationTest
+      has a matching body (FAILED)
+      has a matching body (OK)

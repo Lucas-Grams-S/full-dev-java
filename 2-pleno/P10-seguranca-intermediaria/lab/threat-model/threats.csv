@@ -1,0 +1,27 @@
+id,stride,where,threat,control,status,evidence,owner,review_by
+T01,T,api,"Token forjado: payload trocado e assinatura mantida","Assinatura RS256 conferida contra o JWKS do Keycloak",mitigated,test:ResourceServerTest#tamperedPayload_is401,,
+T02,S,api,"Token sem assinatura (alg=none)","Só RS256 aceito; token sem assinatura é recusado",mitigated,test:ResourceServerTest#algNone_is401,,
+T03,S,api,"Confusão de algoritmo: HS256 assinado com a chave pública","Decodificador restrito a RS256",mitigated,test:ResourceServerTest#hs256SignedWithThePublicKey_is401,,
+T04,S,api,"Token assinado por uma chave desconhecida","Chaves só vêm do JWKS do emissor",mitigated,test:ResourceServerTest#signedByAnUnknownKey_is401,,
+T05,S,auth-code,"Código de autorização roubado e trocado por tokens","PKCE (S256) obrigatório no cliente",mitigated,test:AuthorizationCodePkceIT#stolenCodeIsUselessWithoutTheVerifier,,
+T06,S,internal,"Serviço qualquer (ou usuário) chamando /internal","Escopo + lista de clientes (azp) no /internal",mitigated,test:ResourceServerTest#internal_aKnownClientWithoutTheScope_is403_andAnUnknownClientWithTheScope_is403,,
+T07,S,api,"Token reaproveitado depois do logout","Prazo curto do access token (5 min); o refresh é revogado",accepted,test:ResourceServerKeycloakIT#logoutRevokesTheRefreshToken_butTheAccessTokenKeepsWorkingUntilItExpires,time-seguranca,2027-02-14
+T08,T,auth-code,"redirect_uri trocado para o endereço do atacante","Correspondência exata do redirect_uri no cliente",mitigated,test:AuthorizationCodePkceIT#redirectUriMustMatchExactly_noLoginPageForAnAttackersAddress,,
+T09,T,database,"Aplicação comprometida apaga ou altera o livro-razão","Papel da aplicação sem UPDATE/DELETE/DDL em ledger_entries",mitigated,test:SecretRotationIT#theApplicationRoleHasLeastPrivilege_noDdl_noUpdateOrDeleteOfTheLedger,,
+T10,T,supply-chain,"Imagem trocada na mesma tag","Deploy por digest + assinatura verificada",mitigated,grep:supply-chain-lab/out-cosign.txt::Error: no signatures found,,
+T11,T,supply-chain,"Dependência com falha conhecida","SBOM + scan no CI (Trivy)",mitigated,grep:supply-chain-lab/out-sbom-planted.txt::CVE-2021-44228,,
+T12,R,api,"Ação administrativa sem autoria","sub do token no registro de auditoria (SecurityAudit, J8)",mitigated,file:../../../1-junior/J8-seguranca-essencial/lab/security-lab/src/main/java/com/payflow/security/SecurityAudit.java,,
+T13,R,api,"Escopo e papel do token mudam sem registro no Keycloak","Eventos de administração do realm ligados e exportados",open,,time-plataforma,2026-12-15
+T14,I,api,"Usuário lê a conta de outro (IDOR)","Dono conferido no caso de uso (sub do token)",mitigated,test:ResourceServerTest#idor_bobCannotReadAlicesAccount_404,,
+T15,I,auth-code,"Senha do usuário passa pelo PayFlow","O login é do Keycloak; o PayFlow só vê o código",mitigated,test:AuthorizationCodePkceIT#thePasswordNeverTravelsToThePayFlow_onlyTheCode,,
+T16,I,auth-code,"Login revela se o e-mail existe","Mesma mensagem para usuário e senha inválidos",mitigated,test:AuthorizationCodePkceIT#wrongPassword_showsTheLoginAgain_withoutRevealingWhichPartWasWrong,,
+T17,I,database,"Senha do banco legível por quem acessa o banco","SCRAM-SHA-256 e papel sem acesso a pg_authid",mitigated,test:SecretRotationIT#passwordsAreStoredAsScramHashes_notReadableEvenToTheAppRole,,
+T18,I,infra,"Segredo no state do Terraform","ephemeral + secret_string_wo (P9.06): 0 ocorrências",mitigated,file:../../P9-nuvem-intermediaria/lab/cloud-lab/run-cloud.sh,,
+T19,D,auth-code,"Força bruta de senha","Detecção de força bruta do realm (5 falhas)",mitigated,test:RealmPolicyIT#bruteForceDetection_locksTheAccountAfterFiveFailures_evenForTheRightPassword,,
+T20,D,api,"Corpo de requisição gigante","Limite no gateway/borda (P5)",accepted,file:../../P5-microsservicos-integracao/README.md,time-plataforma,2027-01-15
+T21,D,api,"Keycloak fora do ar: com o JWKS em cache a API segue (medido); sem cache o token vira 403 vazio e ERROR no log","Responder 503 e alarmar; Keycloak em alta disponibilidade (a fazer)",open,,time-plataforma,2026-12-15
+T22,E,api,"Usuário comum chama o endpoint de administrador","Papel ADMIN na cadeia e no @PreAuthorize",mitigated,test:ResourceServerTest#adminEndpoint_needsTheRole_notTheScope,,
+T23,E,api,"Token de leitura usado para transferir","Escopo transfers:write exigido",mitigated,test:ResourceServerTest#readScopeIsNotEnoughToTransfer_403_insufficientScope,,
+T24,E,api,"ID token usado como token de acesso","Validação de typ=Bearer e de audiência",mitigated,test:ResourceServerTest#idTokenIsNotAnAccessToken_is401,,
+T25,E,internal,"Cliente pede um escopo que não recebeu","Escopos opcionais por cliente no Keycloak",mitigated,test:KeycloakRealmIT#aClientCannotAskForAScopeItWasNotGiven,,
+T26,E,database,"Aplicação roda migrações (DDL) com a conta da aplicação","Conta de migração separada da conta da aplicação",mitigated,test:SecretRotationIT#theApplicationRoleHasLeastPrivilege_noDdl_noUpdateOrDeleteOfTheLedger,,

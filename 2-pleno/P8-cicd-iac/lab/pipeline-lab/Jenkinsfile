@@ -1,0 +1,51 @@
+// Declarative Pipeline: the SAME gates as .github/workflows/ci.yml, for a team that still runs Jenkins.
+// NOT executed (no Jenkins server here): written from the official syntax reference; run the
+// "Pipeline Syntax" / declarative linter of your Jenkins before trusting it.
+pipeline {
+  agent none
+  options {
+    timeout(time: 30, unit: 'MINUTES')       // a hung build must not hold an agent forever
+    disableConcurrentBuilds(abortPrevious: true)
+    buildDiscarder(logRotator(numToKeepStr: '30'))
+  }
+  stages {
+    stage('Static analysis') {
+      agent { label 'linux && docker' }
+      steps {
+        sh './mvnw -B -ntp validate'                                    // Checkstyle (fails in seconds)
+        sh 'find scripts deploy -name "*.sh" -print0 | xargs -0 shellcheck --severity=style'
+      }
+    }
+    stage('Build and test') {
+      agent { label 'linux && docker' }                                 // Testcontainers needs Docker
+      steps {
+        sh './mvnw -B -ntp verify'                                      // SpotBugs, tests, JaCoCo gate
+      }
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'                         // test report on the build page
+          archiveArtifacts artifacts: 'target/site/jacoco/**', allowEmptyArchive: true
+        }
+      }
+    }
+    stage('Dependencies and IaC') {
+      parallel {                                                        // independent: run side by side
+        stage('Trivy fs') {
+          agent { label 'linux && docker' }
+          steps { sh 'bash scripts/ci/scan-fs.sh' }
+        }
+        stage('Terraform') {
+          agent { label 'linux && docker' }
+          steps {
+            sh 'terraform fmt -recursive -check deploy/terraform'
+            sh 'bash scripts/ci/terraform-check.sh deploy/terraform'
+            sh 'bash scripts/ci/scan-config.sh deploy/terraform'
+          }
+        }
+      }
+    }
+  }
+  post {
+    failure { echo 'CI failed: the merge must stay blocked (a required status check in the SCM).' }
+  }
+}

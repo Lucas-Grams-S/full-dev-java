@@ -1,0 +1,2 @@
+AWS SDK v2 2.59.1 JARs found: 32
+javac: 7 sample classes compiled (S3ArchiveStore skipped: s3 JAR not in ~/.m2)

@@ -1,0 +1,7 @@
+MODEL: local AES-256-GCM on this machine (amd64, JDK 25); ms vary run to run.
+14-byte field (seal only, key reused): 1.97 us/op
+14-byte field, envelope (new DEK + local wrap): 4.11 us/op, KMS calls = 50000
+A REAL KMS call is a network round trip (ms, not us) with a quota: caching a data key and reusing it for many records trades fewer calls for a bigger blast radius per key.
+  10,000 records, data key reused for     1 records -> 10000 KMS wrap calls (1 per key)
+  10,000 records, data key reused for   100 records ->   100 KMS wrap calls (1 per key)
+  10,000 records, data key reused for 10000 records ->     1 KMS wrap calls (1 per key)

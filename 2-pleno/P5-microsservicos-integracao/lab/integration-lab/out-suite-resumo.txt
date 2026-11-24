@@ -1,0 +1,11 @@
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Reactor Summary for integration-lab 0.0.1:
+[INFO] integration-lab .................................... SUCCESS [  0.001 s]
+[INFO] resilience-lab ..................................... SUCCESS [ 19.415 s]
+[INFO] gateway-lab ........................................ SUCCESS [  6.934 s]
+[INFO] grpc-lab ........................................... SUCCESS [ 13.871 s]
+[INFO] contract-lab ....................................... SUCCESS [  3.430 s]
+[INFO] BUILD SUCCESS

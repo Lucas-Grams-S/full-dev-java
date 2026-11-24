@@ -1,0 +1,11 @@
+## D) backfill of 1M rows: one UPDATE x batches of 20k with COMMIT; point updates (pgbench, 4 clients) running meanwhile
+--- single
+backfill took 9050 ms
+WAL written: 386 MB
+point updates: 6062, average 7.3 ms, MAX 8670.4 ms, slower than 1 s: 4
+--- batches
+NOTICE:  batches: 50
+backfill took 18420 ms
+WAL written: 381 MB
+point updates: 70983, average 1.1 ms, MAX 375.7 ms, slower than 1 s: 0
+dead tuples now: 1211426, table size: 253 MB

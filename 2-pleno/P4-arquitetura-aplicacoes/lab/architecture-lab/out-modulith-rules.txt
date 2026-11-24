@@ -1,0 +1,4 @@
+MODBAD VERIFY ->
+- Module 'extras' depends on non-exposed type com.payflow.fixtures.modbad.core.internal.CoreInternal within module 'core'!
+Field <com.payflow.fixtures.modbad.extras.ExtraService.internal> has type <com.payflow.fixtures.modbad.core.internal.CoreInternal> in (ExtraService.java:0)
+- Module 'reports' depends on module 'extras' via com.payflow.fixtures.modbad.reports.ReportService -> com.payflow.fixtures.modbad.extras.ExtraService. Allowed targets: core :: api.

@@ -1,0 +1,17 @@
+## B) the lock queue: an ALTER waits behind a long reader and BLOCKS every new reader
+--- ALTER with lock_timeout=0 (0 = wait forever)
+  -- what pg_stat_activity shows while the three sessions wait (A = idle reader holding the lock, B = ALTER, C = innocent SELECT):
+   pid | state  |   waiting_on    | blocked_by |                    query                     
+  -----+--------+-----------------+------------+----------------------------------------------
+   156 | active | Timeout:PgSleep | {}         | begin; select count(*) from users; select pg
+   163 | active | Lock:relation   | {156}      | set lock_timeout='0'; alter table users add 
+   170 | active | Lock:relation   | {163}      | select 'reader C got its answer' from users 
+  (3 rows)
+  
+  [C SELECT] reader C got its answer
+  [B ALTER] finished
+  [C SELECT] waited 4610 ms (the long reader A holds its lock for ~6 s)
+--- ALTER with lock_timeout=1s (0 = wait forever)
+  [C SELECT] reader C got its answer
+  [B ALTER] ERROR:  canceling statement due to lock timeout
+  [C SELECT] waited 570 ms (the long reader A holds its lock for ~6 s)

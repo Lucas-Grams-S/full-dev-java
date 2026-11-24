@@ -1,0 +1,5 @@
+waivers:
+  - id: CVE-EXAMPLE-0001            # placeholder id for the exercise
+    reason: library only used by a build-time tool; not on the request path
+    owner: platform-team
+    until: 2027-01-15

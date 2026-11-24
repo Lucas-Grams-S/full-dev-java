@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Pinned by digest: a tag can be moved, a digest cannot (P8.02).
+  TRIVY_IMAGE: ghcr.io/aquasecurity/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
+
+jobs:
+  static:
+    name: static analysis (Checkstyle, shell, workflows)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: "Checkstyle (bound to validate: fails in seconds, before compiling)"
+        run: ./mvnw -B -ntp validate
+      - name: ShellCheck on every script
+        run: find scripts deploy -name '*.sh' -print0 | xargs -0 shellcheck --severity=style
+      - name: actionlint on the workflows themselves
+        run: docker run --rm -v "$PWD":/repo -w /repo rhysd/actionlint:1.7.12 -color
+
+  test:
+    name: build, tests and coverage gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Verify (compile, SpotBugs, tests with Testcontainers, JaCoCo gate)
+        run: ./mvnw -B -ntp verify
+      - name: Coverage summary
+        if: ${{ !cancelled() }}
+        run: python3 scripts/ci/coverage-summary.py target/site/jacoco/jacoco.csv >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: reports
+          path: |
+            target/surefire-reports/
+            target/site/jacoco/
+          retention-days: 7
+          if-no-files-found: warn
+
+  dependencies:
+    name: vulnerable dependencies (filesystem scan)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Trivy fs (pom.xml and lockfiles), HIGH and CRITICAL with a fix available
+        run: bash scripts/ci/scan-fs.sh
+
+  iac:
+    name: infrastructure as code (format, validate, tests, misconfiguration)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: 1.17.2
+          terraform_wrapper: false
+      - name: terraform fmt
+        run: terraform fmt -recursive -check -diff deploy/terraform
+      - name: terraform validate and test every module
+        run: bash scripts/ci/terraform-check.sh deploy/terraform
+      - name: Misconfiguration scan (Trivy config)
+        run: bash scripts/ci/scan-config.sh deploy/terraform
+
+  chart:
+    name: Helm chart (lint and render)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+        with:
+          version: v4.3.2
+      - name: helm lint and template with the production values
+        run: |
+          helm lint deploy/chart/payflow --strict -f deploy/chart/payflow/values-production.yaml
+          helm template payflow deploy/chart/payflow -f deploy/chart/payflow/values-production.yaml > rendered.yaml
+      - name: Misconfiguration scan of the rendered manifests
+        run: bash scripts/ci/scan-config.sh rendered.yaml
+
+  # ONE required check for the branch protection rule: add a job above and the rule does not change.
+  ci-passed:
+    name: ci-passed
+    if: ${{ always() }}
+    needs: [static, test, dependencies, iac, chart]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Every job must have succeeded (skipped and cancelled count as failure)
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: $RESULTS"
+          for r in $RESULTS; do
+            [ "$r" = "success" ] || { echo "::error::a required job finished as '$r'"; exit 1; }
+          done

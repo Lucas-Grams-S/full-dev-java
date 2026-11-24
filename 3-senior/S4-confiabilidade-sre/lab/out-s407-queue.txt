@@ -1,0 +1,12 @@
+M/M/4 queue, mean service 20 ms, 400,000 requests per row, seeded. MODEL.
+utilization | p50 latency | p95 latency | p99 latency | max latency | mean wait in queue
+        30% |       14 ms |       60 ms |       93 ms |      246 ms |      0.3 ms
+        50% |       16 ms |       63 ms |       96 ms |      253 ms |      1.8 ms
+        60% |       17 ms |       67 ms |      100 ms |      272 ms |      3.6 ms
+        70% |       20 ms |       76 ms |      112 ms |      300 ms |      7.2 ms
+        80% |       27 ms |       95 ms |      140 ms |      408 ms |     14.9 ms
+        90% |       44 ms |      158 ms |      237 ms |      674 ms |     38.3 ms
+        95% |       78 ms |      283 ms |      400 ms |      836 ms |     82.8 ms
+        98% |      176 ms |      689 ms |      940 ms |     1296 ms |    215.8 ms
+
+The curve is not a line: from 80% to 95% the p99 grows ~3x (140 -> 400 ms) and the maximum latency doubles. 'We have 20% spare' is not 'we have headroom'.

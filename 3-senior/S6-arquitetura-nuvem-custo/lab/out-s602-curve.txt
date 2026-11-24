@@ -1,0 +1,22 @@
+Region us-east-1, prices published 2026-11-11 (Fargate) / 2026-11-20 (Lambda) / 2026-11-21 (EC2)
+Premises: 10 ms CPU + 50 ms wait per request; daily shape from S6.01 (peak = 1.93x average); target 60%;
+  Lambda ARM 1024 MB behind the same ALB; Fargate ARM 0.5 vCPU/1 GB, min 2; EC2 m7g.large, min 2 (one per AZ).
+  Excluded (equal or not priced here): ALB, data transfer, free tier, people, patching, AMIs.
+
+avg req/s |        Lambda CPU used |       Fargate CPU used | EC2 on-demand CPU used |     EC2 RI 1y
+     0.1 |      US$ 0.29      26% |     US$ 28.84       0% |    US$ 119.14       0% |     US$ 78.84
+     0.5 |      US$ 1.44      26% |     US$ 28.84       1% |    US$ 119.14       0% |     US$ 78.84
+     1.0 |      US$ 2.88      26% |     US$ 28.84       1% |    US$ 119.14       0% |     US$ 78.84
+     2.0 |      US$ 5.77      26% |     US$ 28.84       2% |    US$ 119.14       1% |     US$ 78.84
+     5.0 |     US$ 14.41      26% |     US$ 28.84       5% |    US$ 119.14       1% |     US$ 78.84
+    10.0 |     US$ 28.83      26% |     US$ 28.84      10% |    US$ 119.14       3% |     US$ 78.84
+    20.0 |     US$ 57.66      26% |     US$ 28.84      20% |    US$ 119.14       5% |     US$ 78.84
+    50.0 |    US$ 144.15      26% |     US$ 37.25      39% |    US$ 119.14      12% |     US$ 78.84
+   100.0 |    US$ 288.29      26% |     US$ 57.67      50% |    US$ 119.14      25% |     US$ 78.84
+   200.0 |    US$ 576.59      26% |    US$ 103.33      56% |    US$ 153.88      39% |    US$ 101.84
+   500.0 |  US$ 1,441.47      26% |    US$ 248.10      58% |    US$ 282.95      53% |    US$ 187.25
+
+Crossover Lambda = Fargate at 10.0 req/s on average
+Crossover Lambda = EC2 on-demand at 41.3 req/s on average
+At 20 req/s: Fargate peak 2 (US$ 28.84), Lambda peak concurrency 2.6 (US$ 57.66)
+Fargate x86 / ARM price ratio: vCPU x1.25, memory x1.25

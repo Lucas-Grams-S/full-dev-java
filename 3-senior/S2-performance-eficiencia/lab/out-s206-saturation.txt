@@ -1,0 +1,7 @@
+pool=16  tempo medio de servico ~21.8 ms  =>  capacidade teorica ~734 req/s
+taxa (req/s)  resultado (carga aberta, 8 s por linha, latencia desde o instante pretendido)
+         200  n=1600  p50=21.3  p95=26.4  p99=201.1  p99.9=201.6  max=201.6 ms
+         400  n=3200  p50=20.9  p95=25.9  p99=26.9  p99.9=201.1  max=201.4 ms
+         600  n=4800  p50=20.6  p95=25.6  p99=26.1  p99.9=200.8  max=201.2 ms
+         700  n=5600  p50=24.8  p95=61.3  p99=200.4  p99.9=233.3  max=243.4 ms
+         800  n=6400  p50=404.0  p95=750.7  p99=801.4  p99.9=925.3  max=988.5 ms

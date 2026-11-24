@@ -1,0 +1,9 @@
+T7 gestão /actuator/health (sem credencial) -> 200
+T7 gestão /actuator/prometheus (sem credencial) -> 401
+T7 gestão /actuator/prometheus (ana) -> 403
+T7 gestão /actuator/prometheus (ops) -> 200
+T7 gestão /actuator/prometheus (scraper) -> 200
+T7 app    /api/v1/hello (sem credencial) -> 401
+T7 app    /api/v1/hello (scraper) -> 200
+T7 app    /actuator/health (ops) -> 404
+T7 resumo: health=200 prometheus anon/USER/ADMIN=401/403/200 scraper=200

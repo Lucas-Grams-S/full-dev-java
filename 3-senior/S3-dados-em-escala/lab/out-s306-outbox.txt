@@ -1,0 +1,24 @@
+## F) Outbox + CDC: the outbox_events table of P3.09 as the slot sees it (INSERT by the app, UPDATE by the polling relay, DELETE by the cleanup)
+     ?column?      
+-------------------
+ slot: s306_outbox
+(1 row)
+
+                                                                                                                                       data                                                                                                                                        
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ BEGIN 66953
+ table public.outbox_events: INSERT: id[uuid]:'<uuid>' aggregate_id[text]:'acc-1' type[text]:'TransferCompleted' payload[text]:'{"amount":"10.00","currency":"BRL"}' created_at[timestamp with time zone]:'<ts>' published_at[timestamp with time zone]:null attempts[integer]:0
+ COMMIT 66953
+ BEGIN 66954
+ table public.outbox_events: UPDATE: id[uuid]:'<uuid>' aggregate_id[text]:'acc-1' type[text]:'TransferCompleted' payload[text]:'{"amount":"10.00","currency":"BRL"}' created_at[timestamp with time zone]:'<ts>' published_at[timestamp with time zone]:'<ts>' attempts[integer]:1
+ COMMIT 66954
+ BEGIN 66955
+ table public.outbox_events: DELETE: id[uuid]:'<uuid>'
+ COMMIT 66955
+(9 rows)
+
+ pg_drop_replication_slot 
+--------------------------
+ 
+(1 row)
+

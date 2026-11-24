@@ -1,0 +1,8 @@
+T5 /api/v1/accounts -> 200 {"service":"monolith","method":"GET","path":"/api/v1/accounts","xGateway":"payflow","xForwardedFor":"127.0.0.1","xForwardedHost":"127.0.0.1:36875","xForwardedProto":"http","xForwardedPrefix":"null","authorization":"null","headerNames":"[Accept-encoding, X-forwarded-port, Connection, Http2-settings, Host, Upgrade, User-agent, X-forwarded-host, Forwarded, X-forwarded-for, X-forwarded-proto, X-gateway]"}
+T5 CircuitBreaker no gateway (janela 4, destino 503): status das 6 chamadas = [200(destino=1), 200(destino=2), 200(destino=3), 200(destino=3), 200(destino=3), 200(destino=3)]; chamadas que chegaram ao destino=3
+T5 com o breaker aberto: 200 {"source":"gateway-fallback"}
+T5 destino fora do ar (conexao recusada): HTTP 500 {"timestamp":"2026-11-14T06:10:27.633Z","status":500,"error":"Internal Server Error","path":"/dead/x"}
+T5 destino lento (3 s), spring.http.clients.read-timeout=600ms, rota SEM breaker: HTTP 500 em 609 ms; chamadas ao destino=1
+T5 /notifications/internal/... -> 200 {"service":"notifications","method":"GET","path":"/internal/v1/users/u1/preferences","xGateway":"payflow","xForwardedFor":"127.0.0.1","xForwardedHost":"127.0.0.1:36875","xForwardedProto":"http","xForwardedPrefix":"/notifications","authorization":"Bearer abc","headerNames":"[Accept-encoding, X-forwarded-port, Connection, Http2-settings, Host, Upgrade, User-agent, X-forwarded-host, Authorization, Forwarded, X-forwarded-prefix, X-forwarded-for, X-forwarded-proto, X-gateway]"}
+T5 Retry(methods=GET,POST), destino 503: resposta 500; o destino recebeu 4 chamadas (1 original + 3 retentativas)
+T5 rota inexistente -> 404

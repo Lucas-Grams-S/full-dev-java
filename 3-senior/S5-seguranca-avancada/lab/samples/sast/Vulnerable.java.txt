@@ -1,0 +1,11 @@
+class TransferRepository {
+    private static final String DB_PASSWORD = "s3cr3t-payflow";                     // hard-coded secret
+
+    Account find(Connection c, String id) throws Exception {
+        return c.createStatement().executeQuery("SELECT * FROM accounts WHERE id = '" + id + "'"); // SQL by concatenation
+    }
+    String newToken() { return Long.toString(new java.util.Random().nextLong()); }  // predictable token
+    byte[] hash(byte[] in) throws Exception { return MessageDigest.getInstance("MD5").digest(in); } // weak hash
+    void run(String file) throws Exception { Runtime.getRuntime().exec("convert " + file); }       // command injection
+    SSLContext trustAll() { /* TrustManager that accepts everything */ return ctx("X509TrustManager { checkServerTrusted() {} }"); }
+}

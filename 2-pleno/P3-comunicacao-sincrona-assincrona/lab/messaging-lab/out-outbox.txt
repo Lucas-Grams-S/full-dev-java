@@ -1,0 +1,6 @@
+ESCRITA_DUPLA saldo_ana=900.00 eventos_no_kafka=0
+OUTBOX publicados=1 no_kafka=1
+DOIS_RELES relay1=160 relay2=140 soma=300 no_kafka=300
+CRASH_SIMULADO crash depois-do-envio-antes-de-marcar
+AT_LEAST_ONCE mensagens_no_topico=2 (mesmo event-id duas vezes)
+AT_LEAST_ONCE antes_da_queda=[m0, m1, m2, m3, m4, m5] depois_recebeu=[m0, m1, m2, m3, m4, m5, m6, m7, m8, m9]

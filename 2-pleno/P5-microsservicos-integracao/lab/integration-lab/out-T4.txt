@@ -1,0 +1,3 @@
+T4 bulkhead 5: 20 chamadas simultaneas -> 5 executadas, 15 rejeitadas; maximo simultaneo no servidor=5
+T4 rate limiter 10/s: 25 chamadas instantaneas -> 10 permitidas, 15 negadas (RequestNotPermitted)
+T4 TimeLimiter 200 ms: chamador liberado apos 206 ms com TimeoutException; mas o servidor ainda tem 1 requisicao em andamento (o trabalho NAO foi interrompido)

@@ -1,0 +1,8 @@
+Benchmark                    Mode  Cnt  Score   Error  Units
+PitfallsBench.baseline       avgt    5  0.232 ± 0.002  ns/op
+PitfallsBench.blackhole      avgt    5  4.607 ± 0.033  ns/op
+PitfallsBench.deadCode       avgt    5  0.237 ± 0.003  ns/op
+PitfallsBench.logConstant    avgt    5  4.594 ± 0.076  ns/op
+PitfallsBench.returned       avgt    5  4.624 ± 0.053  ns/op
+PitfallsBench.sqrtConstant   avgt    5  0.233 ± 0.003  ns/op
+PitfallsBench.sqrtFromState  avgt    5  1.374 ± 0.002  ns/op

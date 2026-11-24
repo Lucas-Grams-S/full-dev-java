@@ -1,0 +1,50 @@
+CREATE TABLE
+INSERT 0 2
+--- A) ONE-STEP rename (what a naive migration does)
+ALTER TABLE
+new version (N) reads holder_name:
+ holder_name 
+-------------
+ Ana
+(1 row)
+
+old version (N-1), still running during the rollout, reads owner_name:
+--- B) EXPAND / CONTRACT (three releases)
+ERROR:  column "owner_name" does not exist
+LINE 1: select owner_name from accounts where id = 1;
+               ^
+HINT:  Perhaps you meant to reference the column "accounts.holder_name".
+ALTER TABLE
+release 1 (EXPAND): add the new column, keep the old one, keep both in sync
+ALTER TABLE
+UPDATE 2
+CREATE FUNCTION
+CREATE TRIGGER
+ALTER TABLE
+old version (N-1) still works:
+ owner_name 
+------------
+ Ana
+(1 row)
+
+new version (N) works, and its insert is visible to the old one:
+INSERT 0 1
+ id | holder_name | owner_name 
+----+-------------+------------
+  1 | Ana         | Ana
+  2 | Bruno       | Bruno
+  3 | Carla       | Carla
+(3 rows)
+
+release 3 (CONTRACT): only after NO old version runs anymore
+DROP TRIGGER
+DROP FUNCTION
+ALTER TABLE
+ALTER TABLE
+ id | holder_name 
+----+-------------
+  1 | Ana
+  2 | Bruno
+  3 | Carla
+(3 rows)
+

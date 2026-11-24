@@ -1,0 +1,25 @@
+T5 --- reset
+T5 --- FASE A: tráfego normal
+T5 A p50=0.0041s p95=0.0055s p99=0.0056s
+T5 A média=0.0042s  fração>1s=0.0000
+T5 A erros5xx=0.0086  alertas=(nenhum)
+T5 --- FASE B: o serviço de risco fica LENTO (1500 ms) só para acc-7
+T5 B p50=0.0038s p95=1.5338s p99=1.7384s
+T5 B média=0.1056s  fração>1s=0.0700
+T5 B erros5xx=0.0038  alertas=[('PayflowTransfersSlow', 'firing')]
+T5 B Jaeger (duração >= 1 s): 17 traços; contas (atributo payflow.source.account): {'acc-7': 17}
+T5 B Jaeger (duração < 1 s, amostra): 300 traços; contas (atributo payflow.source.account): {'acc-8': 35, 'acc-1': 35, 'acc-5': 35, 'acc-6': 35, 'acc-2': 36, 'acc-3': 35, 'acc-9': 35, 'acc-4': 35, 'acc-7': 19}
+T5 --- FASE C: a lentidão passa do timeout de 2 s do cliente (2500 ms): 5xx
+T5 C erros5xx=0.0264  alertas=[('PayflowHighErrorRatio', 'firing'), ('PayflowTransfersSlow', 'firing'), ('PayflowUnexpectedErrors', 'firing')]
+T5 C resposta ao usuário: {"detail":"Unexpected error","instance":"/api/v1/transfers","status":500,"title":"Internal Server Error","traceId":"9687baaa32305a7e29310a88e3690139"}
+T5 C traço 9687baaa32305a7e29310a88e3690139:
+T5 C   http post /api/v1/transfers      2003.1 ms  otel.status_code=-     status=500          outcome=SERVER_ERROR exception=none
+T5 C   payflow.transfer                 2001.4 ms  otel.status_code=ERROR status=-            outcome=failed       exception=-
+T5 C   http get                         2001.1 ms  otel.status_code=ERROR status=CLIENT_ERROR outcome=UNKNOWN      exception=ResourceAccessException
+T5 C   http get /internal/v1/risk       2500.7 ms  otel.status_code=-     status=200          outcome=SUCCESS      exception=none
+T5 C logs com esse traceId:
+T5 C    06:57:58.241 ERROR unexpected failure | requestId=ticket-suporte-4711 | error.type=org.springframework.web.client.ResourceAccessException
+T5 C requestId do ticket no log: 1 linha(s)
+T5 --- FASE D: o relé do outbox para (o 'incidente 2')
+T5 D payflow_outbox_pending=149.0000  alertas=[('PayflowHighErrorRatio', 'firing'), ('PayflowOutboxBacklog', 'firing'), ('PayflowTransfersSlow', 'firing'), ('PayflowUnexpectedErrors', 'firing')]
+T5 --- fim

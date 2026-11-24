@@ -1,0 +1,7 @@
+id;pillar;question;risk;evidence;owner;due;action
+FND01;FND;Contas separadas por ambiente?;HIGH;tudo numa conta;;2026-12-31;landing zone
+OPS01;OPS;Runbooks?;NONE;temos alguns;;;
+SEC01;SEC;Autorização testada?;NONE;decisão 230;;;
+REL01;REL;Perda de AZ?;MEDIUM;S4.06;@tech-lead;2026-11-01;medir
+PERF01;PERF;Teste de carga?;HIGH;não medido;@dev-payflow;2027-06-30;k6
+COST01;COST;Compromissos?;NA;;;;

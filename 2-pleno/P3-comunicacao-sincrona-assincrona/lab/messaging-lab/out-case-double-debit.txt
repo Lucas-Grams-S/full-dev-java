@@ -1,0 +1,6 @@
+CASO commit falhou (consumidor expulso do grupo); a mensagem sera reentregue
+CASO_CONCILIACAO duplicados=[{request_id=pay-777, c=2, total=200.00}]
+CASO commit falhou (consumidor expulso do grupo); a mensagem sera reentregue
+CASO_SEM_IDEMPOTENCIA pagamento unico pay-777 de 100.00 -> debitos=2 saldo=800.00
+CASO commit falhou (consumidor expulso do grupo); a mensagem sera reentregue
+CASO_COM_IDEMPOTENCIA pagamento unico pay-777 de 100.00 -> debitos=1 saldo=900.00

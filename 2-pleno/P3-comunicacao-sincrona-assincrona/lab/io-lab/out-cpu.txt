@@ -1,0 +1,8 @@
+JDK 25.0.5.0.3+1-1-26.04.1-Ubuntu | núcleos=12
+== CPU-bound: 48 tarefas (300 000 SHA-256 cada) ==
+pool de   1 threads:    776 ms
+pool de   6 threads:    177 ms
+pool de  12 threads:    139 ms
+pool de  48 threads:    154 ms
+pool de 200 threads:    133 ms
+threads virtuais:       126 ms

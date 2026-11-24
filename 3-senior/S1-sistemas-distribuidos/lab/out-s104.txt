@@ -1,0 +1,18 @@
+== 1. Taxa de acerto de um LRU: 1.000.000 leituras de 100.000 chaves, popularidade Zipf (s=1,0) ==
+cache com   0.1% das chaves (   100): taxa de acerto = 28.9%
+cache com   1.0% das chaves (  1000): taxa de acerto = 50.6%
+cache com   5.0% das chaves (  5000): taxa de acerto = 66.4%
+cache com  10.0% das chaves ( 10000): taxa de acerto = 73.5%
+cache com  30.0% das chaves ( 30000): taxa de acerto = 84.8%
+MESMO cache de 10% com acesso UNIFORME (sem chaves quentes): taxa de acerto = 9.9%
+
+== 2. Corrida no cache-aside (intercalacao deterministica) ==
+banco=40.00 cache=100.00  <- cache velho ate o TTL expirar
+com preenchimento condicional por versao: preencheu? false cache=vazio (a proxima leitura busca o valor novo)
+
+== 3. Stampede: 200 threads pedem a MESMA chave expirada; o carregamento leva 100 ms ==
+sem protecao (cada uma carrega)    consultas ao banco = 200 ; tempo total = 118 ms
+single-flight (uma carrega)        consultas ao banco =   1 ; tempo total = 116 ms
+
+== 4. Write-through x write-behind: 1.000 escritas, o no cai quando 37 ainda nao foram ao banco ==
+apos a queda: write-through tem 1000 registros no banco; write-behind tem 963 (perdeu 37, que estavam so na memoria)

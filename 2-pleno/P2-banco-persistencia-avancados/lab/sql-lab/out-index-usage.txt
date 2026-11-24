@@ -1,0 +1,15 @@
+     tabela     |                 indice                 | buscas  | tamanho 
+----------------+----------------------------------------+---------+---------
+ accounts       | idx_accounts_owner_id                  |       1 | 184 kB
+ accounts       | pk_accounts                            | 8400007 | 632 kB
+ ledger_entries | pk_ledger_entries                      |       0 | 193 MB
+ ledger_entries | idx_ledger_entries_transfer_id         |       1 | 40 MB
+ ledger_entries | idx_ledger_entries_account_created_cov |       4 | 370 MB
+ ledger_entries | idx_ledger_entries_account_created     |   76511 | 194 MB
+ transfers      | uk_transfers_idempotency_key           |       0 | 50 MB
+ transfers      | idx_transfers_source_account_id        |       0 | 7336 kB
+ transfers      | pk_transfers                           |       0 | 30 MB
+ transfers      | idx_transfers_pending                  |       1 | 40 kB
+ transfers      | idx_transfers_target_account_id        |       1 | 7336 kB
+(11 rows)
+

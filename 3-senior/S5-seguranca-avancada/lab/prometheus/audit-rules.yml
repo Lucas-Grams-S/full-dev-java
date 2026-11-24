@@ -1,0 +1,31 @@
+# S5.06: alerts over the audit counter payflow_audit_events_total{action,outcome} (a PROPOSED metric: one counter per audit event written).
+groups:
+  - name: payflow-audit
+    rules:
+      - record: payflow:audit_events:rate5m
+        expr: sum(rate(payflow_audit_events_total[5m]))
+
+      - record: payflow:audit_denied_ratio:rate5m
+        expr: |
+          sum(rate(payflow_audit_events_total{outcome="DENIED"}[5m]))
+            / clamp_min(sum(rate(payflow_audit_events_total[5m])), 0.000001)
+
+      # a burst of refusals is what an IDOR scan or credential stuffing looks like from the inside.
+      # The traffic floor (> 0.5 events/s) keeps a single refused request on a quiet night from paging anyone.
+      - alert: PayflowAuditDeniedSpike
+        expr: payflow:audit_denied_ratio:rate5m > 0.2 and payflow:audit_events:rate5m > 0.5
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "More than 20% of audited actions are being refused"
+          runbook: docs/runbooks/audit-denied-spike.md
+
+      # every use of the break-glass path is reviewed by a second person, even when it was approved.
+      - alert: PayflowBreakGlassUsed
+        expr: sum(increase(payflow_audit_events_total{action="ADMIN_DELETE",outcome="ALLOWED"}[10m])) > 0
+        labels:
+          severity: ticket
+        annotations:
+          summary: "A break-glass ADMIN_DELETE was executed: review the ticket and the statements"
+          runbook: docs/runbooks/break-glass-review.md

@@ -1,0 +1,13 @@
+$ cosign attest --predicate sbom.json --type cyclonedx   # o SBOM como atestação assinada, presa ao digest
+Using payload from: /work/sbom.json
+Signing artifact...
+
+$ cosign verify-attestation --type cyclonedx --key cosign.pub <digest>
+Verification for 127.0.0.1:5001/payflow/identity-lab@sha256:683475d8fad74e58ac557815ecdb2fabd64162c26df0c66891
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+
+$ ... | jq: o que o predicado afirma
+predicateType=https://cyclonedx.org/bom subject.digest=683475d8fad74e58… components=64

@@ -1,0 +1,101 @@
+rule_files:
+  - slo-rules.yml
+evaluation_interval: 1m
+
+tests:
+  # 1) saudável: 50 req/min (~0,83 req/s), 0,02% de 5xx (aqui: 0), 100% abaixo de 500 ms -> nenhum alerta
+  - name: saudavel nao alerta
+    interval: 1m
+    input_series:
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="201"}'
+        values: '0+50x120'
+      - series: 'http_server_requests_seconds_bucket{job="payflow",method="POST",uri="/api/v1/transfers",le="0.5"}'
+        values: '0+50x120'
+    alert_rule_test:
+      - eval_time: 90m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts: []
+      - eval_time: 90m
+        alertname: PayflowTransfersLatencyBurnFast
+        exp_alerts: []
+
+  # 2) queda total: 60 min saudável, depois 100% de 5xx -> a janela de 1 h passa de 1,44% em poucos minutos
+  - name: queda total chama a pagina rapida
+    interval: 1m
+    input_series:
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="201"}'
+        values: '0+50x60 3000+0x30'
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="500"}'
+        values: '0+0x60 0+50x30'
+    alert_rule_test:
+      - eval_time: 59m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts: []
+      - eval_time: 70m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts:
+          - exp_labels: {severity: page, slo: availability}
+            exp_annotations:
+              summary: "Orçamento de availability queimando a 14,4x ou mais: 2% do mês em 1 hora"
+              runbook: "docs/runbooks/slo-queima-rapida.md"
+
+  # 3) 0,5% de 5xx constante (queima 5x): NÃO é página rápida (14,4x) e NÃO é lenta (6x); a lenta só pegaria 0,6%
+  - name: queima de 5x nao chama pagina
+    interval: 1m
+    input_series:
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="201"}'
+        values: '0+9950x480'
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="500"}'
+        values: '0+50x480'
+      - series: 'http_server_requests_seconds_bucket{job="payflow",method="POST",uri="/api/v1/transfers",le="0.5"}'
+        values: '0+10000x480'
+    alert_rule_test:
+      - eval_time: 450m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts: []
+      - eval_time: 450m
+        alertname: PayflowTransfersAvailabilityBurnSlow
+        exp_alerts: []
+
+  # 4) latência: a partir do minuto 60, 20% das requisições passam de 500 ms (orçamento da latência = 1%) -> queima 20x
+  - name: latencia lenta chama a pagina rapida
+    interval: 1m
+    input_series:
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="201"}'
+        values: '0+100x120'
+      - series: 'http_server_requests_seconds_bucket{job="payflow",method="POST",uri="/api/v1/transfers",le="0.5"}'
+        values: '0+100x60 6080+80x59'
+    alert_rule_test:
+      - eval_time: 50m
+        alertname: PayflowTransfersLatencyBurnFast
+        exp_alerts: []
+      - eval_time: 100m        # queima 20x: a janela de 1 h só passa de 14,4% depois de ~43 min (14,4/20 de 1 h): detecção NÃO é instantânea
+        alertname: PayflowTransfersLatencyBurnFast
+        exp_alerts: []
+      - eval_time: 110m
+        alertname: PayflowTransfersLatencyBurnFast
+        exp_alerts:
+          - exp_labels: {severity: page, slo: latency}
+            exp_annotations:
+              summary: "Orçamento de latency queimando a 14,4x ou mais: 2% do mês em 1 hora"
+              runbook: "docs/runbooks/slo-queima-rapida.md"
+
+  # 5) a janela curta existe para ISTO: a queda acabou há 30 min, a janela de 1 h ainda está alta, mas a página NÃO deve mais disparar
+  - name: janela curta apaga a pagina depois da recuperacao
+    interval: 1m
+    input_series:
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="201"}'
+        values: '0+50x60 3000+0x10 3000+50x40'
+      - series: 'http_server_requests_seconds_count{job="payflow",method="POST",uri="/api/v1/transfers",status="500"}'
+        values: '0+0x60 0+50x10 500+0x40'
+    alert_rule_test:
+      - eval_time: 65m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts:
+          - exp_labels: {severity: page, slo: availability}
+            exp_annotations:
+              summary: "Orçamento de availability queimando a 14,4x ou mais: 2% do mês em 1 hora"
+              runbook: "docs/runbooks/slo-queima-rapida.md"
+      - eval_time: 100m
+        alertname: PayflowTransfersAvailabilityBurnFast
+        exp_alerts: []

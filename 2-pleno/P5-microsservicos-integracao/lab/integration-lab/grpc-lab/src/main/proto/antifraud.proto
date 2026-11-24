@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package payflow.antifraud.v1;
+
+option java_multiple_files = true;
+option java_package = "com.payflow.lab.grpc.antifraud.v1";
+
+// Contrato do serviço de antifraude (consultado de forma SÍNCRONA no caminho da transferência).
+service AntifraudService {
+  rpc Score(ScoreRequest) returns (ScoreResponse);
+}
+
+message ScoreRequest {
+  string transfer_id = 1;            // UUID
+  string source_account_id = 2;      // UUID
+  string destination_account_id = 3; // UUID
+  string amount = 4;                 // decisão 11: dinheiro como STRING com 2 casas ("100.00"), nunca double
+  string currency = 5;               // "BRL"
+}
+
+message ScoreResponse {
+  int32 score = 1;                   // 0 (confiável) a 100 (suspeito)
+  Decision decision = 2;
+  reserved 3;                        // era "reason_text"; o número NUNCA pode ser reutilizado
+  reserved "reason_text";
+}
+
+enum Decision {
+  DECISION_UNSPECIFIED = 0;          // o zero é sempre "não sei": é o que o cliente antigo vê num valor novo
+  ALLOW = 1;
+  REVIEW = 2;
+  DENY = 3;
+}

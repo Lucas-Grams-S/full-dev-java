@@ -1,0 +1,15 @@
+$ aws ecr put-image-tag-mutability --repository-name payflow --image-tag-mutability MUTABLE   (someone clicks in the console)
+$ terraform plan
+# module.registry.aws_ecr_repository.this will be updated in-place
+~ resource "aws_ecr_repository" "this" {
+id                   = "payflow"
+~ image_tag_mutability = "MUTABLE" -> "IMMUTABLE"
+name                 = "payflow"
+tags                 = {}
+# (6 unchanged attributes hidden)
+$ terraform apply -auto-approve   (Terraform puts it back)
+module.registry.aws_ecr_repository.this: Modifying... [id=payflow]
+aws_s3_bucket.deploy: Modifying... [id=payflow-deploy-123456789012-us-east-1]
+module.database.aws_vpc_security_group_ingress_rule.from_app: Modifying... [id=sgr-9aae3ce0a03a08d99]
+Apply complete! Resources: 0 added, 3 changed, 0 destroyed.
+now: IMMUTABLE

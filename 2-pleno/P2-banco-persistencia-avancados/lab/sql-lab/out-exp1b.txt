@@ -1,0 +1,10 @@
+=== conciliação em READ COMMITTED (um depósito de 100 confirma entre os dois comandos) ===
+[A]         q        |   sum   
+[A]  soma dos saldos | 4000.00
+[A]           q           |   sum   
+[A]  soma dos lançamentos | 4100.00
+=== conciliação em REPEATABLE READ (um depósito de 100 confirma entre os dois comandos) ===
+[A]         q        |   sum   
+[A]  soma dos saldos | 4000.00
+[A]           q           |   sum   
+[A]  soma dos lançamentos | 4000.00

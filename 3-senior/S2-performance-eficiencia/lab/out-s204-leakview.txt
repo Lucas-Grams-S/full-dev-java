@@ -1,0 +1,7 @@
+
+                         Memory Leak Candidates by Site
+
+Alloc. Time Application Method                            Object Age Heap Usage
+----------- --------------------------------------------- ---------- ----------
+21:33:43    N/A                                               11.2 s    34.0 MB
+21:33:53    LeakLab.handle(boolean, long)                     1.01 s    81.3 MB

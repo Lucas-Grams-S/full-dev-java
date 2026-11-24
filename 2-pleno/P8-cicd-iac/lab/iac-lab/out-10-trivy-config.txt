@@ -1,0 +1,13 @@
+$ trivy config terraform/   (with the justified inline ignores)
+exit 0: no finding above LOW
+$ the same scan WITHOUT the ignore comments
+  CRITICAL AWS-0104  app_host/main.tf
+  LOW      AWS-0089  bootstrap/main.tf
+  HIGH     AWS-0132  bootstrap/main.tf
+  LOW      AWS-0133  database/main.tf
+  MEDIUM   AWS-0176  database/main.tf
+  MEDIUM   AWS-0177  database/main.tf
+  LOW      AWS-0033  registry/main.tf
+  LOW      AWS-0089  study/main.tf
+  HIGH     AWS-0132  study/main.tf
+9 findings (without ignores)

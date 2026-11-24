@@ -1,0 +1,12 @@
+# JDK: openjdk version "25.0.5.0.3" 2026-10-24   cores: 12   load: 0.51
+# one warm call, for contrast:
+jvm-boot=24ms  sdk-client-init=201ms  first-call=319ms  total-to-first-response=544ms  warm-call=4124us
+# cold start variants (7 runs each, median):
+default (-Xshare:auto, tiered)               init= 208ms  first-call= 112ms  total=  344ms  (median of 7)
+-XX:TieredStopAtLevel=1 (C1 only)            init= 186ms  first-call=  89ms  total=  297ms  (median of 7)
+-Xshare:off (no class-data sharing at all)   init= 217ms  first-call= 116ms  total=  380ms  (median of 7)
+# AppCDS archive size: 11692 KiB
+AppCDS (-XX:SharedArchiveFile)               init= 112ms  first-call=  43ms  total=  170ms  (median of 7)
+AppCDS + C1 only                             init= 100ms  first-call=  36ms  total=  151ms  (median of 7)
+# AOT cache size: 27732 KiB
+AOT cache (-XX:AOTCache)                     init=  72ms  first-call=  18ms  total=  108ms  (median of 7)

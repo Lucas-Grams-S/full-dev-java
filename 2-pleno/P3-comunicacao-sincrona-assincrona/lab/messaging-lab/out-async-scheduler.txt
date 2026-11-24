@@ -1,0 +1,9 @@
+ASYNC_THREAD lab-async-1 requestId=req-123 (chamador: main)
+AUTO_CHAMADA thread=main
+SHEDLOCK {job=locked, instance=A, c=3}
+SHEDLOCK {job=locked, instance=B, c=2}
+SHEDLOCK {job=unlocked, instance=A, c=10}
+SHEDLOCK {job=unlocked, instance=B, c=9}
+SHEDLOCK total_com_lock=5 total_sem_lock=19 (9 s, 2 instâncias, fixedRate 1 s, lockAtLeastFor 2 s)
+EXECUTOR_LIMITADO aceitas=4 rejeitadas=6 (2 threads + fila 2)
+VOID_EXCECAO handler=[fireAndForgetThatFails: falhou no @Async void]

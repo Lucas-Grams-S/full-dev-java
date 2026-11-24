@@ -1,0 +1,14 @@
+Little's law: L = lambda x W  (items in the system = arrival rate x time each spends inside)
+
+rate (req/s) | time inside W | concurrent L (threads/connections busy)
+          50 |         40 ms | 2.0
+          50 |        200 ms | 10.0
+          50 |       3000 ms | 150.0
+         200 |         40 ms | 8.0
+
+The ChaosLab case: 40 req/s with notifications at 3 s -> L = 120 threads wanted; the pool had 16.
+With a 200 ms timeout: L = 40 x 0.213 = 8.5 threads: fits; at 100 req/s: 21 > 16: it does not (measured in S4.04).
+
+Connections: per-task pool P, tasks N, deploy factor f -> N x f x P must stay under max_connections (decisions 171/181).
+premise max_connections=100, reserve=10: largest N with f=2: 4 tasks
+=> the database, not the CPU, sets the real ceiling of the autoscaler (decision 152: max 6 tasks); at 6 tasks and f=2 it is already over.

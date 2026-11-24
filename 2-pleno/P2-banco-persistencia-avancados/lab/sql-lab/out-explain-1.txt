@@ -1,0 +1,204 @@
+                                                        info                                                        
+--------------------------------------------------------------------------------------------------------------------
+ hot: 01a1d7cf-1449-7de9-8e24-a37b33139710 = 500622 lançamentos; normal: 01a1d7cf-1449-7fad-907d-993a01ec2a64 = 211
+(1 row)
+
+
+### Q1 extrato da conta normal: 20 mais recentes
+                                                                            QUERY PLAN                                                                            
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.43..81.46 rows=20 width=68) (actual time=0.009..0.042 rows=20.00 loops=1)
+   Buffers: shared hit=23
+   ->  Index Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..948.47 rows=234 width=68) (actual time=0.007..0.039 rows=20.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7fad-907d-993a01ec2a64'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=23
+ Planning:
+   Buffers: shared hit=20
+ Planning Time: 0.107 ms
+ Execution Time: 0.060 ms
+(10 rows)
+
+### Q2 extrato da conta quente: 20 mais recentes
+                                                                               QUERY PLAN                                                                               
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.43..9.33 rows=20 width=68) (actual time=0.007..0.011 rows=20.00 loops=1)
+   Buffers: shared hit=6
+   ->  Index Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..225052.87 rows=505662 width=68) (actual time=0.006..0.010 rows=20.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=6
+ Planning Time: 0.025 ms
+ Execution Time: 0.016 ms
+(8 rows)
+
+### Q3 página 5 000 com OFFSET (conta quente)
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=44506.93..44515.83 rows=20 width=68) (actual time=19.718..19.722 rows=20.00 loops=1)
+   Buffers: shared hit=10763
+   ->  Index Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..225052.87 rows=505662 width=68) (actual time=0.005..17.852 rows=100020.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=10763
+ Planning Time: 0.019 ms
+ Execution Time: 19.731 ms
+(8 rows)
+
+### Q3b mesma página com keyset (created_at, id) < último visto
+                                                                                  QUERY PLAN                                                                                  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.99..12.92 rows=20 width=68) (actual time=0.029..0.030 rows=20.00 loops=1)
+   Buffers: shared hit=5 read=1
+   ->  Incremental Sort  (cost=0.99..242762.41 rows=407238 width=68) (actual time=0.028..0.029 rows=20.00 loops=1)
+         Sort Key: created_at DESC, id DESC
+         Presorted Key: created_at
+         Full-sort Groups: 1  Sort Method: quicksort  Average Memory: 27kB  Peak Memory: 27kB
+         Buffers: shared hit=5 read=1
+         ->  Index Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..224436.70 rows=407238 width=68) (actual time=0.019..0.023 rows=21.00 loops=1)
+               Index Cond: ((account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid) AND (created_at <= '2026-06-21 14:42:22.6368+00'::timestamp with time zone))
+               Filter: (ROW(created_at, id) < ROW('2026-06-21 14:42:22.6368+00'::timestamp with time zone, '01a1d7cf-49c4-744e-96c9-fd4d3f344885'::uuid))
+               Rows Removed by Filter: 1
+               Index Searches: 1
+               Buffers: shared hit=5 read=1
+ Planning:
+   Buffers: shared hit=9
+ Planning Time: 0.082 ms
+ Execution Time: 0.048 ms
+(17 rows)
+
+### Q4 resumo mensal da conta quente (soma por tipo, 30 dias)
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=40203.25..40203.28 rows=2 width=46) (actual time=5.944..5.946 rows=2.00 loops=1)
+   Group Key: type
+   Batches: 1  Memory Usage: 32kB
+   Buffers: shared hit=2298
+   ->  Bitmap Heap Scan on ledger_entries  (cost=625.26..40047.52 rows=20764 width=12) (actual time=0.693..3.276 rows=21353.00 loops=1)
+         Recheck Cond: ((account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid) AND (created_at >= '2026-10-14 00:00:00+00'::timestamp with time zone))
+         Heap Blocks: exact=2190
+         Buffers: shared hit=2298
+         ->  Bitmap Index Scan on idx_ledger_entries_account_created  (cost=0.00..620.07 rows=20764 width=0) (actual time=0.505..0.505 rows=21353.00 loops=1)
+               Index Cond: ((account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid) AND (created_at >= '2026-10-14 00:00:00+00'::timestamp with time zone))
+               Index Searches: 1
+               Buffers: shared hit=108
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.099 ms
+ Execution Time: 5.966 ms
+(16 rows)
+
+### Q4b resumo de 2 anos da conta quente
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=131355.69..143997.24 rows=505662 width=46) (actual time=323.545..386.640 rows=50.00 loops=1)
+   Group Key: (date_trunc('month'::text, created_at)), type
+   Buffers: shared hit=2493 read=51524 written=1, temp read=1932 written=1939
+   ->  Sort  (cost=131355.69..132619.85 rows=505662 width=20) (actual time=322.797..347.161 rows=500622.00 loops=1)
+         Sort Key: (date_trunc('month'::text, created_at)), type
+         Sort Method: external merge  Disk: 15456kB
+         Buffers: shared hit=2493 read=51524 written=1, temp read=1932 written=1939
+         ->  Bitmap Heap Scan on ledger_entries  (cost=13947.31..73079.24 rows=505662 width=20) (actual time=39.984..256.273 rows=500622.00 loops=1)
+               Recheck Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+               Heap Blocks: exact=51545
+               Buffers: shared hit=2490 read=51524 written=1
+               ->  Bitmap Index Scan on idx_ledger_entries_account_created  (cost=0.00..13820.90 rows=505662 width=0) (actual time=12.996..12.996 rows=500622.00 loops=1)
+                     Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+                     Index Searches: 1
+                     Buffers: shared hit=2469
+ Planning Time: 0.047 ms
+ JIT:
+   Functions: 9
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.624 ms (Deform 0.243 ms), Inlining 0.000 ms, Optimization 3.534 ms, Emission 17.648 ms, Total 21.806 ms
+ Execution Time: 475.430 ms
+(21 rows)
+
+### Q5 função na coluna: date(created_at) = dia
+                                                                                           QUERY PLAN                                                                                            
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=17984.13..17984.14 rows=1 width=8) (actual time=28.340..33.895 rows=1.00 loops=1)
+   Buffers: shared hit=991 read=1483 written=4
+   ->  Gather  (cost=17983.92..17984.13 rows=2 width=8) (actual time=28.285..33.889 rows=3.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=991 read=1483 written=4
+         ->  Partial Aggregate  (cost=16983.92..16983.93 rows=1 width=8) (actual time=19.563..19.564 rows=1.00 loops=3)
+               Buffers: shared hit=991 read=1483 written=4
+               ->  Parallel Index Only Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..16981.28 rows=1053 width=0) (actual time=10.863..19.554 rows=218.00 loops=3)
+                     Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+                     Filter: ((created_at)::date = '2026-10-01'::date)
+                     Rows Removed by Filter: 166656
+                     Heap Fetches: 0
+                     Index Searches: 1
+                     Buffers: shared hit=991 read=1483 written=4
+ Planning:
+   Buffers: shared hit=6
+ Planning Time: 0.069 ms
+ Execution Time: 33.915 ms
+(19 rows)
+
+### Q5b intervalo semiaberto equivalente
+                                                                                                           QUERY PLAN                                                                                                           
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=35.71..35.72 rows=1 width=8) (actual time=0.077..0.077 rows=1.00 loops=1)
+   Buffers: shared hit=7
+   ->  Index Only Scan using idx_ledger_entries_account_created on ledger_entries  (cost=0.43..33.78 rows=771 width=0) (actual time=0.020..0.056 rows=654.00 loops=1)
+         Index Cond: ((account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid) AND (created_at >= '2026-10-01 00:00:00+00'::timestamp with time zone) AND (created_at < '2026-10-02 00:00:00+00'::timestamp with time zone))
+         Heap Fetches: 0
+         Index Searches: 1
+         Buffers: shared hit=7
+ Planning Time: 0.084 ms
+ Execution Time: 0.090 ms
+(9 rows)
+
+### Q6 transferências PENDING
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=20501.50..20507.33 rows=50 width=24) (actual time=86.906..89.600 rows=50.00 loops=1)
+   Buffers: shared hit=76 read=14277
+   ->  Gather Merge  (cost=20501.50..20637.30 rows=1166 width=24) (actual time=86.904..89.595 rows=50.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=76 read=14277
+         ->  Sort  (cost=19501.48..19502.69 rows=486 width=24) (actual time=74.978..74.980 rows=38.67 loops=3)
+               Sort Key: created_at
+               Sort Method: top-N heapsort  Memory: 32kB
+               Buffers: shared hit=76 read=14277
+               Worker 0:  Sort Method: top-N heapsort  Memory: 32kB
+               Worker 1:  Sort Method: top-N heapsort  Memory: 32kB
+               ->  Parallel Seq Scan on transfers  (cost=0.00..19485.33 rows=486 width=24) (actual time=1.621..74.822 rows=333.33 loops=3)
+                     Filter: ((status)::text = 'PENDING'::text)
+                     Rows Removed by Filter: 333000
+                     Buffers: shared read=14277
+ Planning:
+   Buffers: shared hit=62 read=5
+ Planning Time: 0.559 ms
+ Execution Time: 89.652 ms
+(20 rows)
+
+### Q7 conciliação (regra 3) de UMA conta
+                                                                                   QUERY PLAN                                                                                   
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=70708.38..70708.39 rows=1 width=32) (actual time=99.492..106.701 rows=1.00 loops=1)
+   Buffers: shared hit=2512 read=51542 written=3
+   ->  Gather  (cost=70708.16..70708.37 rows=2 width=32) (actual time=99.248..106.691 rows=3.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=2512 read=51542 written=3
+         ->  Partial Aggregate  (cost=69708.16..69708.17 rows=1 width=32) (actual time=89.866..89.867 rows=1.00 loops=3)
+               Buffers: shared hit=2512 read=51542 written=3
+               ->  Parallel Bitmap Heap Scan on ledger_entries  (cost=13947.31..68127.97 rows=210692 width=12) (actual time=12.073..71.066 rows=166874.00 loops=3)
+                     Recheck Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+                     Heap Blocks: exact=18031
+                     Buffers: shared hit=2512 read=51542 written=3
+                     Worker 0:  Heap Blocks: exact=17721
+                     Worker 1:  Heap Blocks: exact=15793
+                     ->  Bitmap Index Scan on idx_ledger_entries_account_created  (cost=0.00..13820.90 rows=505662 width=0) (actual time=14.935..14.935 rows=500622.00 loops=1)
+                           Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+                           Index Searches: 1
+                           Buffers: shared hit=2469
+ Planning Time: 0.061 ms
+ Execution Time: 106.759 ms
+(20 rows)
+

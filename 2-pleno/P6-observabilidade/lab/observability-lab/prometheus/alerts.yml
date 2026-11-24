@@ -1,0 +1,99 @@
+groups:
+  - name: payflow-recording
+    rules:
+      # RED por rota (o actuator não entra: está em outra porta, mas o filtro protege se alguém juntar as portas)
+      - record: payflow:http_requests:rate5m
+        expr: sum by (uri) (rate(http_server_requests_seconds_count{job="payflow", uri!~"/actuator.*"}[5m]))
+      - record: payflow:http_errors:ratio5m
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="payflow", status=~"5..", uri!~"/actuator.*"}[5m]))
+          /
+          sum(rate(http_server_requests_seconds_count{job="payflow", uri!~"/actuator.*"}[5m]))
+      - record: payflow:http_request_duration_seconds:p95_5m
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le, uri) (rate(http_server_requests_seconds_bucket{job="payflow", uri!~"/actuator.*"}[5m])))
+
+  - name: payflow-alerts
+    rules:
+      - alert: PayflowInstanceDown
+        expr: up{job="payflow"} == 0
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: "Instância {{ $labels.instance }} não responde ao scrape"
+          description: "O Prometheus não consegue ler as métricas há 2 minutos."
+          runbook: "docs/runbooks/instancia-fora.md"
+
+      - alert: PayflowNoMetrics
+        expr: absent(http_server_requests_seconds_count{job="payflow"})
+        for: 5m
+        labels: {severity: page}
+        annotations:
+          summary: "Nenhuma métrica HTTP do PayFlow existe (alerta de AUSÊNCIA)"
+          description: "Sem dado, nenhum outro alerta consegue disparar: este avisa que o silêncio não é calma."
+          runbook: "docs/runbooks/sem-metricas.md"
+
+      - alert: PayflowHighErrorRatio
+        # só com tráfego mínimo (0,1 req/s): 1 erro em 3 requisições à noite não é incidente
+        expr: payflow:http_errors:ratio5m > 0.02 and sum(payflow:http_requests:rate5m) > 0.1
+        for: 5m
+        labels: {severity: page}
+        annotations:
+          summary: "{{ $value | humanizePercentage }} das respostas são 5xx (limite 2%)"
+          description: "Só 5xx conta: 4xx (inclusive 422 de saldo insuficiente) é o cliente errando."
+          runbook: "docs/runbooks/erros-5xx.md"
+
+      - alert: PayflowUnexpectedErrors
+        # complemento barato a um rastreador de exceções: o Logback já é métrica (ERROR = "alguém precisa olhar", P6.01)
+        expr: sum by (instance) (increase(logback_events_total{job="payflow", level="error"}[10m])) > 5
+        for: 0m
+        labels: {severity: ticket}
+        annotations:
+          summary: "{{ $value }} linhas ERROR em 10 minutos em {{ $labels.instance }}"
+          description: "ERROR é só o inesperado (negócio é WARN, 404 não é erro). Procure o traceId no log do primeiro ERROR."
+          runbook: "docs/runbooks/erros-inesperados.md"
+
+      - alert: PayflowTransfersSlow
+        expr: payflow:http_request_duration_seconds:p95_5m{uri="/api/v1/transfers"} > 1
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "p95 das transferências em {{ $value | humanizeDuration }} (limite 1 s)"
+          runbook: "docs/runbooks/transferencias-lentas.md"
+
+      - alert: PayflowOutboxBacklog
+        expr: payflow_outbox_pending > 100
+        for: 5m
+        labels: {severity: page}
+        annotations:
+          summary: "{{ $value }} eventos do outbox sem publicar há 5 minutos"
+          description: "O relé parou ou o broker não aceita. Sem ele, ninguém é notificado e o antifraude não vê as transferências."
+          runbook: "docs/runbooks/outbox-parado.md"
+
+      - alert: PayflowNotificationsBreakerOpen
+        expr: resilience4j_circuitbreaker_state{name="notifications", state="open"} == 1
+        for: 2m
+        labels: {severity: ticket}
+        annotations:
+          summary: "Circuit breaker do serviço de notificações ABERTO (decisão 133)"
+          runbook: "docs/runbooks/notificacoes-breaker.md"
+
+      - alert: PayflowHeapHigh
+        expr: |
+          sum by (instance) (jvm_memory_used_bytes{job="payflow", area="heap"})
+          / sum by (instance) (jvm_memory_max_bytes{job="payflow", area="heap"}) > 0.9
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "Heap de {{ $labels.instance }} acima de 90% por 10 minutos"
+          runbook: "docs/runbooks/heap-alto.md"
+
+      - alert: PayflowDbPoolSaturated
+        expr: hikaricp_connections_pending{job="payflow"} > 0
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: "Há threads esperando conexão do pool há 2 minutos"
+          description: "Pool pequeno de propósito (decisão 98): espera constante é saturação, não 'aumente o pool'."
+          runbook: "docs/runbooks/pool-saturado.md"

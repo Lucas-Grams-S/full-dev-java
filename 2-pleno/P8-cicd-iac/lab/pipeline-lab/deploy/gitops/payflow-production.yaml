@@ -1,0 +1,21 @@
+# Argo CD Application: the cluster follows what is in Git. NOT executed (no Argo CD installed).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: payflow-production
+  namespace: argocd
+spec:
+  project: payflow
+  source:
+    repoURL: https://github.com/your-user/payflow-deploy.git   # the DEPLOY repository (manifests only)
+    targetRevision: main
+    path: environments/production
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: payflow
+  syncPolicy:
+    automated:
+      prune: true        # what left Git leaves the cluster
+      selfHeal: true     # a manual kubectl edit is reverted
+    syncOptions:
+      - CreateNamespace=false

@@ -1,0 +1,20 @@
+MODEL: 6 line-based regex rules (what a grep-level SAST does). No data flow, no types.
+
+Vulnerable.java.txt -> 6 finding(s)
+  HARDCODED-SECRET   line 2  secret-looking constant with a literal value
+  SQL-CONCAT         line 5  SQL built by string concatenation
+  PREDICTABLE-RANDOM line 7  java.util.Random is not a CSPRNG
+  WEAK-HASH          line 8  MD5/SHA-1 used as a hash
+  CMD-INJECTION      line 9  shell command built by concatenation
+  TRUST-ALL          line 10 TLS trust manager that accepts everything
+
+Fixed.java.txt -> 0 finding(s)
+
+Tricky.java.txt -> 1 finding(s)
+  HARDCODED-SECRET   line 10 secret-looking constant with a literal value
+
+Reading:
+- Vulnerable: every planted flaw is found (true positives); Fixed: 0 findings (the fixes are recognised).
+- Tricky: lines 4-5 build the same SQL on TWO lines -> NOT found (false negative: needs taint tracking, e.g. CodeQL or Semgrep in taint mode).
+- Tricky: line 10 is flagged as a secret but is only the NAME of a form field (false positive: the rule sees text, not meaning).
+- Tricky: the log line with 'SELECT' is NOT flagged here because this rule looks for executeQuery(...) (a looser rule would flag it).

@@ -1,0 +1,33 @@
+server:
+  port: 0                      # os testes usam porta aleatória; para rodar à mão: --server.port=8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${PAYFLOW_OIDC_ISSUER:http://127.0.0.1:8180/realms/payflow}   # o decodificador busca o JWKS no discovery, na 1ª requisição
+          audiences: payflow-api                  # o token precisa ter aud = payflow-api
+          jws-algorithms: RS256                   # só RS256 (nunca "none", nunca HS256 com a chave pública)
+      client:
+        registration:
+          notifications:                          # o PayFlow chamando o serviço de notificações como cliente
+            provider: keycloak
+            client-id: payflow-notifications
+            client-secret: ${PAYFLOW_NOTIFICATIONS_CLIENT_SECRET:lab-only-notifications-secret-change-me}
+            authorization-grant-type: client_credentials
+            scope: internal:notify
+          reporting:
+            provider: keycloak
+            client-id: payflow-reporting
+            client-secret: ${PAYFLOW_REPORTING_CLIENT_SECRET:lab-only-reporting-secret-change-me}
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:                               # endereços explícitos: com issuer-uri o Boot consulta o Keycloak JÁ NA SUBIDA (discovery)
+            token-uri: ${PAYFLOW_OIDC_ISSUER:http://127.0.0.1:8180/realms/payflow}/protocol/openid-connect/token
+
+payflow:
+  security:
+    internal:
+      required-scope: internal:notify
+      allowed-clients: payflow-notifications

@@ -1,0 +1,25 @@
+digest: sha256:683475d8fad74e58ac557815ecdb2fabd64162c26df0c6689102deec283dba8d
+
+$ cosign sign --key cosign.key <repo>@<digest>
+Signing artifact...
+Pushing signature to: 127.0.0.1:5001/payflow/identity-lab
+
+$ cosign verify --key cosign.pub <repo>@<digest>
+Verification for 127.0.0.1:5001/payflow/identity-lab@sha256:683475d8fad74e58ac557815ecdb2fabd64162c26df0c66891
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+exit=0
+
+$ cosign verify --key OUTRA-chave.pub <repo>@<digest>
+Error: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1
+error during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1
+
+$ alguém reenvia OUTRA imagem para a MESMA tag :1 (a tag é mutável)
+tag :1 agora aponta para sha256:0e709d06e72109229b97b78aefd784cee6adfc8dc19638e0c9bf8dd318295900
+$ cosign verify --key cosign.pub <repo>:1   # verificando PELA TAG
+Error: no signatures found
+error during command execution: no signatures found
+$ cosign verify --key cosign.pub <repo>@<digest ORIGINAL>   # a assinatura continua valendo para o conteúdo original
+Verification for 127.0.0.1:5001/payflow/identity-lab@sha256:683475d8fad74e58ac557815ecdb2fabd64162c26df0c6689102deec283d

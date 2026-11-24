@@ -1,0 +1,87 @@
+$ (modules/registry) terraform test
+run "tags_are_immutable_and_scanned"... pass
+run "lifecycle_keeps_requested_history"... pass
+run "rejects_too_little_history"... pass
+Success! 3 passed, 0 failed.
+$ (modules/github_oidc) terraform test
+run "trust_is_pinned_to_one_repo_and_environment"... pass
+run "rejects_a_malformed_repository"... pass
+Success! 2 passed, 0 failed.
+# MUTANTS: break the module on purpose; the tests must FAIL
+$ (mutant of modules/registry) terraform test
+
+Error: Test assertion failed
+
+  on tests/registry.tftest.hcl line 12, in run "tags_are_immutable_and_scanned":
+  12:     condition     = aws_ecr_repository.this.image_tag_mutability == "IMMUTABLE"
+    ├────────────────
+    │ Diff:
+    │ --- actual
+    │ +++ expected
+    │ - "MUTABLE"
+    │ + "IMMUTABLE"
+
+
+tags must be immutable (P7.01: a tag never changes)
+run "tags_are_immutable_and_scanned"... fail
+run "lifecycle_keeps_requested_history"... pass
+run "rejects_too_little_history"... pass
+Failure! 2 passed, 1 failed.
+$ (mutant of modules/github_oidc) terraform test
+
+Error: Test assertion failed
+
+  on tests/oidc.tftest.hcl line 23, in run "trust_is_pinned_to_one_repo_and_environment":
+  23:     condition = contains(
+  24:       flatten([for c in data.aws_iam_policy_document.trust.statement[0].condition : c.values]),
+  25:       "repo:acme/payflow:environment:production"
+  26:     )
+    ├────────────────
+    │ data.aws_iam_policy_document.trust.statement[0].condition is [
+    │     {
+    │       "test": "StringEquals",
+    │       "values": [
+    │         "sts.amazonaws.com"
+    │       ],
+    │       "variable": "token.actions.githubusercontent.com:aud"
+    │     },
+    │     {
+    │       "test": "StringLike",
+    │       "values": [
+    │         "repo:acme/*"
+    │       ],
+    │       "variable": "token.actions.githubusercontent.com:sub"
+    │     }
+    │   ]
+
+the sub claim must name the repository AND the environment
+
+Error: Test assertion failed
+
+  on tests/oidc.tftest.hcl line 31, in run "trust_is_pinned_to_one_repo_and_environment":
+  31:     condition = alltrue([
+  32:       for c in data.aws_iam_policy_document.trust.statement[0].condition :
+  33:       c.test == "StringEquals"
+  34:     ])
+    ├────────────────
+    │ data.aws_iam_policy_document.trust.statement[0].condition is [
+    │     {
+    │       "test": "StringEquals",
+    │       "values": [
+    │         "sts.amazonaws.com"
+    │       ],
+    │       "variable": "token.actions.githubusercontent.com:aud"
+    │     },
+    │     {
+    │       "test": "StringLike",
+    │       "values": [
+    │         "repo:acme/*"
+    │       ],
+    │       "variable": "token.actions.githubusercontent.com:sub"
+    │     }
+    │   ]
+
+StringLike with a wildcard would let any repository of the owner deploy
+run "trust_is_pinned_to_one_repo_and_environment"... fail
+run "rejects_a_malformed_repository"... pass
+Failure! 1 passed, 1 failed.

@@ -1,0 +1,19 @@
+$ jq ... sbom.json   # formato, versão e quantidade de componentes
+CycloneDX 1.6: 64 components, 65 dependency entries
+
+$ "estamos usando a nimbus-jose-jwt? em qual versão?" (sem reescanear nada)
+com.nimbusds:nimbus-jose-jwt:10.9.1  pkg:maven/com.nimbusds/nimbus-jose-jwt@10.9.1?type=jar
+
+$ trivy sbom sbom.json --severity HIGH,CRITICAL
+Report Summary
+
+┌────────┬──────┬─────────────────┐
+│ Target │ Type │ Vulnerabilities │
+├────────┼──────┼─────────────────┤
+│ Java   │ jar  │        0        │
+└────────┴──────┴─────────────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+(avisos 'Unsupported hash algorithm' omitidos: 256 linhas; o plugin grava SHA3/SHA-384 que o Trivy ignora)

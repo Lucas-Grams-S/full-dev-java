@@ -1,0 +1,30 @@
+VPC 10.20.0.0/16: 65536 addresses
+
+1) the plan of the PayFlow VPC (what cidrsubnet() produced in the network module)
+  public-a  10.20.0.0/24     size= 256  usable on AWS= 251  (10.20.0.0 .. 10.20.0.255)
+  public-b  10.20.1.0/24     size= 256  usable on AWS= 251  (10.20.1.0 .. 10.20.1.255)
+  app-a     10.20.10.0/24    size= 256  usable on AWS= 251  (10.20.10.0 .. 10.20.10.255)
+  app-b     10.20.11.0/24    size= 256  usable on AWS= 251  (10.20.11.0 .. 10.20.11.255)
+  data-a    10.20.20.0/24    size= 256  usable on AWS= 251  (10.20.20.0 .. 10.20.20.255)
+  data-b    10.20.21.0/24    size= 256  usable on AWS= 251  (10.20.21.0 .. 10.20.21.255)
+  ok   cidrsubnet("10.20.0.0/16", 8, 10) == 10.20.10.0/24 (confirmed against terraform console below)
+  ok   6 subnets: no overlap, all inside the VPC
+  ok   a /24 has 256 - 5 = 251 usable addresses
+
+2) how many IPs does the app subnet need during a deploy?
+  tasks per AZ at max during a rolling deploy: 6, endpoint ENIs: 6 -> 12 of 251 usable
+  ok   the /24 app subnet is comfortable
+  a /28 (10.20.50.0/28) would have 11 usable: does NOT fit -> deploy would stall
+  ok   a /28 is too small for this service
+
+3) the load balancer rule: each subnet /27 or larger with >= 8 free IPs (ELB documentation)
+  ok   a /27 has 32 - 5 = 27 usable, enough for the 8 the ALB needs to scale
+  ok   public /24 satisfies the load balancer minimum
+
+4) a mistake you will make once: host bits set
+  ok   10.20.5.7/24 -> 10.20.5.7/24 has host bits set; did you mean 10.20.5.0/24?
+
+5) peering/VPN later: overlapping VPC ranges cannot be connected
+  ok   10.20.0.0/16 overlaps the corporate 10.20.0.0/14: choose the VPC range BEFORE you need to connect it
+
+ALL CHECKS PASSED

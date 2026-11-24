@@ -1,0 +1,2 @@
+req=48000 cache=48000 acertos=0 erros=48000 heapUsado~106 MB
+fim sem OutOfMemoryError

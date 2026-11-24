@@ -1,0 +1,25 @@
+$ aws rds describe-db-instances (primary created by Terraform)
+payflow-db	postgres	18	False	False	True	False	7	payflow-pg18
+$ aws rds create-db-instance-read-replica / promote-read-replica (the Terraform replica does not complete in moto: see the lesson)
+payflow-db-replica	payflow-db
+payflow-db-replica	payflow-db
+
+$ terraform apply -var enable_eks=true   (shape only; the control plane is billed per hour on real AWS)
+Apply complete! Resources: 3 added, 15 changed, 0 destroyed.
+$ aws eks describe-cluster
+payflow-eks	ACTIVE	False	True
+$ aws eks update-kubeconfig --name payflow-eks   (the placeholder of deploy.yml, P8)
+Added new context arn:aws:eks:us-east-1:123456789012:cluster/payflow-eks to <tmp>/kubeconfig
+server: https://zCg00FekYlLl0IM3vURV.w0O.us-east-1.eks.amazonaws.com/
+name: arn:aws:eks:us-east-1:123456789012:cluster/payflow-eks
+name: arn:aws:eks:us-east-1:123456789012:cluster/payflow-eks
+apiVersion: client.authentication.k8s.io/v1beta1
+- --region
+- us-east-1
+- eks
+- get-token
+- --cluster-name
+- payflow-eks
+- --output
+- json
+Apply complete! Resources: 2 added, 13 changed, 3 destroyed.

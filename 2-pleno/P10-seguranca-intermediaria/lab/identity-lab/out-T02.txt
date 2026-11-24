@@ -1,0 +1,4 @@
+id_token typ=ID aud="payflow-lab-direct"
+header={"alg":"RS256","typ":"JWT","kid":"gOKmFUXtE3vmU-5vzgtngNy62gFDfEMpSj3YHKu311Y"}
+claims={"exp":1794685281,"iat":1794684981,"jti":"onrtro:c2299849-eeaa-9c4c-48fb-49594ffcfc88","iss":"http://127.0.0.1:8180/realms/payflow","aud":"payflow-api","sub":"11111111-1111-4111-8111-111111111111","typ":"Bearer","azp":"payflow-lab-direct","sid":"ZZ3TZlOGMXMJUqh-n8Zh9ISC","realm_access":{"roles":["USER"]},"scope":"openid profile email transfers:read","email_verified":true,"name":"Alice Silva","preferred_username":"alice@example.com","given_name":"Alice","family_name":"Silva","email":"alice@example.com"}
+scope-without-request=openid profile email

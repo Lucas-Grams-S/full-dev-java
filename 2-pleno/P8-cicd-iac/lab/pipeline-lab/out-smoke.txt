@@ -1,0 +1,12 @@
+smoke test: http://127.0.0.1:5091
+  ok   protected API without token -> 401
+  ok   management port is not published -> 404
+  ok   no internal route -> 404
+  ok   X-Request-Id echoed
+exit=0
+smoke test: http://127.0.0.1:5092
+  FAIL protected API without token -> 200 (expected 401)
+  FAIL management port is not published -> 200 (expected 404)
+  ok   no internal route -> 404
+  FAIL X-Request-Id not echoed (got '')
+exit=1

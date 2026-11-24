@@ -1,0 +1,7 @@
+# Sobreposicao so para depuracao: docker compose -f compose.yaml -f compose.debug.yaml up -d
+services:
+  app:
+    environment:
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    ports:
+      - "127.0.0.1:5005:5005"

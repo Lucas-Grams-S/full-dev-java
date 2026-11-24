@@ -1,0 +1,11 @@
+>> 3000 requests; green is up and warm; at t=1s we switch to green, at t=4s we ROLL BACK to blue
+  [switch] router -> lab-p8-app-green
+  [switch] router -> lab-p8-app-blue
+[action ran at t=1.00s, took 0.09s]
+total=3000 failures=0 duration=8.1s
+  version=v1    status=200                     1895 (63.2%)
+  version=v2    status=200                     1105 (36.8%)
+>> smoke test BEFORE switching: a DEAD green (every /health fails)
+  green failed its readiness -> the switch is NEVER made
+>> smoke test BEFORE switching: a FLAKY green (30% fail), 10 rounds (ready = 3 consecutive OKs, retried up to 30 times, like a probe that keeps trying)
+  the flaky green passed the 3-probe smoke test in 10 of 10 rounds: a probe that keeps trying only needs 3 OKs in a row ONCE

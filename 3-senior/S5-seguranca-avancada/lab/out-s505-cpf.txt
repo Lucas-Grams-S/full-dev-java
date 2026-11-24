@@ -1,0 +1,10 @@
+MODEL: CPF check digits (mod 11) and pseudonymization with HMAC. CPFs below are GENERATED from the algorithm for the exercise: no real person.
+
+generated CPF            : 12345678062  valid=true
+last digit changed       : 12345678060  valid=false
+11111111111              : valid=false   (all-equal digits pass the formula but are rejected on purpose)
+random 11-digit strings that look like a valid CPF: 1.00% (1 in ~100: a CPF detector in logs also needs context, e.g. the word 'cpf')
+masked for display       : ***.456.***-**
+pseudonym (HMAC, secret) : 82878f66cbf6933f  same input -> same token: true  (analytics can join on it without seeing the CPF)
+plain SHA-256 of a CPF   : brute-forceable: only ~10^9 possible bases x a published algorithm; the secret key is what makes the pseudonym safe.
+measured here            : 3.93 million (generate CPF + SHA-256)/s on ONE core -> all 10^9 bases in about 4 min on one core (21 s on 12; extrapolation, ms vary)

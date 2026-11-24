@@ -1,0 +1,29 @@
+$ terraform fmt -recursive -check terraform/
+(clean)
+$ terraform init
+- Installing hashicorp/aws v6.73.0...
+$ terraform validate
+Success! The configuration is valid.
+
+$ terraform plan -out=tfplan
+# aws_s3_bucket.deploy will be created
+# aws_s3_bucket_public_access_block.deploy will be created
+# aws_s3_bucket_versioning.deploy will be created
+# aws_ssm_parameter.db_endpoint will be created
+# module.app_host.aws_iam_instance_profile.ec2 will be created
+# module.app_host.aws_iam_role.ec2 will be created
+# module.app_host.aws_iam_role_policy_attachment.ssm will be created
+# module.app_host.aws_iam_role_policy.ecr_pull will be created
+# module.app_host.aws_instance.app will be created
+# module.app_host.aws_security_group.app will be created
+# module.app_host.aws_vpc_security_group_egress_rule.all_out will be created
+# module.database.aws_db_instance.this will be created
+# module.database.aws_db_subnet_group.this will be created
+# module.database.aws_security_group.db will be created
+# module.database.aws_vpc_security_group_ingress_rule.from_app will be created
+# module.github_oidc.aws_iam_openid_connect_provider.github will be created
+# module.github_oidc.aws_iam_role.deploy will be created
+# module.github_oidc.aws_iam_role_policy.deploy will be created
+# module.registry.aws_ecr_lifecycle_policy.keep_last will be created
+# module.registry.aws_ecr_repository.this will be created
+Plan: 20 to add, 0 to change, 0 to destroy.

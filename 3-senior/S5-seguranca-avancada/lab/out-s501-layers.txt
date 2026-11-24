@@ -1,0 +1,13 @@
+MODEL: an attack succeeds only if it crosses EVERY layer. Each layer misses an attack with probability m (a PREMISE). 2,000,000 simulated attacks per row, seed 42.
+'shared cause' = with probability c ONE event (the same stolen credential / the same misconfiguration) makes ALL layers miss at once.
+
+scenario                                       | formula      | simulated    | reading
+1 independent layer(s), miss 30% each          | 30.0000%     | 29.9995%     | one wall
+2 independent layer(s), miss 30% each          | 9.0000%      | 9.0065%      | each layer multiplies
+3 independent layer(s), miss 30% each          | 2.7000%      | 2.7089%      | each layer multiplies
+5 independent layer(s), miss 30% each          | 0.2430%      | 0.2423%      | each layer multiplies
+5 layers + shared cause c=1%                   | 1.2406%      | 1.2384%      | the shared cause is the floor
+5 layers + shared cause c=5%                   | 5.2309%      | 5.2112%      | the shared cause is the floor
+
+Reading: five 70% layers give ~0.24% IF they fail independently; one shared cause of 1% leaves the attack succeeding ~1.2406% of the time.
+A layer that fails together with another (same credential, same network path, same person) is not another layer: count the shared causes, not the boxes.

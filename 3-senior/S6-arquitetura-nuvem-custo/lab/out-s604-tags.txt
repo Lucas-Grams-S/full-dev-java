@@ -1,0 +1,13 @@
+tag policy: required [app, env, owner, cost-center]; env in [prod, shared, staging, study]; cost-center CC-NNNN; data-class on rds/s3
+  VIOLATION s3/payflow-anchors          US$ 1.10  data store without a valid data-class
+  VIOLATION ecs/payflow-api-staging    US$ 44.70  missing env (found 'Env': keys are case sensitive)
+  VIOLATION rds/payflow-staging        US$ 110.96  env='homolog' not in [prod, shared, staging, study]
+  VIOLATION ecs/loadtest-joao          US$ 89.40  missing app; missing env; missing owner; missing cost-center
+  VIOLATION sqs/payflow-transfers      US$ 12.00  cost-center='1001' does not match CC-NNNN
+  VIOLATION kms/payflow-field           US$ 1.00  missing owner
+resources compliant: 5 of 11 (45%)
+cost attributable to a cost center: US$ 632.92 of US$ 998.08 (63%)
+cost that no tag can carry (data transfer, support, taxes): US$ 106.00 (11%): allocate by a written rule
+showback (compliant only): [CC-1001 US$ 490.76, CC-1002 US$ 142.16]
+RESULT: FAIL (6 resources)
+exit=1

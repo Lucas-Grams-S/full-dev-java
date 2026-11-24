@@ -1,0 +1,18 @@
+1000 -> OK
+75000 -> OK
+95000 -> REJECTED
+payflow.Transfer {
+  duration = 5.12 ms
+  cents = 1000
+  result = "OK"
+}
+payflow.Transfer {
+  duration = 30.1 ms
+  cents = 75000
+  result = "OK"
+}
+payflow.Transfer {
+  duration = 30.1 ms
+  cents = 95000
+  result = "REJECTED"
+}

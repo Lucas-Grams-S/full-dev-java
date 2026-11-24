@@ -1,0 +1,21 @@
+PRODUCER_DEFAULT acks=all
+PRODUCER_DEFAULT enable.idempotence=true
+PRODUCER_DEFAULT retries=2147483647
+PRODUCER_DEFAULT delivery.timeout.ms=120000
+PRODUCER_DEFAULT linger.ms=5
+PRODUCER_DEFAULT batch.size=16384
+PRODUCER_DEFAULT max.in.flight.requests.per.connection=5
+PRODUCER_DEFAULT compression.type=none
+CONSUMER_DEFAULT enable.auto.commit=true
+CONSUMER_DEFAULT auto.offset.reset=latest
+CONSUMER_DEFAULT isolation.level=read_uncommitted
+CONSUMER_DEFAULT max.poll.records=500
+CONSUMER_DEFAULT max.poll.interval.ms=300000
+CONSUMER_DEFAULT session.timeout.ms=45000
+CONSUMER_DEFAULT heartbeat.interval.ms=3000
+CONSUMER_DEFAULT group.protocol=classic
+CONSUMER_DEFAULT partition.assignment.strategy=[class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+LENTO recebeu 5 mensagens; vai 'processar' por 6 s (max.poll.interval.ms=3000)
+LENTO commitSync falhou: CommitFailedException: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignm…
+LENTO depois da expulsão, o grupo reentregou 5 mensagens (processamento duplicado)
+CHAVE_NULA 300 mensagens por partição={1=300}

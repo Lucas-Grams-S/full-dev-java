@@ -1,0 +1,15 @@
+$ pg_basebackup (copies the primary and writes standby.signal + primary_conninfo)
+replica in recovery (read-only)? t
+write on the replica -> ERROR:  cannot execute CREATE TABLE in a read-only transaction
+
+# A) natural lag (replication as it is, same host, idle machine): the lag is tiny, but NOT zero
+natural                immediate read on the replica missed the row in 288 of 300 writes (96.0%)
+natural                time until the row became visible: avg 3 ms, max 6 ms
+natural                with LSN wait: stale reads = 0 of 300, average wait 3 ms
+natural                replay lag measured on the replica now (now - last replayed commit): 6 ms
+
+# B) simulated slow replica: recovery_min_apply_delay = 2s (a legitimate PostgreSQL setting, used here only to make the lag visible)
+delayed-2s             immediate read on the replica missed the row in 5 of 5 writes (100.0%)
+delayed-2s             time until the row became visible: avg 2001 ms, max 2002 ms
+delayed-2s             with LSN wait: stale reads = 0 of 5, average wait 2001 ms
+delayed-2s             replay lag measured on the replica now (now - last replayed commit): 2003 ms

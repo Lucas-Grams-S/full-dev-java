@@ -1,0 +1,19 @@
+MODEL: 1000 events, each carries prev (the previous event's MAC) and mac = HMAC(key, event fields + prev). 'anchor' = (count, head MAC) copied to a place the attacker cannot write (e.g. an S3 object with Object Lock).
+Detected = the verifier reports the first broken index (or the anchor mismatch). The writer has the key; the attacker is someone who can edit the table.
+
+untouched log: chain only -> verifies | chain+anchor -> verifies
+
+attack (on the stored rows)                                | chain only             | chain + anchor
+A1 edit event 495 (DENIED -> ALLOWED), no key              | detected at 495        | detected at 495
+A2 delete event 500                                        | detected at 500        | detected at 500
+A3 swap events 500 and 501                                 | detected at 500        | detected at 500
+A4 delete the LAST 50 events (truncate the tail)           | NOT DETECTED           | detected at 950
+A5 append a forged event, without the key                  | detected at 1000       | detected at 1000
+A6 attacker WITH the key rewrites from event 495           | NOT DETECTED           | detected at 1000
+
+Reading:
+- Event 495 is one of the DENIED ones (every 11th event is). An earlier version of this lab edited event 500, which was already ALLOWED: the 'attack' changed nothing and the table said 'NOT DETECTED' for the wrong reason.
+- The chain alone catches edits, deletions in the middle, reordering and forged appends (A1-A3, A5).
+- A4 (cutting the tail) and A6 (whoever holds the key) pass the chain: only the anchor, kept somewhere the attacker cannot write, exposes them.
+- So the key must live outside the database (KMS, S5.03), the anchor outside the attacker's reach, and the anchor must be taken often: events after the last anchor are not covered.
+Cost: building the chain took 3.3 us/event here (HMAC-SHA256 + string work; ms vary run to run). Verification is the same work.

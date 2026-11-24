@@ -1,0 +1,10 @@
+PREMISES (not AWS numbers): each component is available a fraction of the time, failures independent.
+
+single AZ chain  ALB x app x db           = 99.7502%
+2 AZs: app in 2 AZs x db with standby      = 99.9498%   (ALB assumed already multi-AZ)
+...and the chain still counts a 'shared' dependency (e.g. the same Region/DNS/deploy): x 0.9995 -> 99.8998%
+a HARD dependency on notifications (99.9%) multiplies the ceiling:      99.8499%
+with notifications as a SOFT dependency (P5: fallback/queue):           99.9498%
+
+Correlated failures: redundancy only multiplies if failures are INDEPENDENT. Same bad deploy on both copies = one failure.
+downtime per 30 days: single AZ 107.9 min | multi-AZ 21.7 min (model)

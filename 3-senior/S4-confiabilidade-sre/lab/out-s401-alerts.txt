@@ -1,0 +1,15 @@
+PREMISES: SLO 99.9%, 5 req/s, base error 0.02%, seeded random (reproducible). MODEL, not PayFlow.
+strategy N = naive: page when 5m error ratio > 2% for 5 min (the P6.04 rule, no SLO)
+strategy M = multi-window burn rate (SRE Workbook, table 5-8): page 1h&5m>14.4x or 6h&30m>6x; ticket 3d&6h>1x
+
+scenario                                                   | N: first page (min after start)    | M: first page / ticket            
+A  total outage 10 min (100% errors)                       | +4 min, 1 page(s)                  | page +0 min (1x) / no ticket      
+                                                           |   budget (30 d) consumed in this run: 25.1%
+B  slow burn: 0.8% errors for 12 h                         | never (0 pages)                    | page +250 min (3x) / no ticket    
+                                                           |   budget (30 d) consumed in this run: 16.8%
+C  blips: 1 min of 100% errors every 30 min for 6 h        | never (0 pages)                    | page +0 min (3x) / no ticket      
+                                                           |   budget (30 d) consumed in this run: 29.2%
+D  mild: 0.15% errors for 4 days (burn 1.5x)               | never (0 pages)                    | no page / ticket +63.7 h (1x)     
+                                                           |   budget (30 d) consumed in this run: 20.1%
+E  healthy: base 0.02% only (no incident)                  | never (0 pages)                    | no page / no ticket               
+                                                           |   budget (30 d) consumed in this run: 2.0%

@@ -1,0 +1,28 @@
+== 1. precedence of the rules
+  PASS allowlisted user sees pix-v2 even at 0%
+  PASS everybody else does not (0%)
+  PASS rule country=BR matches
+  PASS rule country=BR rejects AR
+  PASS kill switch beats the allowlist
+  PASS unknown flag returns the CALLER's default (a typo is not silent: see the log in the lesson)
+== 2. a 10% rollout over 100000 users
+  enabled for 10057 of 100000 users = 10.06% (target 10%)
+  PASS within 4% of the target (binomial stdev ~ 95 users)
+== 3. stickiness and ramp-up
+  PASS same user, same answer, every time (no state stored)
+  at 25%: 25191 users enabled; 10057 of the 10057 users from the 10% step are still in
+  PASS ramp 10% -> 25% only ADDS users (nobody loses the feature)
+== 4. independence between flags (the salt)
+  salt=true  two 50% flags: both on for 25.0% of users (independent = 25%, bug = 50%)
+  PASS with the flag key as salt the flags are independent
+  salt=false two 50% flags: both on for 50.2% of users (independent = 25%, bug = 50%)
+  PASS without salt the SAME 50% get every flag (a 'canary group' that suffers everything)
+== 5. atomic updates under concurrent reads
+  two separate isEnabled() calls:    10,547,449 paired reads, 5,979,241 inconsistent (56.7%)
+  PASS without it a reader CAN see (on, off): the update is atomic, the PAIR of reads is not
+  ONE snapshot per decision (view):  13,593,224 paired reads, 0 inconsistent (0.0%)
+  PASS with a snapshot the pair is never torn
+== 6. flag debt
+  expired flags: [old-experiment]
+  PASS the expiry check finds exactly the forgotten flag
+ALL EXPERIMENTS PASSED

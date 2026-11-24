@@ -1,0 +1,14 @@
+MODEL: what a well-formed audit event looks like, and a linter that rejects the bad ones (used in tests of the code that WRITES audit events).
+
+event 1 (EXPORT_STATEMENT/ALLOWED): ok
+event 2 (READ_ACCOUNT/DENIED): ok
+event 3 (TRANSFER/ALLOWED): 1 problem(s)
+   - missing field: actor
+event 4 (CHARGE/ALLOWED): 1 problem(s)
+   - detail contains a card-number-like sequence
+event 5 (LOGIN/success): 3 problem(s)
+   - outcome must be ALLOWED/DENIED/ERROR, got success
+   - detail contains a CPF-like sequence
+   - actor is an e-mail: use a stable id (personal data in the audit trail)
+
+Reading: event 2 is the one teams forget: DENIED attempts are the evidence of an attack in progress, so the audit trail records refusals as well as successes.

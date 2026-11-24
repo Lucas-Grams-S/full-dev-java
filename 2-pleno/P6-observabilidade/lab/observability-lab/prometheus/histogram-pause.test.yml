@@ -1,0 +1,23 @@
+# Confere a conta da "Pausa para lógica" da P6.03: percentis de um histograma são INTERPOLADOS
+evaluation_interval: 1m
+tests:
+  - name: percentis por interpolação linear
+    interval: 1m
+    input_series:
+      - {series: 'h_bucket{le="0.1"}',  values: '0 90'}
+      - {series: 'h_bucket{le="0.5"}',  values: '0 97'}
+      - {series: 'h_bucket{le="1"}',    values: '0 99'}
+      - {series: 'h_bucket{le="+Inf"}', values: '0 100'}
+    promql_expr_test:
+      - expr: round(histogram_quantile(0.95, h_bucket), 0.0001)
+        eval_time: 1m
+        exp_samples:
+          - {labels: '{}', value: 0.3857}
+      - expr: round(histogram_quantile(0.5, h_bucket), 0.0001)
+        eval_time: 1m
+        exp_samples:
+          - {labels: '{}', value: 0.0556}
+      - expr: round(histogram_quantile(0.995, h_bucket), 0.0001)
+        eval_time: 1m
+        exp_samples:
+          - {labels: '{}', value: 1}

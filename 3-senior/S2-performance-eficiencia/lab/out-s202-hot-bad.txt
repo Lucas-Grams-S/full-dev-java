@@ -1,0 +1,14 @@
+
+                                         Java Methods that Execute the Most
+
+Method                                                                                              Samples Percent
+--------------------------------------------------------------------------------------------------- ------- -------
+ProfileApp.reportBad(int)                                                                             1,959  35.31%
+java.lang.StringLatin1.hashCode(byte[])                                                                 739  13.32%
+java.util.regex.Pattern.expr(Pattern$Node)                                                              420   7.57%
+java.util.regex.Pattern.sequence(Pattern$Node)                                                          348   6.27%
+ProfileApp.countBad(String)                                                                             266   4.79%
+java.util.regex.Matcher.reset()                                                                         245   4.42%
+java.util.regex.Pattern.compile()                                                                       244   4.40%
+jdk.internal.util.DecimalDigits.uncheckedGetCharsLatin1(int, int, byte[])                               217   3.91%
+ProfileApp.lambda$main$2(long, boolean, AtomicLong)                                                     203   3.66%

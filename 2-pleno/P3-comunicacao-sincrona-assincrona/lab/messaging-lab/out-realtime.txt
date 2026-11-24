@@ -1,0 +1,6 @@
+SSE content-type=text/event-stream
+SSE linhas=[:conectado, , id:1, event:balance, data:{"balance":"90.00"}, , id:2, event:balance, data:{"balance":"80.00"}, ]
+SSE content-type=text/event-stream
+SSE reconexao Last-Event-ID=2 recebeu=[id:3, event:balance, data:{"balance":"70.00"}, , :conectado, ]
+WS recebeu=[eco:ola, eco:saldo?]
+WS origem hostil recusada: WebSocketHandshakeException null

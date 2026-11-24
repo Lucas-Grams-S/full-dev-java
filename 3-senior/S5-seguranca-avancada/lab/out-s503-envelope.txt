@@ -1,0 +1,15 @@
+MODEL: AES-256-GCM per record (DEK), DEK wrapped by a KEK that lives only inside the (fake) KMS; aad = "table|id|column".
+stored: kekId=kek-1 wrappedDek=60 B data=42 B  (value was 14 B: 12 nonce + 16 tag = 28 B overhead; wrapped DEK = 12 + 32 + 16 = 60 B)
+
+1. right place            : OK "+5511999990000"
+2. moved to another row   : FAILED (AEADBadTagException: Tag mismatch)   <- the context is part of the check
+3. moved to another column: FAILED (AEADBadTagException: Tag mismatch)
+4. one flipped bit in data : FAILED (AEADBadTagException: Tag mismatch)   <- GCM authenticates, it does not only hide
+5. wrapped DEK from another record: FAILED (AEADBadTagException: Tag mismatch)
+
+KEY ROTATION (1000 records): re-wrap the DEKs, leave the data alone
+  data digest before = dd4c54332f9cc50b, after = dd4c54332f9cc50b  (identical: no data byte was touched)
+  KMS calls for the re-wrap = 2000 (1 unwrap + 1 wrap per record); local time 18.2 ms (a real KMS is a network call per operation)
+  record 7 under kek-2     : OK "+5511999900007"
+  old record 7 under kek-1 : OK "+5511999900007"   <- old KEK must stay until every DEK is re-wrapped
+  copy of the DB, stranger's KMS (its own kek-1): FAILED (AEADBadTagException: Tag mismatch)   <- a database dump alone is useless

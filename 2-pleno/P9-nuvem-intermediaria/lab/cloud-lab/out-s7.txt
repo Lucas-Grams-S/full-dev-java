@@ -1,0 +1,26 @@
+$ aws cloudwatch describe-alarms (name, state, description without the runbook URL)
+payflow-dlq-antifraud-not-empty	OK	[page] Dead-letter queue payflow-antifraud-dlq has messages: a consumer is failing permanently
+payflow-dlq-notifications-not-empty	OK	[page] Dead-letter queue payflow-notifications-dlq has messages: a consumer is failing permanently
+payflow-ecs-cpu-high	OK	[ticket] ECS service CPU above 85% for 15 minutes (the autoscaler targets 60%: it may be at max_count)
+payflow-ecs-memory-high	OK	[ticket] ECS service memory above 85% for 15 minutes (JVM budget, P7.09)
+payflow-http-5xx-ratio	OK	[page] More than 5% of requests answered 5xx by the application for 10 minutes, with at least 30 requests per period (0.1 re
+payflow-queue-antifraud-old-message	OK	[ticket] Oldest message in payflow-antifraud is older than 5 minutes (consumer slow or down)
+payflow-queue-notifications-old-message	OK	[ticket] Oldest message in payflow-notifications is older than 5 minutes (consumer slow or down)
+payflow-rds-cpu-high	OK	[ticket] Database CPU above 80% for 15 minutes
+payflow-rds-free-storage-low	OK	[page] Database free storage below 2 GiB
+payflow-target-latency-p95	OK	[ticket] p95 response time above 1 s for 10 minutes
+payflow-unexpected-errors	OK	[ticket] ERROR-level log lines (unexpected failures; 404/405/400 are not ERROR, decision 144)
+payflow-unhealthy-targets	OK	[page] At least one target is unhealthy for 3 minutes (readiness failing: database? startup?)
+total alarms: 12
+$ alarms grouped by (number of actions, has runbook link):
+     12 1	True
+$ aws logs describe-metric-filters
+payflow-unexpected-errors	{ $.log.level = "ERROR" }	UnexpectedErrors	PayFlow
+# NOT validated here: moto accepts the JSON metric-filter pattern but does not evaluate it (filter-log-events returned every line, WARN included).
+# The pattern follows the documented syntax ($.property = "value") and the nested shape of the real application log (P6: "log":{"level":...}).
+$ force an alarm into ALARM and read it back
+ALARM	lab: DLQ has 1 message
+$ metric math 5xx ratio alarm: its queries
+ratio	IF(requests >= 30, 100 * errors / requests, 0)
+requests	RequestCount
+errors	HTTPCode_Target_5XX_Count

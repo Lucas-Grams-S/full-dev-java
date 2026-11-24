@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: payflow-lite
+  flyway:
+    locations: classpath:db/migration      # base = producao: so o esquema, nunca o seed
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+server:
+  shutdown: graceful                       # ao receber SIGTERM, termina as requisicoes em andamento
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  pattern:
+    level: "%5p [%X{requestId:-}]"

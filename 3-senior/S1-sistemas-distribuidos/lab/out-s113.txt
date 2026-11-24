@@ -1,0 +1,10 @@
+== 1. Modelo: 100.000 usuarios, 5.000.000 relacoes de seguir (Zipf s=1,0). Seguidores do maior autor = 99999; do 100o = 4136; do 10.000o = 41 ==
+posts: 1,000,000; entregas na escrita (push puro) = 1,054,121,017 (amplificacao 1054x)
+hibrido (autores com mais de 10,000 seguidores = 41 'celebridades' lidos na hora): entregas = 199,320,815 (18.9% do push puro)
+um unico post do maior autor gera 99,999 escritas no push puro
+
+== 2. Custo de ABRIR o feed: pull puro le os posts recentes de ~50 contas seguidas por abertura; push le 1 lista pronta; hibrido le 1 lista + (celebridades que voce segue, em media 13.2) ==
+
+== 3. Notificacoes: 1.000.000 de eventos de 20.000 usuarios, 25% duplicados por reentrega at-least-once; deduplicar por (usuario, tipo, referencia) numa janela ==
+eventos=1,000,000 entregues=750,000 descartados como duplicados=250,000 (esperado 250.000)
+sem agrupar: 750,000 push; agrupando por usuario na janela: 20,000 push (97% menos)

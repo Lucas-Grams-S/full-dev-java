@@ -1,0 +1,20 @@
+groups:
+  - name: payflow-capacity
+    rules:
+      # Métrica a criar (CloudWatch FreeStorageSpace do RDS -> Prometheus/OTLP, P9.07: "ainda não testado"): bytes livres do volume do banco.
+      # Previsão LINEAR: o intervalo [3d] é a decisão (S4.07): longo = estável, mas guarda um degrau (carga pontual) por 3 dias.
+      - alert: PayflowDbDiskFullIn14d
+        expr: predict_linear(payflow_db_free_bytes[3d], 14 * 24 * 3600) < 0
+        for: 6h
+        labels: {severity: ticket}
+        annotations:
+          summary: "O disco do banco enche em menos de 14 dias no ritmo dos últimos 3 dias"
+          runbook: "docs/runbooks/disco-do-banco.md"
+      # Janela curta e horizonte curto: urgente. Só quando a tendência recente é de encher em 24 h.
+      - alert: PayflowDbDiskFullIn24h
+        expr: predict_linear(payflow_db_free_bytes[6h], 24 * 3600) < 0
+        for: 30m
+        labels: {severity: page}
+        annotations:
+          summary: "O disco do banco enche em menos de 24 h no ritmo das últimas 6 h"
+          runbook: "docs/runbooks/disco-do-banco.md"

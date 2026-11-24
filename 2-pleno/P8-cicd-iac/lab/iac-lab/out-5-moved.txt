@@ -1,0 +1,10 @@
+# rename module.registry -> module.container_registry WITHOUT a moved block
+# module.container_registry.aws_ecr_lifecycle_policy.keep_last will be created
+# module.container_registry.aws_ecr_repository.this will be created
+# module.registry.aws_ecr_lifecycle_policy.keep_last will be destroyed
+# module.registry.aws_ecr_repository.this will be destroyed
+Plan: 2 to add, 3 to change, 2 to destroy.
+# the same rename WITH a moved block
+# module.registry.aws_ecr_lifecycle_policy.keep_last has moved to module.container_registry.aws_ecr_lifecycle_policy.keep_last
+# module.registry.aws_ecr_repository.this has moved to module.container_registry.aws_ecr_repository.this
+Plan: 0 to add, 1 to change, 0 to destroy.

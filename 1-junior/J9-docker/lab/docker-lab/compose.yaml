@@ -1,0 +1,88 @@
+name: payflow
+
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: payflow
+      POSTGRES_DB: payflow
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - pgdata:/var/lib/postgresql          # no PostgreSQL 18 o caminho e /var/lib/postgresql (J3.03)
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payflow -d payflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  app:
+    build: .
+    image: payflow-lite:dev
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/payflow
+      SPRING_DATASOURCE_USERNAME: payflow
+      SPRING_CONFIG_IMPORT: configtree:/run/secrets/
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration,classpath:db/seed
+    secrets:
+      - source: db_password
+        target: spring.datasource.password
+      - source: jwt_secret
+        target: payflow.security.jwt.secret
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
+    networks:
+      - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"                     # sem isto o log do container cresce sem limite
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  # Cliente psql sob demanda: docker compose --profile tools run --rm psql
+  psql:
+    profiles: ["tools"]
+    image: postgres:18
+    networks:
+      - backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: payflow
+      PGDATABASE: payflow
+      PGPASSFILE: /run/secrets/pgpass
+    secrets:
+      - source: db_pgpass
+        target: pgpass
+    entrypoint: ["psql"]
+
+secrets:
+  db_pgpass:
+    file: ./secrets/pgpass
+  db_password:
+    file: ./secrets/db_password
+  jwt_secret:
+    file: ./secrets/jwt_secret
+
+volumes:
+  pgdata:
+
+networks:
+  backend:

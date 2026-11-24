@@ -1,0 +1,13 @@
+MODEL: 5.0 commits/s (premise), 20000 random disasters per row, seeded.
+RPO = how much committed data is LOST. A row says how often the log is shipped to a place that survives the disaster.
+
+mechanism (ship interval)                    | mean lost tx |  p99 lost tx |  max lost tx
+synchronous (every commit waits for the copy) |          0.0 |            0 |            0
+async stream, lag ~ 0.003 s (the P9.08 measure) |          0.0 |            1 |            2
+async stream, lag ~ 1 s                      |          2.5 |            9 |           14
+log shipped every 60 s (archive_timeout = 60) |        149.0 |          308 |          347
+log shipped every 300 s (RDS: ~5 min, P9.08) |        746.9 |         1500 |         1601
+nightly dump (24 h)                          |     215134.1 |       427176 |       432947
+
+The worst case of periodic shipping is the interval itself (RPO = 300 s -> up to 1500 transfers at 5/s).
+Synchronous copy gives RPO 0 but every commit now pays the round trip to the other site (latency x availability trade).

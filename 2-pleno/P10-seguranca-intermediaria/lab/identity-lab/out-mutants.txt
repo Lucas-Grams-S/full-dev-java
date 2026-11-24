@@ -1,0 +1,9 @@
+M1 sem `audiences`: KILLED (a suíte falhou) -> wrongAudience_is401
+M2 sem `jws-algorithms`: SURVIVED (a suíte continuou verde)
+M3 sem o validador de `typ`: KILLED (a suíte falhou) -> idTokenIsNotAnAccessToken_is401
+M4a regra da cadeia para /admin frouxa (authenticated), fica o @PreAuthorize: SURVIVED (a suíte continuou verde)
+M4b regra frouxa E sem o @PreAuthorize: KILLED (a suíte falhou) -> adminEndpoint_needsTheRole_notTheScope
+M5 sem a lista de clientes (azp) no /internal: KILLED (a suíte falhou) -> internal_aKnownClientWithoutTheScope_is403_andAnUnknownClientWithTheScope_is403
+M6 sem o filtro de dono (IDOR): KILLED (a suíte falhou) -> idor_bobCannotReadAlicesAccount_404
+M7 escopo de escrita não exigido: KILLED (a suíte falhou) -> readScopeIsNotEnoughToTransfer_403_insufficientScope
+mutants killed: 6/8

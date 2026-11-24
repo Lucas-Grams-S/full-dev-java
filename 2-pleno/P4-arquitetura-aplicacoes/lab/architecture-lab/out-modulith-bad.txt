@@ -1,0 +1,10 @@
+BAD MODULES VERIFY -> Violations
+- Cycle detected: Slice billing -> 
+                Slice orders -> 
+                Slice billing
+  1. Dependencies of Slice billing
+    - Field <com.payflow.fixtures.badmod.billing.BillingService.orders> has type <com.payflow.fixtures.badmod.orders.OrderService> in (BillingService.java:0)
+    - Field <com.payflow.fixtures.badmod.billing.BillingService.secret> has type <com.payflow.fixtures.badmod.orders.internal.Secret> in (BillingService.java:0)
+  2. Dependencies of Slice orders
+    - Field <com.payflow.fixtures.badmod.orders.OrderService.billing> has type <com.payflow.fixtures.badmod.billing.BillingService> in (OrderService.java:0)
+- Module 'billing' depends on non-exposed type com.payflow.fixtures.badmod.orders.internal.Secret within module 'orders'!

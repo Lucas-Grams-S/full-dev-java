@@ -1,0 +1,16 @@
+## A) ADD COLUMN: constant default x volatile default (3M rows)
+Time: 2.243 ms
+Time: 2.122 ms
+ same_file_after_constant_default 
+----------------------------------
+ t
+(1 row)
+
+Time: 0.099 ms
+Time: 8201.956 ms (00:08.202)
+ same_file_after_volatile_default 
+----------------------------------
+ f
+(1 row)
+
+Time: 115.413 ms

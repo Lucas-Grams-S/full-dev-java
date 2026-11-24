@@ -1,0 +1,6 @@
+benchmark (10.000 valores)         exato=4721950.00  double=4721950.0  igual? true  erro=0.00
+centavos quebrados (10.000)        exato=4998150.00  double=4998150.0  igual? true  erro=0.00
+1.000.000 x R$ 0,10                exato=100000.00  double=100000.00000133288  igual? false  erro=0.000001332882675
+10 x 0.1 em double = 0.9999999999999999  (igual a 1.0? false)
+0.1 + 0.2 == 0.3 em double? false   (0.1 + 0.2 = 0.30000000000000004)
+arredondar 1.005 para 2 casas, meio para cima: double 1.0  x  BigDecimal 1.01

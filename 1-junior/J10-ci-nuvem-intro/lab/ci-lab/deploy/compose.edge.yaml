@@ -1,0 +1,24 @@
+# Caminho B (opcional): HTTPS publico com Caddy. Exige um dominio seu apontando para o IP da instancia
+# e as portas 80/443 abertas no security group. Uso:
+#   PAYFLOW_DOMAIN=app.exemplo.com.br docker compose -f compose.prod.yaml -f compose.edge.yaml up -d --wait
+services:
+  caddy:
+    image: caddy:2.11
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      PAYFLOW_DOMAIN: ${PAYFLOW_DOMAIN:?set PAYFLOW_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data              # certificados: se perder o volume, o Caddy pede outros (limite da Let's Encrypt)
+
+  app:
+    ports: !override []                # com o Caddy na frente, a 8080 nem precisa ficar no host
+
+volumes:
+  caddy_data:

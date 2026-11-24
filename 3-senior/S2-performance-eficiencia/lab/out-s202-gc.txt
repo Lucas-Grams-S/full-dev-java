@@ -1,0 +1,8 @@
+--- BAD
+Total Pause Time: 201 ms
+Number of Pauses: 281
+Average Pause Time: 0.716 ms
+--- FIXED
+Total Pause Time: 137 ms
+Number of Pauses: 197
+Average Pause Time: 0.696 ms

@@ -1,0 +1,7 @@
+## D) the cost of keeping the indexes: insert 100k rows with 0, 1 and 2 GIN indexes
+no index:
+Time: 118.401 ms
+trigram GIN only:
+Time: 2004.225 ms (00:02.004)
+trigram GIN + tsvector column + GIN:
+Time: 2938.424 ms (00:02.938)

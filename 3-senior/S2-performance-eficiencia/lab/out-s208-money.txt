@@ -1,0 +1,7 @@
+Benchmark                   (n)  Mode  Cnt   Score    Error  Units
+MoneySumBench.bigDecimal    100  avgt    5   0.386 ±  0.047  us/op
+MoneySumBench.bigDecimal  10000  avgt    5  39.999 ±  4.349  us/op
+MoneySumBench.doubleSum     100  avgt    5   0.022 ±  0.001  us/op
+MoneySumBench.doubleSum   10000  avgt    5   4.544 ±  0.008  us/op
+MoneySumBench.longCents     100  avgt    5   0.013 ±  0.001  us/op
+MoneySumBench.longCents   10000  avgt    5   2.286 ±  0.007  us/op

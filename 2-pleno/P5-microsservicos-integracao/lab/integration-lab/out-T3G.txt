@@ -1,0 +1,11 @@
+T3G amount invalido -> INVALID_ARGUMENT | amount invalido: abc
+T3G deadline 200 ms contra servidor de 1000 ms: DEADLINE_EXCEEDED | DEADLINE_EXCEEDED: CallOptions deadline exceeded after 0.174711437s. Name resolution delay 0.001105900 seconds. [closed=[], open=[[connecting_and_lb_delay=63464203ns, remote_addr=127.0.0.1/127.0.0.1:39185]]]
+T3G ... falhou rapido, em 3 ms (SEM deadline configurado)
+T3G ... o chamador foi liberado apos 216 ms
+T3G rodada 1: gRPC 145 us/chamada, REST/JSON HTTP/1.1 441 us/chamada (loopback, 1 cliente sequencial, 3000 chamadas)
+T3G rodada 2: gRPC 105 us/chamada, REST/JSON HTTP/1.1 255 us/chamada (loopback, 1 cliente sequencial, 3000 chamadas)
+T3G rodada 3: gRPC 63 us/chamada, REST/JSON HTTP/1.1 259 us/chamada (loopback, 1 cliente sequencial, 3000 chamadas)
+T3G Score(15000.00) -> score=90 decision=DENY
+T3G SEM deadline: o chamador esperou 1503 ms (o padrao do gRPC e nao ter prazo)
+T3G servidor fora do ar: UNAVAILABLE | UNAVAILABLE: io exception
+T3G tamanho do corpo: requisicao protobuf=129 bytes, JSON=209 bytes; resposta protobuf=4 bytes, JSON=30 bytes

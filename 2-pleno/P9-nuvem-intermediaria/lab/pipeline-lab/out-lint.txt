@@ -1,0 +1,11 @@
+$ actionlint .github/workflows/deploy-ecs.yml
+(clean)
+$ shellcheck scripts/ci/ecs-deploy.sh scripts/ci/smoke-test.sh
+(clean)
+# MUTANT: a missing needs target and an unquoted variable must be caught
+.github/workflows/deploy-ecs.yml:48:3: job "production" needs job "stagng" which does not exist in this workflow [job-needs]
+   |
+48 |   production:
+In scripts/ci/ecs-deploy.sh line 12:
+                                                                                                       ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+  https://www.shellcheck.net/wiki/SC2086 -- Double quote to prevent globbing ...

@@ -1,0 +1,11 @@
+# Overrides of values.yaml for staging. NOTHING secret here (the Secret is created outside the chart, decision 150).
+image:
+  repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/payflow   # the digest comes from the pipeline (--set-string image.digest=...)
+replicaCount: 2
+ingress:
+  host: payflow.staging.example.com
+autoscaling:
+  enabled: false
+pdb:
+  enabled: true
+  minAvailable: 1

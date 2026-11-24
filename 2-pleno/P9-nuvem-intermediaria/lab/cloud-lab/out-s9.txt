@@ -1,0 +1,5 @@
+$ aws lambda get-function-configuration (the Terraform-created function)
+{"runtime":"java25","handler":"com.payflow.exporter.StatementExporter::handleRequest","arch":["arm64"],"memory":1024,"timeout":60,"snapStart":{"ApplyOn":"None","OptimizationStatus":"Off"}}
+$ aws lambda list-aliases
+live	3
+(SnapStart restore is NOT emulated by moto: this only proves the configuration shape.)

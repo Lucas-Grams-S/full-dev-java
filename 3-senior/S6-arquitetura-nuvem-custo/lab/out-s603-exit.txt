@@ -1,0 +1,16 @@
+1. Data gravity: moving 1 TB (1,024 GB) out, first pricing tier, prices from the Price List
+   from us-east-1: to the internet US$ 83.16 (after the 100 GB free); to sa-east-1 US$ 20.48
+   from sa-east-1: to the internet US$ 138.60 (after the 100 GB free); to us-east-1 US$ 141.31
+   (the AWS waiver for data transfer out when leaving AWS exists, through Support, see the 2024 blog post;
+    it covers the move, not years of running in two clouds)
+
+2. Exit vs. active-active portability over 3 years (region sa-east-1; premises in the source)
+   one exit: 4 months running both (US$ 4,000.00) + egress of 2048 GB (US$ 292.20) = US$ 4,292.20, adapters not priced
+   active-active in a 2nd cloud: US$ 1,030.00/month extra x 36 months = US$ 37,080.00, common layer not priced
+   P(must leave within 3 years)             expected exit
+   5%                                         US$ 214.61
+   20%                                        US$ 858.44
+   50%                                      US$ 2,146.10
+   100%                                     US$ 4,292.20
+   even P = 100% gives US$ 4,292.20, 8.6x less than active-active (US$ 37,080.00): as lock-in insurance it does not pay;
+   multi-cloud active-active needs another reason (regulation, contract, availability), priced on its own

@@ -1,0 +1,13 @@
+MODEL: what happens when the SAME (key, nonce) encrypts two messages with AES-GCM. The JDK refuses a repeat on one Cipher object; we bypass it with two objects.
+c1 xor c2           = 0908090900090900... (first 9 bytes are 0: both messages start with "transfer ")
+p1 (attacker knows) = "transfer 0100.00 to acc-17 ok  "
+(c1 xor c2) xor p1  = "transfer 9999.99 to acc-66 ok  "   <- p2 recovered WITHOUT the key
+p2 (secret)         = "transfer 9999.99 to acc-66 ok  "
+equal? true
+JDK guard: re-init of the SAME Cipher with the same key+nonce -> InvalidAlgorithmParameterException: Cannot reuse iv for GCM encryption
+
+Random 96-bit nonces under ONE key (birthday bound, math not measurement): P(repeat) ~ n^2 / 2^97
+  n = 2^20 messages -> P(repeat) ~ 2^-57  (6.94e-18)
+  n = 2^32 messages -> P(repeat) ~ 2^-33  (1.16e-10)
+  n = 2^40 messages -> P(repeat) ~ 2^-17  (7.63e-06)
+NIST SP 800-38D limits random-nonce GCM to 2^32 invocations per key: that is why one DEK per record (or per few thousand) is the habit.

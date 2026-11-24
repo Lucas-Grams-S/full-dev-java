@@ -1,0 +1,10 @@
+
+                                 Allocation by Site
+
+Method                                                          Allocation Pressure
+--------------------------------------------------------------- -------------------
+java.util.Arrays.copyOfRange(byte[], int, int)                               35.09%
+java.lang.AbstractStringBuilder.<init>(int)                                  34.54%
+java.util.regex.Pattern.matcher(CharSequence)                                13.98%
+java.util.regex.Matcher.<init>(Pattern, CharSequence)                         6.91%
+jdk.internal.misc.Unsafe.allocateUninitializedArray(Class, int)               4.12%

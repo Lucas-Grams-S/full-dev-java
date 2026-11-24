@@ -1,0 +1,21 @@
+== colapsado (as 5 pilhas mais frequentes) ==
+1969  Thread.run;ProfileApp.lambda$main$1;ProfileApp.reportBad
+739  Thread.run;ProfileApp.lambda$main$2;ProfileApp.countBad;String.hashCode;StringLatin1.hashCode
+420  Thread.run;ProfileApp.lambda$main$0;ProfileApp.validateBad;String.matches;Pattern.matches;Pattern.compile;Pattern.<init>;Pattern.compile;Pattern.expr
+348  Thread.run;ProfileApp.lambda$main$0;ProfileApp.validateBad;String.matches;Pattern.matches;Pattern.compile;Pattern.<init>;Pattern.compile;Pattern.expr;Pattern.sequence
+266  Thread.run;ProfileApp.lambda$main$2;ProfileApp.countBad
+
+== arvore (de cima para baixo; so ramos >= 3.0% do total) ==
+100.0%  (todas as amostras)
+  100.0%  Thread.run
+     39.6%  ProfileApp.lambda$main$0
+       33.7%  ProfileApp.validateBad
+         33.7%  String.matches
+           33.7%  Pattern.matches
+        3.6%  StringConcatHelper$Concat1.concat
+     38.5%  ProfileApp.lambda$main$1
+       38.5%  ProfileApp.reportBad
+     21.9%  ProfileApp.lambda$main$2
+       18.2%  ProfileApp.countBad
+         13.3%  String.hashCode
+           13.3%  StringLatin1.hashCode

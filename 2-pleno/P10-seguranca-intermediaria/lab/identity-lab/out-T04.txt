@@ -1,0 +1,6 @@
+wrong secret -> 401 {"error":"unauthorized_client","error_description":"Invalid client or Invalid client credentials"}
+reporting asks internal:notify -> 400 {"error":"invalid_scope","error_description":"Invalid scopes: internal:notify"}
+service claims={"exp":1794685281,"iat":1794684981,"jti":"trrtcc:fef4563b-4e7b-e048-a13a-0371f257aa10","iss":"http://127.0.0.1:8180/realms/payflow","aud":"payflow-api","sub":"cbccda6b-1bd5-47ff-83e9-317d31e630b4","typ":"Bearer","azp":"payflow-notifications","scope":"internal:notify","clientHost":"172.17.0.1","clientAddress":"172.17.0.1","client_id":"payflow-notifications"}
+service has refresh_token=false
+reporting client -> 403 FORBIDDEN WWW-Authenticate=Bearer error="insufficient_scope", error_description="The request requires higher privileges than provided by the access token.", error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"
+first=202 ACCEPTED second=202 ACCEPTED same jti (token reused)=true

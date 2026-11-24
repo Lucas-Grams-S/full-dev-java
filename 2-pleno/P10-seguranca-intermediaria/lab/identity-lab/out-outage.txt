@@ -1,0 +1,10 @@
+1) Keycloak FORA DO AR desde antes da subida
+Started LabApplication in 1.867 seconds
+   sem token                 -> 401
+   token qualquer (lixo)     -> 403   (corpo vazio)
+   linhas ERROR no log       -> 1 com JwtDecoderInitializationException: Unable to resolve the Configuration with the provided Issuer of "http://127.0.0.1:8180/realms/payflow"
+2) Keycloak VOLTA (sem reiniciar a API)
+   token real                -> 200
+   token qualquer (lixo)     -> 401
+3) Keycloak CAI de novo (o JWKS já está em cache)
+   mesmo token real          -> 200

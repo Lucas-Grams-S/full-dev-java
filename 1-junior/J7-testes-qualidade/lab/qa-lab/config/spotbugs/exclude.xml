@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Código gerado pelo MapStruct: não é escrito por nós. -->
+  <Match>
+    <Class name="~.*MapperImpl"/>
+  </Match>
+</FindBugsFilter>

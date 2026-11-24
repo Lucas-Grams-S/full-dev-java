@@ -1,0 +1,12 @@
+== 1. Concorrencia otimista no fluxo (expectedVersion) ==
+segundo saque concorrente: conflito: esperava versao 2 mas o fluxo esta na 3
+saldo = 4000 centavos (nunca negativo: o segundo saque foi recusado, nao aplicado)
+
+== 2. Snapshots: carregar um agregado com 1.000.000 de eventos ==
+sem snapshot: 1000001 eventos lidos em 13 ms; com snapshot na posicao 999000: 1001 eventos em 0 ms; mesmo saldo? true
+
+== 3. Evolucao do evento (upcasting): v1 com double, v2 com centavos ==
+somando os double do v1: 0.6000000000000001 (imprecisao do double); apos o upcast para centavos inteiros: 60 centavos (= 0,60)
+
+== 4. Corrigir um erro: nunca editar o passado; acrescentar um evento que o compensa ==
+saldo com o deposito duplicado = 10000; apos o evento de correcao = 5000; o historico (4 eventos) ficou inteiro e auditavel

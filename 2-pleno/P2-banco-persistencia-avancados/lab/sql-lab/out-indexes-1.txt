@@ -1,0 +1,116 @@
+### A. Cobertura: INCLUDE (type, amount) permite Index Only Scan na soma por conta quente
+Time: 2852.785 ms (00:02.853)
+                relname                 | tamanho 
+----------------------------------------+---------
+ idx_ledger_entries_account_created     | 194 MB
+ idx_ledger_entries_account_created_cov | 281 MB
+(2 rows)
+
+                                                                          QUERY PLAN                                                                          
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=53.282..55.629 rows=1.00 loops=1)
+   Buffers: shared hit=6 read=3580
+   ->  Gather (actual time=53.228..55.620 rows=3.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=6 read=3580
+         ->  Partial Aggregate (actual time=48.621..48.622 rows=1.00 loops=3)
+               Buffers: shared hit=6 read=3580
+               ->  Parallel Index Only Scan using idx_ledger_entries_account_created_cov on ledger_entries (actual time=0.097..35.899 rows=166874.00 loops=3)
+                     Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+                     Heap Fetches: 0
+                     Index Searches: 1
+                     Buffers: shared hit=6 read=3580
+ Planning:
+   Buffers: shared hit=23 read=6
+ Planning Time: 0.363 ms
+ Execution Time: 55.832 ms
+(17 rows)
+
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate (actual time=3.623..3.624 rows=2.00 loops=1)
+   Group Key: type
+   Batches: 1  Memory Usage: 32kB
+   Buffers: shared hit=157
+   ->  Index Only Scan using idx_ledger_entries_account_created_cov on ledger_entries (actual time=0.011..1.300 rows=21353.00 loops=1)
+         Index Cond: ((account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid) AND (created_at >= '2026-10-14 00:00:00+00'::timestamp with time zone))
+         Heap Fetches: 0
+         Index Searches: 1
+         Buffers: shared hit=157
+ Planning:
+   Buffers: shared hit=33 read=1
+ Planning Time: 0.339 ms
+ Execution Time: 3.646 ms
+(13 rows)
+
+### A2. O extrato (SELECT *) continua pedindo o heap: o coberto não ajuda quando se pede coluna fora do INCLUDE
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.203..0.208 rows=20.00 loops=1)
+   Buffers: shared hit=3 read=3
+   ->  Index Scan using idx_ledger_entries_account_created on ledger_entries (actual time=0.199..0.202 rows=20.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=3 read=3
+ Planning:
+   Buffers: shared hit=11
+ Planning Time: 0.054 ms
+ Execution Time: 0.214 ms
+(10 rows)
+
+### B. Parcial: só as PENDING
+Time: 94.262 ms
+             relname             | tamanho 
+---------------------------------+---------
+ idx_transfers_pending           | 40 kB
+ idx_transfers_status_created    | 39 MB
+ idx_transfers_source_account_id | 7336 kB
+(3 rows)
+
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.014..0.141 rows=50.00 loops=1)
+   Buffers: shared hit=30 read=22
+   ->  Index Scan using idx_transfers_pending on transfers (actual time=0.013..0.137 rows=50.00 loops=1)
+         Index Searches: 1
+         Buffers: shared hit=30 read=22
+ Planning:
+   Buffers: shared hit=47 read=7
+ Planning Time: 0.806 ms
+ Execution Time: 0.155 ms
+(9 rows)
+
+### B2. Armadilha: parâmetro ($1) + plano genérico não usa o índice parcial
+                    QUERY PLAN                     
+---------------------------------------------------
+ Limit
+   ->  Gather Merge
+         Workers Planned: 2
+         ->  Sort
+               Sort Key: created_at
+               ->  Parallel Seq Scan on transfers
+                     Filter: ((status)::text = $1)
+(7 rows)
+
+                        QUERY PLAN                         
+-----------------------------------------------------------
+ Limit
+   ->  Index Scan using idx_transfers_pending on transfers
+(2 rows)
+
+### C. Ordem das colunas: (created_at, account_id) em vez de (account_id, created_at)
+                                               QUERY PLAN                                               
+--------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.302..0.413 rows=20.00 loops=1)
+   Buffers: shared hit=9 read=4
+   ->  Index Scan using idx_wrong_order on ledger_entries (actual time=0.301..0.410 rows=20.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=9 read=4
+ Planning:
+   Buffers: shared hit=19 read=1
+ Planning Time: 0.136 ms
+ Execution Time: 0.428 ms
+(10 rows)
+

@@ -1,0 +1,82 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: "Image digest to deploy (sha256:...), from the Release run"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  staging:
+    name: staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: staging
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DIGEST: ${{ inputs.digest }}
+      NAMESPACE: payflow-staging
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The input must be a digest, never a tag
+        run: |
+          [[ "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "::error::not a digest: $DIGEST"; exit 1; }
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+        with:
+          version: v4.3.2
+      - name: Cluster access (EKS arrives in P9; until then this step is a placeholder)
+        run: aws eks update-kubeconfig --name "${{ vars.CLUSTER_NAME }}"
+      - name: Upgrade, wait and roll back by itself if it does not become ready
+        run: bash scripts/ci/helm-deploy.sh staging "$NAMESPACE" "$DIGEST"
+      - name: Smoke test through the public entry point
+        env:
+          BASE_URL: ${{ vars.STAGING_URL }}
+        run: bash scripts/ci/smoke-test.sh "$BASE_URL"
+
+  production:
+    name: production (after staging, with a human approval)
+    needs: staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production      # required reviewers are configured on the environment
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DIGEST: ${{ inputs.digest }}
+      NAMESPACE: payflow
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+        with:
+          version: v4.3.2
+      - run: aws eks update-kubeconfig --name "${{ vars.CLUSTER_NAME }}"
+      - name: Upgrade
+        run: bash scripts/ci/helm-deploy.sh production "$NAMESPACE" "$DIGEST"
+      - name: Smoke test
+        env:
+          BASE_URL: ${{ vars.PRODUCTION_URL }}
+        run: bash scripts/ci/smoke-test.sh "$BASE_URL"

@@ -1,0 +1,34 @@
+$ promtool --version
+promtool, version 3.16.0 (branch: HEAD, revision: e2e28adeee2c5883d000fc82aca6008cfbf7e96d)
+
+$ promtool check rules audit-rules.yml
+Checking audit-rules.yml
+  SUCCESS: 4 rules found
+
+
+$ promtool test rules audit-rules.test.yml
+Processing test file: audit-rules.test.yml
+  SUCCESS
+
+
+$ MUTANT: remove the traffic floor (' and payflow:audit_events:rate5m > 0.5')
+  FAILED:
+    alertname: PayflowAuditDeniedSpike, time: 18m, 
+        exp:[], 
+        got:[
+              Labels:{alertname="PayflowAuditDeniedSpike", severity="ticket"}
+    alertname: PayflowAuditDeniedSpike, time: 6m, 
+        exp:[], 
+        got:[
+              Labels:{alertname="PayflowAuditDeniedSpike", severity="ticket"}
+(exit code of the mutant run is non-zero when the test notices)
+
+$ MUTANT 2: shorten 'for: 5m' to 'for: 1m'
+  FAILED:
+    alertname: PayflowAuditDeniedSpike, time: 3m, 
+        exp:[], 
+        got:[
+              Labels:{alertname="PayflowAuditDeniedSpike", severity="ticket"}
+    alertname: PayflowAuditDeniedSpike, time: 3m, 
+        exp:[], 
+        got:[

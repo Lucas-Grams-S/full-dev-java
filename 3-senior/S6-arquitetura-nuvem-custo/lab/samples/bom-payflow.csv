@@ -1,0 +1,41 @@
+env;service;item;key;qty;kind;premise
+prod;ECS Fargate;vCPU (opção B da S6.01: 114 tarefas-hora/dia x 0,5 vCPU);fargate.arm.vcpu_h;1734;variable;demanda da S6.01 (~78 req/s médios)
+prod;ECS Fargate;memória (114 tarefas-hora/dia x 1 GB);fargate.arm.gb_h;3468;variable;idem
+prod;ELB;ALB, horas;alb.h;730;fixed;1 ALB
+prod;ELB;ALB, LCU (média de 2);alb.lcu_h;1460;variable;premissa
+prod;VPC;IPv4 público do ALB (2 AZs);vpc.ipv4_h;1460;fixed;um IP por AZ
+prod;RDS;db.m7g.large Multi-AZ (primário);rds.pg.m7g.large.multi_h;730;fixed;tamanho é premissa (a P9 usou db.t4g.micro no estudo)
+prod;RDS;gp3 Multi-AZ 100 GB;rds.gp3.multi_gb_mo;100;fixed;premissa
+prod;RDS;réplica do reporting db.t4g.medium;rds.pg.t4g.medium.single_h;730;fixed;decisão 171
+prod;RDS;gp3 da réplica 100 GB;rds.gp3.single_gb_mo;100;fixed;premissa
+prod;RDS;backup além da cota grátis;rds.backup_gb_mo;100;variable;PITR 7 dias (decisão 223)
+prod;VPC;6 endpoints de interface x 2 AZs;vpc.endpoint_h;8760;fixed;decisão 164
+prod;VPC;GB processados pelos endpoints;vpc.endpoint_gb;300;variable;imagens, logs, SQS/SNS
+prod;CloudWatch;logs ingeridos (0,5 KB por requisição);cw.logs_ingest_gb;100;variable;~205 milhões de requisições/mês
+prod;CloudWatch;logs guardados (30 dias);cw.logs_store_gb_mo;100;variable;decisão 170
+prod;CloudWatch;alarmes;cw.alarm_mo;12;fixed;decisão 170
+prod;CloudWatch;métricas próprias;cw.metric_mo;20;fixed;premissa
+prod;Secrets Manager;segredos;sm.secret_mo;4;fixed;decisão 169
+prod;KMS;chaves (RDS, arquivo, campo);kms.key_mo;3;fixed;decisões 234-237
+prod;KMS;requisições;kms.request;2000000;variable;premissa
+prod;SQS;requisições (2 filas, envio/recebe/apaga, polling);sqs.request;60000000;variable;10 milhões de transferências/mês
+prod;SNS;publicações;sns.request;10000000;variable;idem
+prod;S3;arquivo e âncoras (standard);s3.std_gb_mo;500;variable;S3.04 e decisão 242
+prod;S3;PUTs;s3.put;1000000;variable;premissa
+prod;Data transfer;saída para a internet (respostas da API);dt.out_gb;400;variable;2 KB por resposta (os 100 GB grátis não descontados)
+prod;Data transfer;entre AZs (app <-> banco, 2 sentidos);dt.inter_az_gb;600;variable;metade do tráfego do banco cruza AZ
+staging;ECS Fargate;vCPU (2 tarefas 24x7);fargate.arm.vcpu_h;730;fixed;sem agenda de desligamento
+staging;ECS Fargate;memória (2 tarefas 24x7);fargate.arm.gb_h;1460;fixed;idem
+staging;ELB;ALB, horas;alb.h;730;fixed;1 ALB
+staging;ELB;ALB, LCU;alb.lcu_h;146;variable;premissa
+staging;VPC;IPv4 público do ALB (2 AZs);vpc.ipv4_h;1460;fixed;um IP por AZ
+staging;RDS;db.t4g.medium Single-AZ;rds.pg.t4g.medium.single_h;730;fixed;premissa
+staging;RDS;gp3 50 GB;rds.gp3.single_gb_mo;50;fixed;premissa
+staging;VPC;6 endpoints de interface x 1 AZ;vpc.endpoint_h;4380;fixed;endpoint_az_count = 1
+staging;CloudWatch;logs ingeridos;cw.logs_ingest_gb;10;variable;premissa
+staging;Secrets Manager;segredos;sm.secret_mo;4;fixed;idem prod
+staging;KMS;chaves;kms.key_mo;2;fixed;premissa
+shared;S3;conta de log archive (CloudTrail e Config);s3.std_gb_mo;100;variable;S6.05
+shared;Config;itens de configuração gravados;config.item;5000;variable;S6.05
+shared;KMS;chaves da conta de backup e de auditoria;kms.key_mo;2;fixed;decisão 237
+shared;RDS;cópias de snapshot na conta de backup;rds.backup_gb_mo;200;variable;decisão 223 (camada 4)

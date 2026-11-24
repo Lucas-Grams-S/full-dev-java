@@ -1,0 +1,34 @@
+name: payflow
+
+services:
+  app:
+    image: ${PAYFLOW_IMAGE:?set PAYFLOW_IMAGE}
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:?set DB_HOST}:5432/payflow?sslmode=verify-full&sslrootcert=/certs/global-bundle.pem
+      SPRING_DATASOURCE_USERNAME: payflow
+      SPRING_CONFIG_IMPORT: configtree:/run/secrets/
+    secrets:
+      - source: db_password
+        target: spring.datasource.password
+      - source: jwt_secret
+        target: payflow.security.jwt.secret
+    volumes:
+      - ./certs/global-bundle.pem:/certs/global-bundle.pem:ro
+    ports:
+      - "127.0.0.1:8080:8080"        # so o proprio host alcanca; o acesso de fora e por tunel SSM (ou pelo Caddy)
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 40s
+
+secrets:
+  db_password:
+    file: ./secrets/db_password
+  jwt_secret:
+    file: ./secrets/jwt_secret

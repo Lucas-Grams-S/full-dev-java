@@ -1,0 +1,10 @@
+== S4.07: capacity rules (predict_linear)
+  SUCCESS: 2 rules found
+Processing test file: capacity-rules.test.yml
+  SUCCESS
+
+
+== mutant M3: the 14-day forecast reads only 6 h (the step is no longer mistaken for a trend) -> the test that DEPENDS on the 3 d window must FAIL
+  FAILED:
+    alertname: PayflowDbDiskFullIn14d, time: 3d, 
+              Labels:{alertname="PayflowDbDiskFullIn14d", severity="ticket"}

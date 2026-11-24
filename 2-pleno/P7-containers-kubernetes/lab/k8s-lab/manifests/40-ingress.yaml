@@ -1,0 +1,19 @@
+# A API Ingress está "congelada" (sem novidades), mas estável e sem plano de remoção; o projeto recomenda a Gateway API
+# para o que é novo (ver P7.04). No kind, o Cloud Provider KIND atende Ingress sem controlador extra e SEM ingressClassName.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: payflow
+  namespace: payflow
+  labels: {app.kubernetes.io/name: payflow, app.kubernetes.io/part-of: payflow}
+spec:
+  rules:
+    - host: payflow.localtest.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: payflow
+                port: {name: http}

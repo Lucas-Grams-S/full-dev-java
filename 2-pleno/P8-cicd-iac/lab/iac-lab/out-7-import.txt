@@ -1,0 +1,10 @@
+$ terraform state rm aws_ssm_parameter.db_endpoint    (the resource still exists in the cloud)
+Successfully removed 1 resource instance(s).
+$ terraform plan
+# aws_ssm_parameter.db_endpoint will be created
+Plan: 1 to add, 1 to change, 0 to destroy.
+$ terraform plan   (with an import block)
+# aws_ssm_parameter.db_endpoint will be imported
+Plan: 1 to import, 0 to add, 1 to change, 0 to destroy.
+aws_ssm_parameter.db_endpoint: Import complete [id=/payflow/db/endpoint]
+Apply complete! Resources: 1 imported, 0 added, 1 changed, 0 destroyed.

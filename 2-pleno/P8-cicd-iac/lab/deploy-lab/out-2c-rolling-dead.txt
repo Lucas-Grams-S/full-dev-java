@@ -1,0 +1,5 @@
+>> 4000 requests / 4 threads; at t=1s the rolling update starts (BAD_ROLLOUT=2)
+  [rollout] lab-p8-app-new1 NEVER became ready -> rollout stopped at step 1/4
+[action ran at t=1.00s, took 10.70s]
+total=4000 failures=0 duration=11.7s
+  version=v1    status=200                     4000 (100.0%)

@@ -1,0 +1,4 @@
+T1 com timeout 300 ms: falhou apos 302 ms
+T1 com timeout 300 ms: ResourceAccessException <- java.net.http.HttpTimeoutException: Request cancelled
+T1 connect timeout 300 ms: ResourceAccessException <- java.net.http.HttpConnectTimeoutException apos 301 ms
+T1 sem timeout de leitura: respondeu apos 2003 ms (servidor demora 2000 ms)

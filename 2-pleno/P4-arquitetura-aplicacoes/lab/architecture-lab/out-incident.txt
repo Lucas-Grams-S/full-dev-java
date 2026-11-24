@@ -1,0 +1,1 @@
+INCIDENT -> BadSqlGrammarException: PreparedStatementCallback; bad SQL grammar [select balance from accounts where id = ?]

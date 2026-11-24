@@ -1,0 +1,8 @@
+# Cluster local do PayFlow: 1 plano de controle + 2 workers (para ver o espalhamento das réplicas).
+# Uso: kind create cluster --name payflow --config kind-config.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker

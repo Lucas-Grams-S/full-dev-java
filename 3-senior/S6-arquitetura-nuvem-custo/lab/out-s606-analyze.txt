@@ -1,0 +1,38 @@
+SYNTHETIC bill, sa-east-1, real unit prices (see prices.csv). Monthly cost by service:
+service               2026-08      2026-09      2026-10    Oct - Aug
+CloudWatch         US$ 101.28   US$ 102.97 US$ 1,331.25 US$ 1,229.97
+ECS                US$ 163.03   US$ 164.24   US$ 931.52   US$ 768.49
+EC2-Other            US$ 0.00     US$ 0.00   US$ 657.43   US$ 657.43
+RDS                US$ 628.70   US$ 608.42   US$ 989.40   US$ 360.70
+S3                  US$ 24.76    US$ 23.96    US$ 47.87    US$ 23.11
+DataTransfer        US$ 62.45    US$ 64.02    US$ 68.77     US$ 6.33
+SQS                 US$ 23.24    US$ 23.82    US$ 25.59     US$ 2.35
+ELB                 US$ 65.93    US$ 64.68    US$ 67.48     US$ 1.55
+KMS                  US$ 8.81     US$ 8.85     US$ 9.39     US$ 0.58
+SNS                  US$ 4.79     US$ 4.91     US$ 5.28     US$ 0.49
+Config              US$ 15.34    US$ 14.85    US$ 15.34     US$ 0.00
+SecretsManager       US$ 1.63     US$ 1.58     US$ 1.63     US$ 0.00
+VPC                US$ 299.02   US$ 289.54   US$ 150.46  US$ -148.55
+TOTAL            US$ 1,398.97 US$ 1,371.85 US$ 4,301.42 US$ 2,902.45   (Oct = x3.07 Aug)
+
+Top 8 movers by account + usage type (Oct - Sep):
+  payflow-prod SAE1-DataProcessing-Bytes                  US$ 88.44 -> US$ 1,295.19  (+US$ 1,206.75)
+  payflow-staging SAE1-Fargate-vCPU-Hours:perCPU           US$ 0.00 ->   US$ 621.39  (+US$ 621.39)
+  payflow-prod SAE1-NatGateway-Bytes                       US$ 0.00 ->   US$ 527.97  (+US$ 527.97)
+  payflow-staging SAE1-Multi-AZUsage:db.m7g.large          US$ 0.00 ->   US$ 328.85  (+US$ 328.85)
+  payflow-staging SAE1-Fargate-GB-Hours                    US$ 0.00 ->   US$ 135.71  (+US$ 135.71)
+  payflow-prod SAE1-NatGateway-Hours                       US$ 0.00 ->   US$ 129.46  (+US$ 129.46)
+  payflow-prod SAE1-TimedStorage-ByteHrs                  US$ 23.99 ->    US$ 68.94  (+US$ 44.95)
+  payflow-prod SAE1-RDS:ChargedBackupUsage                 US$ 9.37 ->    US$ 41.54  (+US$ 32.17)
+
+By cost center tag:
+  (no tag)      US$ 62.45    US$ 64.02 US$ 1,154.72  (27% of Oct)
+  CC-1001    US$ 1,144.00 US$ 1,121.19 US$ 2,930.48  (68% of Oct)
+  CC-1002      US$ 144.88   US$ 140.21   US$ 167.99  (4% of Oct)
+  CC-1003        US$ 8.81     US$ 8.85     US$ 9.39  (0% of Oct)
+  CC-9000       US$ 38.83    US$ 37.58    US$ 38.83  (1% of Oct)
+
+Unit economics (all accounts):
+  2026-08: 9,547,806 transfers, US$ 0.15 per 1,000 transfers
+  2026-09: 9,788,972 transfers, US$ 0.14 per 1,000 transfers
+  2026-10: 10,515,337 transfers, US$ 0.41 per 1,000 transfers

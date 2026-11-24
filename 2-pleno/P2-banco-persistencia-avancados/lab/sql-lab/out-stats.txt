@@ -1,0 +1,29 @@
+### A. Estatística velha: tabela nova carregada SEM ANALYZE
+psql:<stdin>:3: NOTICE:  table "lab_stats" does not exist, skipping
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on lab_stats  (cost=45.57..4982.08 rows=3244 width=40) (actual rows=10000.00 loops=1)
+   Recheck Cond: (status = 'PENDING'::text)
+   Heap Blocks: exact=5406
+   ->  Bitmap Index Scan on lab_stats_status_idx  (cost=0.00..44.75 rows=3244 width=0) (actual rows=10000.00 loops=1)
+         Index Cond: (status = 'PENDING'::text)
+         Index Searches: 1
+ Planning Time: 0.293 ms
+ Execution Time: 4.728 ms
+(8 rows)
+
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Index Scan using lab_stats_status_idx on lab_stats  (cost=0.42..955.96 rows=9200 width=13) (actual rows=10000.00 loops=1)
+   Index Cond: (status = 'PENDING'::text)
+   Index Searches: 1
+ Planning Time: 0.086 ms
+ Execution Time: 4.395 ms
+(5 rows)
+
+### B. pg_stat_statements: as consultas mais caras depois de uma carga
+   pg_stat_statements_reset    
+-------------------------------
+ 2026-11-14 02:12:36.004834+00
+(1 row)
+

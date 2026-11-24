@@ -1,0 +1,5 @@
+T3 404 x20 com a configuracao PADRAO (toda excecao conta): estado=OPEN
+T3 404 x20 com ignoreExceptions: estado=CLOSED (4xx = erro do chamador, nao da saude do servico)
+T3 5 respostas 200 OK de 150 ms (limite de lentidao 100 ms): estado=OPEN
+T3 aberto: chamada recusada em 1946 us, sem tocar o servidor (chamadas antes=5, depois=5)
+T3 transicoes: [CLOSED->OPEN, OPEN->HALF_OPEN, HALF_OPEN->CLOSED] | metricas: 0 ok, 0 falhas, 0 recusadas

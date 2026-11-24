@@ -1,0 +1,30 @@
+## MODE=trigger
+-- load: old code writing users.phone (4 clients, 90% UPDATE / 10% INSERT) for 30 s; the migration steps run during it
+-- step 1 (V18, expand): ADD COLUMN + function + trigger, with lock_timeout and retries
+   V18 applied after 0 retries in 100 ms
+-- step 2: backfill in batches of 10,000 by id (keyset), COMMIT per batch, 100 ms pause
+NOTICE:  backfill: 190 batches, 218258 rows
+   backfill took 26090 ms
+-- wait for the load to finish, then verify
+   pgbench: number of transactions actually processed: 183494
+   pgbench: number of failed transactions: 0 (0.000%)
+   pgbench: latency average = 0.654 ms
+   pgbench: max latency 307.5 ms over 183494 transactions
+-- step 3 (verify): drift between the stored column and the function applied to the old column
+users: 218258 | with phone: 200887 | stored phone_e164 not null: 200038 | invalid (go to review): 849
+DRIFT rows (phone_e164 IS DISTINCT FROM normalize_phone_br(phone)): 0
+crosscheck: 218258 rows checked, 0 mismatches
+-- step 4 (contract, V23 + V24) once every reader uses phone_e164 and the old code is gone
+Time: 0.695 ms
+Time: 2.585 ms
+Time: 255.062 ms
+V23: drop the trigger and the function
+Time: 1.074 ms
+Time: 0.477 ms
+V24: drop the old column
+Time: 0.596 ms
+                                    ?column?                                    
+--------------------------------------------------------------------------------
+ columns now: id, email, full_name, password_hash, role, created_at, phone_e164
+(1 row)
+

@@ -1,0 +1,30 @@
+# Controle de versao e IDE
+.git
+.gitignore
+.idea
+.vscode
+*.iml
+
+# Saida de build (o build acontece dentro da imagem)
+target/
+
+# Segredos e configuracao local: NUNCA entram no contexto
+secrets/
+.env
+.env.*
+*.pem
+*.key
+
+# Logs, dumps e temporarios
+*.log
+*.sql
+dump*
+tmp/
+
+# O que nao faz parte da imagem
+compose*.yaml
+Dockerfile*
+.dockerignore
+README.md
+docs/
+scripts/

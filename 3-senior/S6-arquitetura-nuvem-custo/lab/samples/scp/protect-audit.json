@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ProtectAuditTrailAndConfig",
+      "Effect": "Deny",
+      "Action": ["cloudtrail:StopLogging", "cloudtrail:DeleteTrail", "cloudtrail:UpdateTrail",
+                 "config:StopConfigurationRecorder", "config:DeleteConfigurationRecorder"],
+      "Resource": "*"
+    }
+  ]
+}

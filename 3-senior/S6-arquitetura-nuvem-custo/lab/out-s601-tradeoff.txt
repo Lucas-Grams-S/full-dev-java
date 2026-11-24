@@ -1,0 +1,32 @@
+Prices: AWS Price List, Fargate ARM published 2026-11-11 (us-east-1) / 2026-11-11 (sa-east-1)
+Demand (premise): 24 hourly values, 0.20 to 1.50 vCPU; task = 0.5 vCPU / 1 GB ARM; 30.4 days/month
+
+1. Headroom options from S4.06, priced (compute + extra AZ endpoints only)
+option                       task-h/day peak tasks        us-east-1/month        sa-east-1/month   worst CPU*
+A: 2 AZs, min 2, target 60%          77          5              US$ 46.26              US$ 79.56         180%
+B: 2 AZs, min 4, target 45%         114          7       US$ 68.48 (+48%)      US$ 117.79 (+48%)         110%
+C: 3 AZs, min 3, target 60%          87          5      US$ 96.06 (+108%)     US$ 181.87 (+129%)         120%
+B2: B, only multiples of 2          124          8       US$ 74.49 (+61%)      US$ 128.12 (+61%)          90%
+   * worst CPU = highest utilization of the surviving tasks, in any hour, right after losing one AZ
+   (C adds 6 interface endpoints in the 3rd AZ; subnets are free. A and C hit >100% because the AZ
+    that fails holds ceil(n/AZs) tasks: odd task counts make it worse, as S4.06 showed.
+    B2 is a hypothesis: target tracking does not keep counts even; it needs step scaling by 2 or similar.)
+
+2. RDS PostgreSQL db.m7g.large + 100 GB gp3: Single-AZ vs Multi-AZ (on demand, per month)
+   us-east-1: Single-AZ US$ 134.14, Multi-AZ US$ 269.01, extra US$ 134.87/month = US$ 1,618.44/year
+      breaks even if 1 hour of payments down costs more than US$ 822.94 (premise: 1 AZ event/year, RTO 2 h -> 2 min)
+   sa-east-1: Single-AZ US$ 183.23, Multi-AZ US$ 366.46, extra US$ 183.23/month = US$ 2,198.76/year
+      breaks even if 1 hour of payments down costs more than US$ 1,118.01 (premise: 1 AZ event/year, RTO 2 h -> 2 min)
+
+3. Same architecture, two regions: sa-east-1 / us-east-1 price ratio
+   fargate.arm.vcpu_h           0.032380   0.055700  x1.72
+   fargate.arm.gb_h             0.003560   0.006120  x1.72
+   rds.pg.m7g.large.multi_h     0.337000   0.442000  x1.31
+   rds.gp3.multi_gb_mo          0.230000   0.438000  x1.90
+   alb.h                        0.022500   0.034000  x1.51
+   vpc.endpoint_h               0.010000   0.021000  x2.10
+   nat.gb                       0.045000   0.093000  x2.07
+   cw.logs_ingest_gb            0.500000   0.900000  x1.80
+   dt.out_gb                    0.090000   0.150000  x1.67
+   s3.std_gb_mo                 0.023000   0.040500  x1.76
+   kms.key_mo                   1.000000   1.000000  x1.00

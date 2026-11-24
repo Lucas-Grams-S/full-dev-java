@@ -1,0 +1,8 @@
+== 1. Escrever e ler logo em seguida (projecao com 30 ms por evento) ==
+apos gravar 5 depositos de 10,00: leitura do modelo de leitura = 0,00 (esperado 50,00)  projetado ate seq=0
+esperando o token de versao seq>=5: leitura = 50,00 apos 151 ms
+
+== 2. Reconstruir o modelo de leitura do zero a partir do log (1.000.000 de lancamentos, 100.000 contas) ==
+reconstrucao completa: 100000 contas em 143 ms
+invariante soma(log) == soma(visao): true (4989525,36)
+projecao com bug (ignora debitos): soma(visao)=5615256,91 != soma(log)=4989525,36 -> divergencia detectada: true

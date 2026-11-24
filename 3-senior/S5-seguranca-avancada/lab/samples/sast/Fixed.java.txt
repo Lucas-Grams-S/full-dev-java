@@ -1,0 +1,12 @@
+class TransferRepository {
+    private final String dbPassword = System.getenv("DB_PASSWORD");                  // from the environment / secret store
+
+    Account find(Connection c, String id) throws Exception {
+        PreparedStatement ps = c.prepareStatement("SELECT * FROM accounts WHERE id = ?");
+        ps.setString(1, id);
+        return ps.executeQuery();
+    }
+    String newToken() { byte[] b = new byte[32]; new java.security.SecureRandom().nextBytes(b); return HexFormat.of().formatHex(b); }
+    byte[] hash(byte[] in) throws Exception { return MessageDigest.getInstance("SHA-256").digest(in); }
+    void run(String file) throws Exception { new ProcessBuilder("convert", file).start(); }  // no shell, argument vector
+}

@@ -1,0 +1,7 @@
+reset 'short' -> 400; reset equal to username -> 400; reset ok -> 204
+failure #1 -> 400 Invalid user credentials
+failure #2 -> 400 Invalid user credentials
+failure #3 -> 400 Invalid user credentials
+failure #4 -> 400 Invalid user credentials
+failure #5 -> 400 Invalid user credentials
+right password after 5 failures -> 400 {"error":"invalid_grant","error_description":"Invalid user credentials"}

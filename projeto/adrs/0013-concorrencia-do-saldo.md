@@ -1,0 +1,26 @@
+# ADR 0013 — Concorrência do saldo: versão no banco + *retry* com chave de idempotência; lock em memória rejeitado
+
+- **Status:** aceita (P1.13, 2026-11-13). **Evidência obtida em laboratório em memória** (`2-pleno/P1-java-a-fundo/lab/jvm-lab/StudyCase.java`, JDK 25.0.5): **não** foi medida no PayFlow nem no PostgreSQL (decisão do aluno: testes práticos no fim do treinamento). Os números do modelo mostram o **comportamento**, não o desempenho do banco.
+- **Contexto:** as regras 1 (saldo ≥ 0), 2 (transferência atômica), 3 (saldo = soma dos lançamentos) e 4 (mesma `idempotency_key` não repete) são **invariantes** que uma corrida pode violar sem exceção nenhuma (P1.09). A J5 introduziu `@Version` em `Account` (locking otimista) e a J6.03 mapeou a colisão para `409`; a P1 mediu o que acontece **com** e **sem** essas proteções sob carga concorrente.
+- **Evidência (modelo em memória, 10 contas, 16 threads × 4 000 transferências):**
+  - **A. gravar às cegas** (sem `WHERE version = ?`): **corrupção silenciosa**: total `967 293` em vez de `1 000 000` (espalhado) e `100 508 481` em vez de `100 000 000` (conta quente: dinheiro **criado**); **10 de 10** contas com `saldo ≠ Σ lançamentos`; **nenhum** erro reportado.
+  - **B. otimista (`@Version`)**: total exato e regra 3 respeitada; **48%** das tentativas viraram `409` (espalhado) e **70%** na conta quente.
+  - **C. B + *retry* com *backoff* e *jitter***: total exato, **0** `409` visíveis, quase todas as transferências concluídas.
+  - **D. lock por conta em memória (ordem global por `id`)**: correto **num processo**; **não** protege com 2+ instâncias.
+  - **Idempotência:** `verifica-e-age` criou **8** transferências para a mesma chave; `putIfAbsent`/`UNIQUE`, **1**.
+  - **`LoginThrottle` (J8.06):** a sequência `isLocked → BCrypt → failure` não é atômica: com limite 5 e 60 tentativas simultâneas, **60** senhas foram testadas; com *reserva antes do trabalho caro*, **5**.
+- **Opções:** (A) gravar às cegas; (B) `@Version`; (C) `@Version` + *retry*; (D) lock em memória; (E, P2) `SELECT … FOR UPDATE` ordenado por `id` ou `UPDATE … WHERE balance >= ?`.
+- **Decisão:**
+  - Manter **B** (`@Version`, J5) como **rede de segurança** e acrescentar **C**: o serviço (ou o cliente) repete **só** diante de `ObjectOptimisticLockingFailureException`, com **limite de tentativas** (ordem de grandeza: 5 a 8), *backoff* exponencial com *jitter* e **reutilizando a mesma `idempotency_key`**.
+  - **Rejeitar D** como mecanismo de correção em produção: `synchronized`/`ReentrantLock` só valem em **uma instância** (J10 tem uma, mas P7 e o *rolling deploy* terão mais).
+  - Invariantes **críticos vivem no banco**: `UNIQUE (idempotency_key)`, `CHECK`/`WHERE balance >= ?` (P2), nunca só em memória.
+  - **Locks em memória que existirem** (ex.: `LoginThrottle`) seguem **ordem global** ("contas por `id` crescente") e **não** chamam código externo com o lock.
+  - Todo teste de concorrência verifica **invariantes** (total, não-negatividade, saldo = Σ lançamentos, chave única) e **prova que falha** quando a proteção é removida.
+  - Em produção: **conciliação** periódica (regra 3 em SQL) com alerta.
+- **Consequências:**
+  - (+) O dinheiro **nunca** é criado nem destruído por corrida (com `@Version`); a repetição é segura pela chave de idempotência.
+  - (−) Sob disputa alta na **mesma** conta, o otimista gera **tempestade de repetições**: a **P2** avalia `FOR UPDATE` ordenado e `UPDATE` condicional; contas "quentes" extremas pedem outro modelo (S1/S3).
+  - (−) O *retry* exige **limite e *backoff*** (senão é um *retry storm*) e **idempotência de ponta a ponta** (P3 para consumidores; S1).
+  - (−) A correção do `LoginThrottle` (reserva atômica antes do BCrypt) **não foi aplicada** ao PayFlow: é exercício da P1.09/P1.13; a J8.06 **não** foi reescrita (registro em "Correções pendentes").
+  - (−) **Nada disso foi medido no PostgreSQL**: a pendência é do fim do treinamento.
+- **Revisão prevista:** P2 (isolamento, `FOR UPDATE`, pool), P3 (idempotência de consumidores), P5 (*retry*/*bulkhead*/*circuit breaker*), S1 (idempotência ponta a ponta), S2 (teste de carga real).

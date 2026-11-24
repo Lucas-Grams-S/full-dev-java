@@ -1,0 +1,11 @@
+class Tricky {
+    // FALSE NEGATIVE for a line-based rule: the dangerous string is built on one line and used on another.
+    Object find(Connection c, String id) throws Exception {
+        String sql = "SELECT * FROM accounts WHERE id = '" + id + "'";
+        return c.createStatement().executeQuery(sql);
+    }
+    // A log message that mentions SELECT and never reaches the database: a rule that just greps for SELECT would flag it.
+    void log(String id) { logger.info("running SELECT for " + id); }
+    // FALSE POSITIVE for the HARDCODED-SECRET rule: the constant is a public field NAME, not a secret.
+    private static final String PASSWORD_FIELD = "password";
+}

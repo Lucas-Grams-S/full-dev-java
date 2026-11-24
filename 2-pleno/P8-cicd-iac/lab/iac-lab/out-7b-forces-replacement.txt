@@ -1,0 +1,9 @@
+# a harmless-looking change to the database module: db_name "payflow" -> "payflow2"
+$ terraform plan
+# module.database.aws_db_instance.this must be replaced
+~ db_name                               = "payflow" -> "payflow2" # forces replacement
+Plan: 1 to add, 2 to change, 1 to destroy.
+# the safety net: prevent_destroy on the database
+$ terraform plan
+Error: Instance cannot be destroyed
+Resource module.database.aws_db_instance.this has lifecycle.prevent_destroy

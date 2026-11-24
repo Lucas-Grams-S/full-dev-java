@@ -1,0 +1,11 @@
+T3 [brokenLivenessIsTheOnlyWayToAskForARestart] GET /actuator/health/liveness: 503 {"status":"DOWN"}
+T3 [criticalDependencyDownTakesTheInstanceOutOfRotationButDoesNotRestartIt] GET /actuator/health/liveness: 200 {"status":"UP"}
+T3 [criticalDependencyDownTakesTheInstanceOutOfRotationButDoesNotRestartIt] GET /actuator/health/readiness: 503 {"status":"DOWN"}
+T3 [everythingUp] GET /actuator/health: 200 {"groups":["liveness","readiness"],"status":"UP"}
+T3 [everythingUp] GET /actuator/health/liveness: 200 {"status":"UP"}
+T3 [everythingUp] GET /actuator/health/readiness: 200 {"status":"UP"}
+T3 [optionalDependencyDownDoesNotRemoveTheInstanceFromRotation] GET /actuator/health: 503 {"groups":["liveness","readiness"],"status":"DOWN"}
+T3 [optionalDependencyDownDoesNotRemoveTheInstanceFromRotation] GET /actuator/health/liveness: 200 {"status":"UP"}
+T3 [optionalDependencyDownDoesNotRemoveTheInstanceFromRotation] GET /actuator/health/readiness: 200 {"status":"UP"}
+T3 [shutdownStyleRefusingTrafficMakesReadinessFailWhileLivenessStaysUp] GET /actuator/health/liveness: 200 {"status":"UP"}
+T3 [shutdownStyleRefusingTrafficMakesReadinessFailWhileLivenessStaysUp] GET /actuator/health/readiness: 503 {"status":"OUT_OF_SERVICE"}

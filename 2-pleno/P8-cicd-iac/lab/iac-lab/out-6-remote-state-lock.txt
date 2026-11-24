@@ -1,0 +1,21 @@
+$ (bootstrap) terraform apply   -> the bucket that will hold the state
+  + state_bucket = "payflow-tfstate-123456789012-us-east-1"
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+state_bucket = "payflow-tfstate-123456789012-us-east-1"
+$ terraform init -migrate-state -backend-config=backend.hcl
+Successfully configured the backend "s3"! Terraform will automatically
+Terraform has been successfully initialized!
+$ aws s3 ls s3://payflow-tfstate-.../study/
+55789 terraform.tfstate
+# terminal A: terraform apply waiting for "yes" (holds the lock); terminal B: terraform plan
+$ aws s3 ls (while A waits)
+55789 terraform.tfstate
+255 terraform.tfstate.tflock
+$ terraform plan   (terminal B)
+Error: Error acquiring the state lock
+StatusCode: 412, 
+api error PreconditionFailed: At least one of the pre-conditions you
+Operation: OperationTypeApply
+Version:   1.17.1
+$ aws s3 ls (after A gave up)
+55789 terraform.tfstate

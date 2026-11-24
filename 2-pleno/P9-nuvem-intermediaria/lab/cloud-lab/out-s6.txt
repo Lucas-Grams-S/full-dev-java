@@ -1,0 +1,18 @@
+$ aws secretsmanager list-secrets (names only)
+payflow/study/jwt-signing-key
+rds!db-88eb5416-bb56-45af-b932-9874460a39e1
+$ aws ssm get-parameters-by-path --path /payflow/study --recursive
+/payflow/study/features/webhook-dispatch  String  false
+/payflow/study/outbox/batch-size          String  50
+secret length in Secrets Manager: 48 characters (the value itself is not printed)
+$ grep the Terraform state and plan for that value (module: ephemeral random_password + secret_string_wo)
+occurrences in terraform.tfstate: 0
+occurrences in the saved plan   : 0
+
+# the contrast: the same secret created the "obvious" way (regular random_password + secret_string)
+ephemeral: value length 48, occurrences of the value in its terraform.tfstate = 0
+leaky: value length 48, occurrences of the value in its terraform.tfstate = 2
+
+# RDS-managed master secret (manage_master_user_password): the JSON that ECS reads with ":username::" and ":password::"
+master secret ARN present on the instance: yes
+["password","username"]

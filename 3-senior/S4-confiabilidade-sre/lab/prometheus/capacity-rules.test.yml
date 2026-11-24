@@ -1,0 +1,65 @@
+rule_files:
+  - capacity-rules.yml
+evaluation_interval: 1h
+
+tests:
+  # 1) estável: 120 GB livres, sem tendência -> nada
+  - name: estavel nao alerta
+    interval: 1h
+    input_series:
+      - series: 'payflow_db_free_bytes'
+        values: '120e9+0x100'
+    alert_rule_test:
+      - eval_time: 96h
+        alertname: PayflowDbDiskFullIn14d
+        exp_alerts: []
+      - eval_time: 96h
+        alertname: PayflowDbDiskFullIn24h
+        exp_alerts: []
+
+  # 2) consumo contínuo de 10 GB/dia (0,4167 GB/h = ~416,7e6 B/h) a partir de 300 GB livres: 14 dias = 140 GB < 300 -> NÃO alerta;
+  #    mas com 120 GB livres: 14 dias = 140 GB > 120 -> alerta de ticket (enche em ~12 dias)
+  - name: consumo continuo de 10 GB por dia
+    interval: 1h
+    input_series:
+      - series: 'payflow_db_free_bytes{id="folgado"}'
+        values: '300e9-416666666x100'
+      - series: 'payflow_db_free_bytes{id="apertado"}'
+        values: '120e9-416666666x100'
+    promql_expr_test:
+      - expr: predict_linear(payflow_db_free_bytes{id="apertado"}[3d], 14 * 24 * 3600) < 0
+        eval_time: 80h
+        exp_samples:
+          - labels: '{id="apertado"}'
+            value: -5.333333305600023e10
+      - expr: predict_linear(payflow_db_free_bytes{id="folgado"}[3d], 14 * 24 * 3600) < 0
+        eval_time: 80h
+        exp_samples: []
+
+  # 3) degrau único: uma carga pontual de 40 GB numa hora e depois NADA muda. A janela de 3 dias lê o degrau como tendência;
+  #    a de 6 h, 8 horas depois do degrau, já não vê nada.
+  - name: degrau unico engana a janela longa
+    interval: 1h
+    input_series:
+      - series: 'payflow_db_free_bytes'
+        values: '100e9+0x48 60e9+0x60'
+    promql_expr_test:
+      - expr: predict_linear(payflow_db_free_bytes[3d], 14 * 24 * 3600) < 0
+        eval_time: 56h      # 8 h depois do degrau (hora 48)
+        exp_samples:
+          - labels: '{}'
+            value: -9.058681185722928e10
+      - expr: predict_linear(payflow_db_free_bytes[6h], 24 * 3600) < 0
+        eval_time: 56h
+        exp_samples: []
+    alert_rule_test:
+      - eval_time: 72h        # 24 h depois do degrau: o ticket de 14 dias dispara (FALSO POSITIVO: nada está crescendo) e a página de 24 h não
+        alertname: PayflowDbDiskFullIn14d
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "O disco do banco enche em menos de 14 dias no ritmo dos últimos 3 dias"
+              runbook: "docs/runbooks/disco-do-banco.md"
+      - eval_time: 72h
+        alertname: PayflowDbDiskFullIn24h
+        exp_alerts: []

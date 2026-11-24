@@ -1,0 +1,20 @@
+## E) the SCOPE of the search: one account (1,000 rows per account here) x the whole table
+-- inside ONE account: b-tree on account_id, then ILIKE on its ~1,000 rows (no search engine, no trigram index used)
+                                      QUERY PLAN                                       
+---------------------------------------------------------------------------------------
+ Limit (actual rows=20.00 loops=1)
+   ->  Sort (actual rows=20.00 loops=1)
+         Sort Key: id DESC
+         Sort Method: top-N heapsort  Memory: 28kB
+         ->  Bitmap Heap Scan on memo_search (actual rows=45.00 loops=1)
+               Recheck Cond: (account_id = 424)
+               Filter: (memo ~~* '%mercado%'::text)
+               Rows Removed by Filter: 955
+               Heap Blocks: exact=1000
+               ->  Bitmap Index Scan on idx_memo_account (actual rows=1000.00 loops=1)
+                     Index Cond: (account_id = 424)
+                     Index Searches: 1
+ Planning Time: 1.715 ms
+ Execution Time: 4.783 ms
+(14 rows)
+

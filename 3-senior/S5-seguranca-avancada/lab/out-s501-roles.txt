@@ -1,0 +1,77 @@
+--- seed, as payflow_migrator
+INSERT INTO users(name, phone_e164) VALUES ('Ana', '+5511999990000');
+INSERT INTO idempotency_keys(key, created_at) VALUES ('old-1', now() - interval '3 days'), ('old-2', now() - interval '2 days'), ('fresh-1', now());
+--- connected as payflow_app
+INSERT INTO ledger_entries(account_id, amount) VALUES (gen_random_uuid(), 10.00);
+UPDATE ledger_entries SET amount = 9999;
+ERROR:  permission denied for table ledger_entries
+DELETE FROM ledger_entries;
+ERROR:  permission denied for table ledger_entries
+TRUNCATE ledger_entries;
+ERROR:  permission denied for table ledger_entries
+DELETE FROM idempotency_keys;
+ERROR:  permission denied for table idempotency_keys
+SELECT purge_idempotency_keys(interval '0 seconds');
+ERROR:  refusing to purge keys younger than 24 hours (asked: 00:00:00)
+SELECT purge_idempotency_keys(interval '24 hours') AS purged_old_keys;
+ purged_old_keys 
+-----------------
+               2
+(1 row)
+
+SELECT count(*) AS keys_left FROM idempotency_keys;
+ keys_left 
+-----------
+         1
+(1 row)
+
+CREATE TABLE evil (x int);
+ERROR:  permission denied for schema public
+LINE 1: CREATE TABLE evil (x int);
+                     ^
+DROP TABLE users;
+ERROR:  must be owner of table users
+INSERT INTO audit_events(actor, action, resource, outcome, request_id) VALUES ('user:42', 'TRANSFER', 'account/1', 'ALLOWED', 'req-1');
+SELECT count(*) FROM audit_events;
+ERROR:  permission denied for table audit_events
+--- connected as payflow_readonly
+SELECT id, name FROM users;
+                  id                  | name 
+--------------------------------------+------
+ 01a20971-1432-7bf1-954f-f275afc13f2e | Ana
+(1 row)
+
+SELECT phone_e164 FROM users;
+ERROR:  permission denied for table users
+INSERT INTO users(name) VALUES ('x');
+ERROR:  permission denied for table users
+SELECT count(*) FROM audit_events;
+ERROR:  permission denied for table audit_events
+--- audit_events is append-only even for the OWNER of the table (payflow_migrator, then SET ROLE payflow_owner)
+SET ROLE payflow_owner;
+UPDATE audit_events SET outcome = 'DENIED';
+ERROR:  audit_events is append-only (UPDATE blocked)
+DELETE FROM audit_events;
+ERROR:  audit_events is append-only (DELETE blocked)
+TRUNCATE audit_events;
+ERROR:  audit_events is append-only (TRUNCATE blocked)
+SELECT count(*) AS audit_rows_still_there FROM audit_events;
+ audit_rows_still_there 
+------------------------
+                      1
+(1 row)
+
+-- ...but the owner can switch the trigger off (this is why the audit trail also needs a copy the owner cannot reach):
+ALTER TABLE audit_events DISABLE TRIGGER audit_events_no_update;
+DELETE FROM audit_events;
+SELECT count(*) AS audit_rows_after_owner_disabled_the_trigger FROM audit_events;
+ audit_rows_after_owner_disabled_the_trigger 
+---------------------------------------------
+                                           0
+(1 row)
+
+ALTER TABLE audit_events ENABLE TRIGGER audit_events_no_update;
+RESET ROLE;
+--- break-glass: a human role whose login is time-boxed (VALID UNTIL applies to password logins)
+inside the window: login ok as breakglass_ana
+psql: error: connection to server at "172.17.0.3", port 5432 failed: FATAL:  password authentication failed for user "breakglass_ana"

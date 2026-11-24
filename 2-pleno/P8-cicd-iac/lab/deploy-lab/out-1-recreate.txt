@@ -1,0 +1,8 @@
+>> 3000 requests / 4 threads; at t=1s v1 is removed and v2 starts (simulated startup: 5s)
+[action ran at t=1.00s, took 6.08s]
+total=3000 failures=44 duration=14.1s
+  version=?     status=502                       20 (0.7%)
+  version=?     status=504                       24 (0.8%)
+  version=v1    status=200                      385 (12.8%)
+  version=v2    status=200                     2571 (85.7%)
+  first failure at t=1.07s, last at t=7.19s (window 6.12s)

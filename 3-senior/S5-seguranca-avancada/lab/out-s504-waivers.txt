@@ -1,0 +1,8 @@
+samples/waivers-good.yml @ 2026-11-23: OK
+exit=0
+samples/waivers-bad.yml @ 2026-11-23: 4 problem(s)
+  - CVE-EXAMPLE-0002: EXPIRED on 2026-11-10 (owner payments-team): fix it or renew with a new decision
+  - CVE-EXAMPLE-0003: missing 'owner'
+  - CVE-EXAMPLE-0003: expiry 2028-01-01 is more than 90 days away: a waiver is a short loan, not a decision
+  - CVE-EXAMPLE-0004: missing 'reason'
+exit=1

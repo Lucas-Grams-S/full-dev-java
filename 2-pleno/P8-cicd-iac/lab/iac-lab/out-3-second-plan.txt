@@ -1,0 +1,14 @@
+$ terraform plan   (second run, nothing changed in the code)
+~ update in-place
+# aws_s3_bucket.deploy will be updated in-place
+~ resource "aws_s3_bucket" "deploy" {
+~ tags_all                    = {
++ "managedby" = "terraform"
++ "project"   = "payflow"
+# module.database.aws_vpc_security_group_ingress_rule.from_app will be updated in-place
+~ resource "aws_vpc_security_group_ingress_rule" "from_app" {
++ description                  = "PostgreSQL from the application security group only"
+~ referenced_security_group_id = "123456789012/sg-35e6cd71ce6ba9783" -> "sg-35e6cd71ce6ba9783"
+Plan: 0 to add, 2 to change, 0 to destroy.
+# the 2 diffs above are emulator artifacts (moto does not echo tags on S3 buckets and prefixes the account id in the SG reference).
+# they are NOT a lesson about Terraform: on real AWS the second plan is 'No changes'.

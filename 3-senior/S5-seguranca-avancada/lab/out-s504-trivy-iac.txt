@@ -1,0 +1,15 @@
+13 finding(s); first 13 by severity:
+  HIGH     Dockerfile         DS-0002 Image user should not be 'root'
+  HIGH     main.tf            AWS-0086 S3 Access block should block public ACL
+  HIGH     main.tf            AWS-0087 S3 Access block should block public policy
+  HIGH     main.tf            AWS-0091 S3 Access Block should Ignore Public ACL
+  HIGH     main.tf            AWS-0093 S3 Access block should restrict public bucket to limit access
+  HIGH     main.tf            AWS-0132 S3 encryption should use Customer Managed Keys
+  HIGH     ssh.tf             AWS-0107 Security groups should not allow unrestricted ingress to SSH or RDP from any IP address.
+  MEDIUM   main.tf            AWS-0090 S3 Data should be versioned
+  LOW      Dockerfile         DS-0026 No HEALTHCHECK defined
+  LOW      main.tf            AWS-0089 S3 Bucket Logging
+  LOW      main.tf            AWS-0094 S3 buckets should each define an aws_s3_bucket_public_access_block
+  LOW      main.tf            AWS-0099 Missing description for security group.
+  LOW      main.tf            AWS-0124 Missing description for security group rule.
+by severity: {'HIGH': 7, 'MEDIUM': 1, 'LOW': 5}

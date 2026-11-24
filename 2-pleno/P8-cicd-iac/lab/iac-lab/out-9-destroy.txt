@@ -1,0 +1,13 @@
+$ terraform destroy
+Destroy complete! Resources: 20 destroyed.
+(destroy took 87s)
+$ what is left in the account (should be only the state bucket)
+ec2 not terminated: 0
+rds: 0
+ecr: 0
+ssm /payflow: 0
+iam roles payflow*: 0
+buckets: payflow-tfstate-123456789012-us-east-1
+$ (bootstrap) terraform destroy   -> prevent_destroy protects the state bucket
+Error: Instance cannot be destroyed
+Resource aws_s3_bucket.state has lifecycle.prevent_destroy set, but the plan

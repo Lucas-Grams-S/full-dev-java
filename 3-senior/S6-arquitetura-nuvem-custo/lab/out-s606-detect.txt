@@ -1,0 +1,20 @@
+Daily detector: cost today > mean + 3 sd of the previous 14 days (and +US$ 2), per service and for the account total
+Planted causes: loadtest env Oct 1 (ECS, RDS); NAT + endpoints removed Oct 3 (EC2-Other, VPC); DEBUG logs Oct 10 (CloudWatch);
+                manual snapshots kept Oct 15 (RDS); S3 versioning without lifecycle, gradual from Oct 1 (S3)
+  CloudWatch       alert days: 10-10 10-11 10-12
+  Config           alert days: none
+  DataTransfer     alert days: none
+  EC2-Other        alert days: 10-03 10-04
+  ECS              alert days: 10-01 10-02
+  ELB              alert days: none
+  KMS              alert days: none
+  RDS              alert days: 10-01 10-02
+  S3               alert days: none
+  SNS              alert days: none
+  SQS              alert days: none
+  SecretsManager   alert days: none
+  VPC              alert days: none
+  ACCOUNT TOTAL    alert days: 10-01 10-02 10-03
+
+Monthly budget US$ 1,600 (premise): forecast alert (from day 3) on 2026-10-03; actual > 100% on 2026-10-14
+(AWS Budgets refreshes up to three times a day; billing data itself can lag: count on hours to a day of delay)

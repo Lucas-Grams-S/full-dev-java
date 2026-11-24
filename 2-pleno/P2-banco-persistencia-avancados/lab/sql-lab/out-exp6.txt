@@ -1,0 +1,16 @@
+=== CREATE INDEX  idx_tmp ON ledger_entries (amount) com um INSERT chegando 1 s depois ===
+[A] Time: 2384.941 ms (00:02.385)
+[B] INSERT: Time: 1523.605 ms (00:01.524)
+=== CREATE INDEX CONCURRENTLY idx_tmp ON ledger_entries (amount) com um INSERT chegando 1 s depois ===
+[B] INSERT: Time: 2.548 ms
+[A] Time: 3686.368 ms (00:03.686)
+=== CONCURRENTLY dentro de transação não é permitido ===
+ERROR:  CREATE INDEX CONCURRENTLY cannot run inside a transaction block
+=== CONCURRENTLY que falha deixa índice INVALID: índice único sobre coluna com duplicatas ===
+ERROR:  could not create unique index "idx_tmp3"
+DETAIL:  Key (amount)=(211.95) is duplicated.
+ indexrelid | indisvalid 
+------------+------------
+ idx_tmp3   | f
+(1 row)
+

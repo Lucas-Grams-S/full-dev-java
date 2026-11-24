@@ -1,0 +1,9 @@
+Benchmark                      (lines)  Mode  Cnt    Score    Error  Units
+TextBench.concatPlusEquals         200  avgt    5   16.484 ±  1.561  us/op
+TextBench.concatPlusEquals        1500  avgt    5  891.415 ± 42.023  us/op
+TextBench.concatStringBuilder      200  avgt    5    0.969 ±  0.045  us/op
+TextBench.concatStringBuilder     1500  avgt    5    8.564 ±  0.183  us/op
+TextBench.regexMatchesString       200  avgt    5    0.113 ±  0.004  us/op
+TextBench.regexMatchesString      1500  avgt    5    0.113 ±  0.003  us/op
+TextBench.regexPrecompiled         200  avgt    5    0.044 ±  0.001  us/op
+TextBench.regexPrecompiled        1500  avgt    5    0.043 ±  0.002  us/op

@@ -1,0 +1,7 @@
+
+                               Contention by Site
+
+StackTrace                                                Count    Avg.    Max.
+--------------------------------------------------------- ----- ------- -------
+ProfileApp.countBad(String)                               8,977 2.72 ms 42.0 ms
+jdk.jfr.internal.PlatformRecorder.periodicTask()              1 2.13 ms 2.13 ms

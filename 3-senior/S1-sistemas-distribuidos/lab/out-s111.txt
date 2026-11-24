@@ -1,0 +1,22 @@
+== 1. Quantos caracteres base62 para N URLs? ==
+5 caracteres: 62^5 = 916,132,832 codigos
+6 caracteres: 62^6 = 56,800,235,584 codigos
+7 caracteres: 62^7 = 3,521,614,606,208 codigos
+8 caracteres: 62^8 = 218,340,105,584,896 codigos
+exemplos: b62(125) = 21, b62(1_000_000) = 4c92, b62(3_521_614_606_207) = ZZZZZZZ
+
+== 2. Codigos ALEATORIOS de 7 caracteres: quantas colisoes em N geracoes? (simulado x teoria n^2/(2M)) ==
+n=    100,000: colisoes simuladas =     0 ; teoria ~ 0.0
+n=  1,000,000: colisoes simuladas =     1 ; teoria ~ 0.1
+n= 10,000,000: colisoes simuladas =    17 ; teoria ~ 14.2
+n= 50,000,000: colisoes simuladas =   373 ; teoria ~ 355.0
+
+== 3. Contador sequencial x contador ofuscado (Feistel): unicidade e adivinhacao ==
+1.000.000 contadores -> codigos de 7 caracteres todos DISTINTOS: true
+sequencial 1000000..1000004 : 4c92 4c93 4c94 4c95 4c96  (vizinhos adivinham-se)
+ofuscado   1000000..1000004 : FVclQUU hUpnz6n bqnaSoj QVa4AHk hEaQ2FZ
+
+se existem 1.000.000.000 de URLs no espaco de 3,521,614,606,208 codigos, chutar um codigo valido acerta com probabilidade 0.0284% por tentativa (nao e segredo: nao use para dado privado)
+
+== 4. Armazenamento e trafego (calculo a partir dos PARAMETROS da aula, nao medicao) ==
+100 milhoes de novas URLs/mes = 39 escritas/s em media; razao leitura:escrita 100:1 = 3858 leituras/s; 500 bytes por registro, 5 anos = 3.0 TB

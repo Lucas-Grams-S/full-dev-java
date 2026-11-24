@@ -1,0 +1,34 @@
+# Account
+> Logical name: account
+> Base package: com.payflow.lab.account
+> Excluded packages: none
+> Spring beans:
+  o ….adapter.in.web.AccountController
+  o ….adapter.out.InMemoryAccountStore
+  o ….application.AccountService
+
+# Transfer
+> Logical name: transfer
+> Base package: com.payflow.lab.transfer
+> Excluded packages: none
+> Spring beans:
+  o ….adapter.in.web.TransferController
+  o ….adapter.out.AccountsAdapter
+  o ….adapter.out.SpringDomainEvents
+  o ….application.TransferService
+
+# Antifraud
+> Logical name: antifraud
+> Base package: com.payflow.lab.antifraud
+> Excluded packages: none
+> Spring beans:
+  o ….application.FraudReview
+
+# Notification
+> Logical name: notification
+> Base package: com.payflow.lab.notification
+> Excluded packages: none
+> Spring beans:
+  o ….adapter.out.InMemorySender
+  o ….application.NotifyOnTransfer
+

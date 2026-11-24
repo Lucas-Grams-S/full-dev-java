@@ -1,0 +1,28 @@
+Organization: [Root, Security, Backup, Workloads, Prod, NonProd, Sandbox, Suspended]; accounts [log-archive, audit, payflow-backup, payflow-prod, payflow-staging, study, old-poc] + management
+Structure: every root, OU and account has 1 to 10 SCPs
+ 1 ok   ALLOW dev updates the ECS service in prod                allowed by identity, inside every SCP
+ 2 ok   DENY  dev launches an instance in eu-west-1              explicit deny in SCP deny-outside-regions @Root
+ 3 ok   ALLOW admin creates an IAM role (global, us-east-1)      allowed by identity, inside every SCP
+ 4 ok   DENY  admin stops CloudTrail in prod                     explicit deny in SCP protect-audit @Root
+ 5 ok   ALLOW admin stops CloudTrail in the MANAGEMENT account   management account: SCPs do not apply
+ 6 ok   DENY  admin schedules deletion of the backup key         explicit deny in SCP protect-backup @payflow-backup
+ 7 ok   ALLOW break-glass schedules deletion of the backup key   allowed by identity, inside every SCP
+ 8 ok   DENY  dev launches in staging without cost-center        explicit deny in SCP require-cost-tags @Workloads
+ 9 ok   ALLOW dev launches in staging with cost-center           allowed by identity, inside every SCP
+10 ok   DENY  dev launches m7i.24xlarge in the sandbox           explicit deny in SCP sandbox-limits @Sandbox
+11 ok   ALLOW dev launches t4g.small in the sandbox              allowed by identity, inside every SCP
+12 ok   ALLOW service-linked role acts in eu-west-1              service-linked role: SCPs do not apply
+13 ok   DENY  dev deletes a bucket (SCP allows, identity does not) identity policy does not allow (SCPs never grant)
+14 ok   DENY  root user of a member account reads S3             explicit deny in SCP deny-root-user @Root
+15 ok   DENY  admin tries to leave the organization              explicit deny in SCP deny-leave-org @Root
+16 ok   DENY  admin in a suspended account reads S3              explicit deny in SCP deny-all @Suspended
+17 ok   DENY  admin deletes the trail in log-archive             explicit deny in SCP protect-audit @Root
+RESULT: 17/17 cases as expected
+
+Mutants and variants (a guardrail test that never fails proves nothing):
+  V0 variant: only sa-east-1, global-service exception kept                   -> cases [1, 7, 11] changed
+  M1 only sa-east-1 and NO global-service exception (NotAction -> Action *)   -> cases [1, 3, 7, 11] changed
+  M2 protect-backup without the break-glass exception                         -> cases [7] changed
+  M3 FullAWSAccess detached from the Workloads OU                             -> cases [1, 3, 9] changed
+  M4 protect-audit attached to Workloads instead of Root                      -> cases [17] changed
+  M5 Suspended OU with no SCP at all (my first design)                        -> REJECTED: Suspended has no SCP attached (Organizations requires at least one)

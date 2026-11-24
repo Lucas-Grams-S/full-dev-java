@@ -1,0 +1,23 @@
+== 1. Ultima-escrita-vence (LWW) com relogio de parede: o no B esta 5 s ATRASADO ==
+A grava 'velho@x' com timestamp 100 ; 2 s DEPOIS, B grava 'novo@x' com timestamp 97 (relogio atrasado)
+LWW escolhe: velho@x  <- a escrita MAIS RECENTE (de B) foi descartada
+
+== 2. Relogio de Lamport: 3 processos trocando mensagens ==
+P1 evento local          L=1
+P1 envia a P2            L=2
+P2 recebe de P1          L=3
+P2 envia a P3            L=4
+P3 evento local (concorrente com os de P1/P2)  L=1
+P3 recebe de P2          L=5
+Lamport garante: a -> b  implica  L(a) < L(b). O contrario NAO vale: o evento local de P3 (L=1) e o primeiro de P1 (L=1) sao concorrentes e nao ha como saber so pelos numeros.
+
+== 3. Relogio vetorial: detectar escritas concorrentes (3 replicas) ==
+w1=[1, 0, 0] w2=[1, 1, 0] w3=[2, 0, 0]
+w1 x w2: a ANTES de b
+w2 x w3: CONCORRENTES (conflito)  <- o sistema sabe que precisa de MERGE (ou de pedir ao usuario), sem adivinhar por horario
+
+== 4. Relogio hibrido (HLC): relogio fisico de B atrasado 5 s, mas a ordem causal e respeitada ==
+A envia (relogio 100000):       HLC=(100000,0)
+B recebe (relogio fisico 95000): HLC=(100000,1)  -> o evento de B ja fica DEPOIS do de A
+B grava logo apos (relogio 95001): HLC=(100000,2)  -> continua maior que o de A, mesmo com o relogio fisico de B atrasado
+comparacao (l, c): a escrita de B vence, como deveria (aconteceu depois)

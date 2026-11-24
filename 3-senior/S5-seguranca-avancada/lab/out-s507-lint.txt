@@ -1,0 +1,13 @@
+MODEL: a report linter. Today = 2026-11-23. The findings are EXAMPLES about a fictional PayFlow review, written so that the good ones pass and the bad ones fail for a stated reason.
+
+-- report 'good' (3 findings)
+  F-01 CRITICAL: ok
+  F-02 MEDIUM: ok
+  F-03 LOW: ok
+-- report 'bad' (4 findings, written to FAIL)
+  B-01 HIGH: [no evidence (a finding nobody can reproduce is an opinion), no recommendation, no owner, severity HIGH does not match L x I = MEDIUM]
+  B-02 MEDIUM: [severity MEDIUM does not match L x I = CRITICAL]
+  B-03 HIGH: [OPEN and overdue since 2026-11-01]
+  B-04 LOW: [accepted risk without an approver, accepted risk EXPIRED on 2026-10-15: decide again]
+
+self-test: good report -> 0 problems (expected 0); bad report -> 8 problems (expected > 0)

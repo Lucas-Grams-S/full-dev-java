@@ -1,0 +1,4 @@
+T2 4xx: NotFound, chamadas=1
+T2 amplificacao: 1 requisicao do usuario -> 27 chamadas ao servico (3 camadas x 3 tentativas)
+T2 POST repetido: o cliente desistiu 3x, mas o servidor recebeu 3 mensagens (sem chave de idempotencia = 3 e-mails)
+T2 retry: chamadas no servidor=3, retentativas em t(ms)=[6, 143], resposta={"ok":true}

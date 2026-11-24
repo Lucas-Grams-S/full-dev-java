@@ -1,0 +1,9 @@
+T9 SIGTERM enviado (JVM pid 2211581)
+T9 t=0.0s readiness=503 liveness=200 novaRequisicao=000
+T9 t=1.4s readiness=000 liveness=000 novaRequisicao=000
+T9 JVM saiu com código 143
+T9 requisição em voo: HTTP 201 em 1.591678s
+T9 log: Commencing graceful shutdown. Waiting for active requests to complete
+T9 log: Graceful shutdown complete
+T9 log: Commencing graceful shutdown. Waiting for active requests to complete
+T9 log: Graceful shutdown complete

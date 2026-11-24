@@ -1,0 +1,29 @@
+review wa-review-payflow.csv (20 items, date 2026-11-23)
+pillar  HIGH  MEDIUM  NONE   NA
+FND        3       1     0    0
+OPS        1       0     1    0
+SEC        0       1     2    0
+REL        0       2     1    0
+PERF       0       1     1    0
+COST       0       2     1    1
+SUS        0       0     2    0
+RESULT: PASS
+exit=0
+
+review wa-review-bad.csv (6 items, date 2026-11-23)
+pillar  HIGH  MEDIUM  NONE   NA
+FND        1       0     0    0
+OPS        0       0     1    0
+SEC        0       0     1    0
+REL        0       1     0    0
+PERF       1       0     0    0
+COST       0       0     0    1
+SUS        0       0     0    0
+  PROBLEM 2 FND01: risco HIGH sem dono (@alguem)
+  PROBLEM 3 OPS01: 'sem risco' sem evidência (decisão, ADR, docs/, out-*.txt ou aula)
+  PROBLEM 5 REL01: prazo 2026-11-01 não está depois da revisão
+  PROBLEM 6 PERF01: risco HIGH com prazo > 90 dias (2027-06-30)
+  PROBLEM 7 COST01: 'não se aplica' sem justificativa (NA: ...)
+  PROBLEM pilar SUS sem nenhuma pergunta respondida
+RESULT: FAIL (6 problems)
+exit=1

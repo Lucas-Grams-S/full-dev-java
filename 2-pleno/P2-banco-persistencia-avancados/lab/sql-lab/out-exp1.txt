@@ -1,0 +1,127 @@
+=== Leitura não repetível e fantasma em READ COMMITTED ===
+[B]          ?column?         
+[B] --------------------------
+[B]  B confirmou (autocommit)
+[B] (1 row)
+[B] 
+[A]       q       | balance | lancamentos 
+[A] --------------+---------+-------------
+[A]  A 1a leitura | 1000.00 |           0
+[A] (1 row)
+[A] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+[A]       q       | balance | lancamentos 
+[A] --------------+---------+-------------
+[A]  A 2a leitura | 1100.00 |           1
+[A] (1 row)
+[A] 
+=== Leitura não repetível e fantasma em REPEATABLE READ ===
+[B]          ?column?         
+[B] --------------------------
+[B]  B confirmou (autocommit)
+[B] (1 row)
+[B] 
+[A]       q       | balance | lancamentos 
+[A] --------------+---------+-------------
+[A]  A 1a leitura | 1000.00 |           0
+[A] (1 row)
+[A] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+[A]       q       | balance | lancamentos 
+[A] --------------+---------+-------------
+[A]  A 2a leitura | 1000.00 |           0
+[A] (1 row)
+[A] 
+=== READ UNCOMMITTED se comporta como READ COMMITTED (leitura suja?) ===
+[B]  transaction_isolation 
+[B] -----------------------
+[B]  read uncommitted
+[B] (1 row)
+[B] 
+[B]            q            | balance 
+[B] ------------------------+---------
+[B]  B lê durante a tx de A | 1000.00
+[B] (1 row)
+[B] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+=== Write skew (máx. 3 contas por usuário) em READ COMMITTED ===
+[B]     q    | count 
+[B] ---------+-------
+[B]  b conta |     2
+[B] (1 row)
+[B] 
+[B]  pg_sleep 
+[B] ----------
+[B]  
+[B] (1 row)
+[B] 
+[A]     q    | count 
+[A] ---------+-------
+[A]  a conta |     2
+[A] (1 row)
+[A] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+contas de Ana no fim: 4
+=== Write skew (máx. 3 contas por usuário) em REPEATABLE READ ===
+[A]     q    | count 
+[A] ---------+-------
+[A]  a conta |     2
+[A] (1 row)
+[A] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+[B]     q    | count 
+[B] ---------+-------
+[B]  b conta |     2
+[B] (1 row)
+[B] 
+[B]  pg_sleep 
+[B] ----------
+[B]  
+[B] (1 row)
+[B] 
+contas de Ana no fim: 4
+=== Write skew (máx. 3 contas por usuário) em SERIALIZABLE ===
+[B]     q    | count 
+[B] ---------+-------
+[B]  b conta |     2
+[B] (1 row)
+[B] 
+[B]  pg_sleep 
+[B] ----------
+[B]  
+[B] (1 row)
+[B] 
+[B] ERROR:  could not serialize access due to read/write dependencies among transactions
+[B] DETAIL:  Reason code: Canceled on identification as a pivot, during commit attempt.
+[B] HINT:  The transaction might succeed if retried.
+[A]     q    | count 
+[A] ---------+-------
+[A]  a conta |     2
+[A] (1 row)
+[A] 
+[A]  pg_sleep 
+[A] ----------
+[A]  
+[A] (1 row)
+[A] 
+contas de Ana no fim: 3

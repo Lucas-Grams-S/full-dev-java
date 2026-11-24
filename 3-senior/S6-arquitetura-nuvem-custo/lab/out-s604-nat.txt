@@ -1,0 +1,25 @@
+Reaching AWS APIs (ECR, logs, Secrets Manager, SQS, SNS) from private subnets in 2 AZs.
+S3 always through the gateway endpoint (no additional charge, VPC docs). Per month, 730 h.
+
+us-east-1: endpoint 0.01/h + 0.01/GB; NAT 0.045/h + 0.045/GB; inter-AZ 0.01/GB each way
+  GB/month    6 endpoints x 2 AZs     2 NAT (one per AZ)   1 NAT (no AZ redundancy)
+         0              US$ 87.60              US$ 65.70                  US$ 32.85
+       100              US$ 88.60              US$ 70.20                  US$ 38.35
+       500              US$ 92.60              US$ 88.20                  US$ 60.35
+      1000              US$ 97.60             US$ 110.70                  US$ 87.85
+      2000             US$ 107.60             US$ 155.70                 US$ 142.85
+      5000             US$ 137.60             US$ 290.70                 US$ 307.85
+     10000             US$ 187.60             US$ 515.70                 US$ 582.85
+break-even: endpoints cheaper than 2 NAT above 626 GB/month; than 1 NAT above 1217 GB/month
+
+sa-east-1: endpoint 0.021/h + 0.01/GB; NAT 0.093/h + 0.093/GB; inter-AZ 0.01/GB each way
+  GB/month    6 endpoints x 2 AZs     2 NAT (one per AZ)   1 NAT (no AZ redundancy)
+         0             US$ 183.96             US$ 135.78                  US$ 67.89
+       100             US$ 184.96             US$ 145.08                  US$ 78.19
+       500             US$ 188.96             US$ 182.28                 US$ 119.39
+      1000             US$ 193.96             US$ 228.78                 US$ 170.89
+      2000             US$ 203.96             US$ 321.78                 US$ 273.89
+      5000             US$ 233.96             US$ 600.78                 US$ 582.89
+     10000             US$ 283.96           US$ 1,065.78               US$ 1,097.89
+break-even: endpoints cheaper than 2 NAT above 580 GB/month; than 1 NAT above 1248 GB/month
+(NAT also reaches the internet; endpoints do not. Each new AWS service in the code = one more endpoint pair.)

@@ -1,0 +1,9 @@
+ calls | total_ms | mean_ms | rows  |                                                query                                                 
+-------+----------+---------+-------+------------------------------------------------------------------------------------------------------
+ 38224 |    15577 |   0.408 | 38224 | INSERT INTO ledger_entries (account_id, type, amount) SELECT id, $1, $2 FROM lab_acc WHERE n = $3
+ 38224 |     1217 |   0.032 | 38224 | UPDATE accounts SET balance = balance + $1, version = version + $2 WHERE id = (SELECT id FROM lab_ac
+     1 |       82 |  82.095 |     1 | SELECT count(*) FROM ledger_entries WHERE account_id = (SELECT id FROM lab_acc WHERE n=$1)
+ 19112 |        6 |   0.000 |     0 | END
+ 19112 |        5 |   0.000 |     0 | BEGIN
+(5 rows)
+

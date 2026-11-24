@@ -1,0 +1,28 @@
+runbook-good.md        expected OK   -> as expected (0 problems)
+runbook-bad.md         expected FAIL -> as expected (8 problems)
+     - missing section: Impacto
+     - missing section: Mitigação
+     - missing section: Escalar
+     - missing section: Verificação
+     - no owner (@name) anywhere
+     - no 'Dono:' line
+     - no 'Revisado em:' line
+     - Diagnóstico is not an ordered list of steps
+postmortem-good.md     expected OK   -> as expected (0 problems)
+postmortem-bad.md      expected FAIL -> as expected (15 problems)
+     - missing section: Impacto
+     - missing section: Linha do tempo
+     - missing section: Causa raiz
+     - missing section: O que funcionou
+     - missing section: O que não funcionou
+     - no owner (@name) anywhere
+     - blame wording: "culpa" (describe what the SYSTEM allowed)
+     - blame wording: "esqueceu" (describe what the SYSTEM allowed)
+     - vague action (not verifiable): - Melhorar o monitoramento
+     - action without owner: - Melhorar o monitoramento
+     - action without date: - Melhorar o monitoramento
+     - vague action (not verifiable): - Tomar mais cuidado nos deploys
+     - action without owner: - Tomar mais cuidado nos deploys
+     - action without date: - Tomar mais cuidado nos deploys
+     - timeline has no timestamped entries (- HH:MM ...)
+selftest PASSED (the lint accepts the good ones and rejects the bad ones)

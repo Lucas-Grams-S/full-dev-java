@@ -1,0 +1,36 @@
+=== 1. Ana->Bruno e Bruno->Ana, cada uma trava a origem primeiro ===
+[B] (1 row)
+[A] (1 row)
+[A] ERROR:  deadlock detected
+[A] DETAIL:  Process 950 waits for ShareLock on transaction 1089; blocked by process 957.
+[A] Process 957 waits for ShareLock on transaction 1088; blocked by process 950.
+[A] HINT:  See server log for query details.
+[A] CONTEXT:  while updating tuple (0,2) in relation "accounts"
+saldos: 1020.00 / 980.00
+=== 2. Correção: travar SEMPRE em ordem de id (SELECT ... FOR UPDATE ORDER BY id) ===
+[A]                   id                  
+[A]  20000000-0000-0000-0000-000000000001
+[A]  20000000-0000-0000-0000-000000000002
+[A] (2 rows)
+[A] (1 row)
+[B]                   id                  
+[B]  20000000-0000-0000-0000-000000000001
+[B]  20000000-0000-0000-0000-000000000002
+[B] (2 rows)
+[B] (1 row)
+saldos: 1010.00 / 990.00
+=== 3. Diagnóstico: quem espera quem (pg_locks / pg_blocking_pids) ===
+ pid  | state  | wait_event_type |  wait_event   | bloqueado_por |                            query                             
+------+--------+-----------------+---------------+---------------+--------------------------------------------------------------
+ 1042 | active | Lock            | transactionid | {1035}        | UPDATE accounts SET balance = balance + 1 WHERE id='20000000
+(2 rows)
+
+[A] (1 row)
+=== 4. Deadlock sem UPDATE de saldo: duas inserções com a mesma idempotency_key em sentido cruzado ===
+[A] (1 row)
+[A] ERROR:  deadlock detected
+[A] DETAIL:  Process 1077 waits for ShareLock on transaction 1135; blocked by process 1084.
+[A] Process 1084 waits for ShareLock on transaction 1134; blocked by process 1077.
+[A] HINT:  See server log for query details.
+[A] CONTEXT:  while inserting index tuple (0,3) in relation "uk_transfers_idempotency_key"
+[B] (1 row)

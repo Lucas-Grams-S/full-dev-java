@@ -1,0 +1,3 @@
+RETENCAO log_start_offset=20 log_end_offset=25 (20 antigas escritas, retention.ms=3000)
+RETENCAO seek(0) -> OffsetOutOfRangeException: {lab.ret.e6b47147-0=0}
+COMPACTACAO 18 mensagens escritas (3 chaves × 6 versões); depois da compactação restam 6: [saldo-v5, saldo-v5, saldo-v5, saldo-v6, saldo-v6, saldo-v6]

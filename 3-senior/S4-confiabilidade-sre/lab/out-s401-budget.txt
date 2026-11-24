@@ -1,0 +1,31 @@
+== error budget of a 30-day window (time view) ==
+SLO  99.00% -> budget   432.00 min (7.2 h)
+SLO  99.50% -> budget   216.00 min (3.6 h)
+SLO  99.90% -> budget    43.20 min (43.2 min)
+SLO  99.95% -> budget    21.60 min (21.6 min)
+SLO  99.99% -> budget     4.32 min (4.3 min)
+
+== request view (premise: 5 req/s) ==
+requests in 30 days: 12,960,000
+SLO 99.90% -> 12,960 failed requests allowed
+SLO 99.99% -> 1,296 failed requests allowed
+
+== burn rate: how long the budget lasts (SLO 99.9%, window 30 d) ==
+burn    1.0x -> budget gone in   720.00 h (30.0 days) | error ratio 0.1000%
+burn    2.0x -> budget gone in   360.00 h (15.0 days) | error ratio 0.2000%
+burn    6.0x -> budget gone in   120.00 h (5.0 days) | error ratio 0.6000%
+burn   14.4x -> budget gone in    50.00 h (2.1 days) | error ratio 1.4400%
+burn   36.0x -> budget gone in    20.00 h (20.0 h) | error ratio 3.6000%
+burn  100.0x -> budget gone in     7.20 h (7.2 h) | error ratio 10.0000%
+burn 1000.0x -> budget gone in     0.72 h (43.2 min) | error ratio 100.0000%
+
+== budget consumed by a burn rate over a window (SLO 99.9%, 30 d) ==
+consumed = burn x window / 30 d
+burn  14.4x for   1.0 h ->  2.00% of the budget
+burn   6.0x for   6.0 h ->  5.00% of the budget
+burn   1.0x for  72.0 h -> 10.00% of the budget
+
+== availability of a chain (serial) vs redundancy (parallel) ==
+3 components in series, each 99.9%: 99.7003%
+5 components in series, each 99.9%: 99.5010%
+2 independent copies in parallel, each 99.9%: 99.99990%

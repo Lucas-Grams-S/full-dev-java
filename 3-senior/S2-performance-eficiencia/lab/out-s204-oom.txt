@@ -1,0 +1,4 @@
+java.lang.OutOfMemoryError: Java heap space
+Dumping heap to <dir>/oom.hprof ...
+Heap dump file created [71150257 bytes]
+Terminating due to java.lang.OutOfMemoryError: Java heap space

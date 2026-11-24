@@ -1,0 +1,36 @@
+## A) what the primary knows about its replica (pg_stat_replication) and what the replica knows about itself
+ application_name |   state   | sync_state | has_write_lag | has_replay_lag 
+------------------+-----------+------------+---------------+----------------
+ walreceiver      | streaming | async      | t             | t
+(1 row)
+
+replica: pg_is_in_recovery=true, replayed up to 0/519D458
+
+## B) recovery conflict: a long query on the replica x VACUUM on the primary
+--- hot_standby_feedback=off, max_standby_streaming_delay=3s
+  [primary] DELETE of 150000 rows, then VACUUM VERBOSE says: tuples: 150010 removed, 446503 remain, 0 are dead but not yet removable
+  [replica long query]  before_sleep 
+  [replica long query] --------------
+  [replica long query]        600000
+  [replica long query] (1 row)
+  [replica long query] 
+  [replica long query] ERROR:  canceling statement due to conflict with recovery
+  [replica long query] DETAIL:  User query might have needed to see row versions that must be removed.
+  [replica long query] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+--- hot_standby_feedback=on, max_standby_streaming_delay=3s
+  [primary] DELETE of 150000 rows, then VACUUM VERBOSE says: tuples: 0 removed, 564019 remain, 150010 are dead but not yet removable
+  [replica long query]  before_sleep 
+  [replica long query] --------------
+  [replica long query]        600000
+  [replica long query] (1 row)
+  [replica long query] 
+  [replica long query]  pg_sleep 
+  [replica long query] ----------
+  [replica long query]  
+  [replica long query] (1 row)
+  [replica long query] 
+  [replica long query]  after_sleep 
+  [replica long query] -------------
+  [replica long query]       600000
+  [replica long query] (1 row)
+  [replica long query] 

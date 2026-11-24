@@ -1,0 +1,15 @@
+== 1. A mesma chamada, 12 vezes seguidas (work(200_000), ms) ==
+#1=8.80 #2=6.59 #3=3.05 #4=1.86 #5=1.46 #6=1.40 #7=1.41 #8=1.59 #9=1.38 #10=1.35 #11=1.34 #12=2.00
+
+== 2. Latencia de um servico MODELADO (semente fixa): 98% rapidas, 2% lentas ==
+media=15.3 ms  p50=8.0  p95=10.8  p99=356.6  p99.9=458.0  max=608.2
+paginas com 100 chamadas que sofreram ao menos uma acima do p99: 63.6% (teoria: 1-0,99^100 = 63.4%)
+
+== 3. Uma requisicao com 3 fases: onde esta o tempo? (media de 200 execucoes, ms) ==
+parse=0.005 (0.1%)  banco(modelado)=5.239 (93.3%)  serialize=0.370 (6.6%)  total=5.614
+ganho total se parse ficar 10x mais rapido:     1.001x
+ganho total se o banco ficar 10x mais rapido:    6.246x
+ganho total se serialize ficar 10x mais rapido:  1.063x
+
+== 4. Ruido: a mesma medicao 15 vezes (cada uma = 30 execucoes de work(100_000), ms) ==
+min=19.0  mediana=19.2  max=30.2  media=21.0  desvio=3.4 (16.3% da media)

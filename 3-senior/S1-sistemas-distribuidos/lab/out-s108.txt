@@ -1,0 +1,14 @@
+== 1. 10.000 debitos de 10,00; a RESPOSTA se perde em 30% das tentativas e o cliente repete ==
+sem chave: 14253 tentativas -> 14253 debitos (esperado 10000); saldo=85747000 (esperado 90000000)
+com chave: 14223 tentativas -> 10000 debitos (esperado 10000); saldo=90000000 (esperado 90000000)
+
+== 2. A MESMA chave chegando ao mesmo tempo (2 threads, 1.000 chaves) ==
+debitos efetivos = 1000 de 1000 chaves (cada chave debitada exatamente uma vez: true)
+
+== 3. Mesma chave, corpo diferente; e queda entre o efeito e o registro da chave ==
+1o pedido (chave k1, R$ 10,00): 200 ok
+repeticao igual               : 200 repetido: OK
+mesma chave, valor diferente  : 422 chave reutilizada com outro corpo
+queda no meio de k2: queda
+saldo antes/depois da queda (atomico, efeito e chave na mesma transacao): 99999000 / 99999000 (efeito do k2 NAO ficou; o retry executa por inteiro)
+SEM atomicidade (efeito gravado, chave nao): o retry de k2 -> 200 ok ; debitos = 2 (DUPLICADO)

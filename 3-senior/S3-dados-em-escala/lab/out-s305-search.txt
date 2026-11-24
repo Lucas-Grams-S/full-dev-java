@@ -1,0 +1,105 @@
+ setseed 
+---------
+ 
+(1 row)
+
+## setup: 1M memos like "Pix para João Silva - Mercado Central"
+                              ?column?                              
+--------------------------------------------------------------------
+ table: 95 MB | sample: Recarga Pedro Nascimento - Farmácia Popular
+(1 row)
+
+
+## A) ILIKE with a leading wildcard, no index
+                                    QUERY PLAN                                     
+-----------------------------------------------------------------------------------
+ Finalize Aggregate (actual rows=1.00 loops=1)
+   ->  Gather (actual rows=3.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Partial Aggregate (actual rows=1.00 loops=3)
+               ->  Parallel Seq Scan on memo_search (actual rows=15275.33 loops=3)
+                     Filter: (memo ~~* '%mercado%'::text)
+                     Rows Removed by Filter: 318058
+ Planning Time: 0.824 ms
+ Execution Time: 213.351 ms
+(10 rows)
+
+
+## B) pg_trgm GIN index (same query, same answer)
+Time: 4777.182 ms (00:04.777)
+         ?column?          
+---------------------------
+ trigram index size: 42 MB
+(1 row)
+
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Aggregate (actual rows=1.00 loops=1)
+   ->  Bitmap Heap Scan on memo_search (actual rows=45826.00 loops=1)
+         Recheck Cond: (memo ~~* '%mercado%'::text)
+         Heap Blocks: exact=9339
+         ->  Bitmap Index Scan on idx_memo_trgm (actual rows=45826.00 loops=1)
+               Index Cond: (memo ~~* '%mercado%'::text)
+               Index Searches: 1
+ Planning Time: 0.183 ms
+ Execution Time: 107.161 ms
+(9 rows)
+
+-- a typo: word_similarity (<%) finds "farmacia" for "farmcia"
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Aggregate (actual rows=1.00 loops=1)
+   ->  Bitmap Heap Scan on memo_search (actual rows=0.00 loops=1)
+         Filter: ('farmcia'::text <% memo)
+         Rows Removed by Filter: 91142
+         Heap Blocks: exact=9398
+         ->  Bitmap Index Scan on idx_memo_trgm (actual rows=91142.00 loops=1)
+               Index Cond: (memo %> 'farmcia'::text)
+               Index Searches: 1
+ Planning Time: 0.728 ms
+ Execution Time: 462.279 ms
+(10 rows)
+
+
+## C) full-text search: portuguese + unaccent, stored generated tsvector + GIN
+Time: 11359.515 ms (00:11.360)
+Time: 678.816 ms
+                                 sizes                                 
+-----------------------------------------------------------------------
+ tsvector index size: 6488 kB | heap now (with the tsv column): 143 MB
+(1 row)
+
+-- "joao padaria" typed without accents matches "João" and "Padaria São João":
+                                  QUERY PLAN                                  
+------------------------------------------------------------------------------
+ Aggregate (actual rows=1.00 loops=1)
+   ->  Bitmap Heap Scan on memo_search (actual rows=90994.00 loops=1)
+         Recheck Cond: (tsv @@ '''joa'' & ''pad'''::tsquery)
+         Heap Blocks: exact=18088
+         ->  Bitmap Index Scan on idx_memo_tsv (actual rows=90994.00 loops=1)
+               Index Cond: (tsv @@ '''joa'' & ''pad'''::tsquery)
+               Index Searches: 1
+ Planning Time: 0.261 ms
+ Execution Time: 36.733 ms
+(9 rows)
+
+-- top 3 by ts_rank:
+ id  |                    memo                     |  rank  
+-----+---------------------------------------------+--------
+ 157 | Recarga João Almeida - Padaria São João     | 0.1873
+ 286 | Mensalidade João Almeida - Padaria São João | 0.1873
+ 653 | Reembolso João Santos - Padaria São João    | 0.1873
+(3 rows)
+
+-- stemming: "pagamentos" (plural) finds "Pagamento":
+ matches_plural 
+----------------
+         142585
+(1 row)
+
+ matches_exact_word 
+--------------------
+                  0
+(1 row)
+

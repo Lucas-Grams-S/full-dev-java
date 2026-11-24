@@ -1,0 +1,39 @@
+replicaCount: 2
+
+image:
+  repository: payflow
+  tag: ""                 # vazio = usa o appVersion do Chart.yaml; em produção: um digest (sha256:...)
+  pullPolicy: IfNotPresent
+
+config:                   # vira o ConfigMap (NADA secreto aqui)
+  SPRING_DATASOURCE_URL: jdbc:postgresql://db.payflow.svc.cluster.local:5432/payflow
+  SPRING_DATASOURCE_USERNAME: payflow
+  SPRING_CONFIG_IMPORT: configtree:/run/secrets/app/
+  MANAGEMENT_SERVER_PORT: "8081"
+  LOGGING_STRUCTURED_FORMAT_CONSOLE: ecs
+  SERVER_SHUTDOWN: graceful
+  SPRING_LIFECYCLE_TIMEOUT_PER_SHUTDOWN_PHASE: 20s
+  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError"
+
+existingSecret: payflow-app   # o Secret NÃO é criado pelo chart (decisão 150)
+
+resources:
+  requests: {cpu: 250m, memory: 768Mi}
+  limits: {cpu: "1", memory: 768Mi}
+
+terminationGracePeriodSeconds: 45
+preStopSleepSeconds: 5
+
+ingress:
+  enabled: true
+  host: payflow.localtest.me
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+
+pdb:
+  enabled: true
+  minAvailable: 1

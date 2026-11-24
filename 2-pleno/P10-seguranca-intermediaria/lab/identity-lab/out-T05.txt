@@ -1,0 +1,3 @@
+refresh #1 ok; new refresh token differs=true access token expires_in=300
+replay of the spent refresh token -> 400 {"error":"invalid_grant","error_description":"Maximum allowed refresh token reuse exceeded"}
+the legitimate newest refresh token after the replay -> 400 {"error":"invalid_grant","error_description":"Session doesn't have required client"}

@@ -1,0 +1,11 @@
+>> canary at 5% (BAD=1): 4000 requests
+total=4000 failures=63 duration=10.8s
+  version=v1    status=200                     3805 (95.1%)
+  version=v2    status=200                      132 (3.3%)
+  version=v2    status=500                       63 (1.6%)
+  first failure at t=0.07s, last at t=10.72s (window 10.65s)
+  canary: 195 requests, 63 errors -> 32.3% ; rule: abort above 2%
+  DECISION: ABORT (canary back to 0%)
+  canary back to 0%; checking 500 requests:
+    total=500 failures=0 duration=1.4s
+      version=v1    status=200                      500 (100.0%)

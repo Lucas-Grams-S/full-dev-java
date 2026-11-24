@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:55432/lab
+    username: postgres
+    password: lab
+  sql.init.mode: always
+  rabbitmq:
+    host: localhost
+    port: 55672
+    username: guest
+    password: guest
+  kafka:
+    bootstrap-servers: localhost:59092
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+logging.level:
+  org.apache.kafka: WARN
+  org.springframework.kafka: WARN
+  org.springframework.amqp: WARN
+---
+spring.rabbitmq.listener.simple:
+  retry:
+    enabled: true
+    initial-interval: 200ms
+    multiplier: 2
+    max-retries: 2      # Boot 4.x: "max-retries" = retentativas DEPOIS da 1ª entrega (o nome antigo max-attempts não tem efeito)
+  default-requeue-rejected: false   # esgotou as tentativas -> rejeita sem reenfileirar (vai para a DLX)

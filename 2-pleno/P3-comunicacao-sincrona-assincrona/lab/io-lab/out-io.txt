@@ -1,0 +1,9 @@
+JDK 25.0.5.0.3+1-1-26.04.1-Ubuntu | núcleos=12
+== I/O-bound: 200 tarefas de 100 ms de espera ==
+pool de   1 threads de plataforma:  20063 ms (ideal 20000 ms)
+pool de   4 threads de plataforma:   5012 ms (ideal 5000 ms)
+pool de  16 threads de plataforma:   1306 ms (ideal 1250 ms)
+pool de  50 threads de plataforma:    402 ms (ideal 400 ms)
+pool de 200 threads de plataforma:    110 ms (ideal 100 ms)
+threads virtuais (uma por tarefa):     106 ms
+threads virtuais, 10 000 tarefas:      125 ms

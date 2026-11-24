@@ -1,0 +1,60 @@
+$ terraform fmt -recursive -check terraform/
+(clean)
+$ (cd modules/network && terraform test)
+  run "no_nat_means_private_subnets_have_no_default_route"... pass
+  run "one_nat_is_shared_by_both_app_route_tables"... pass
+  run "cidr_plan_is_stable"... pass
+  run "the_database_is_reachable_only_from_the_application"... pass
+  run "three_azs_are_refused"... pass
+  run "three_nats_are_refused"... pass
+Success! 6 passed, 0 failed.
+$ (cd modules/ecs_service && terraform test)
+  run "a_mutable_tag_is_refused"... pass
+  run "the_service_rolls_back_a_bad_deploy_and_never_drops_capacity"... pass
+  run "the_container_is_locked_down"... pass
+  run "secrets_are_injected_by_reference_never_by_value"... pass
+Success! 4 passed, 0 failed.
+$ (cd modules/observability && terraform test)
+  run "every_alarm_has_severity_runbook_and_an_action"... pass
+  run "every_dead_letter_queue_has_its_alarm"... pass
+  run "the_replica_alarm_exists_only_when_there_is_a_replica"... pass
+  run "with_a_replica_the_lag_alarm_appears"... pass
+Success! 4 passed, 0 failed.
+$ (cd modules/messaging && terraform test)
+  run "every_consumer_has_a_dlq_with_14_days_and_a_redrive_policy"... pass
+  run "subscriptions_are_raw_and_filtered"... pass
+  run "a_zero_max_receive_count_is_refused"... pass
+  run "a_visibility_timeout_over_12_hours_is_refused"... pass
+Success! 4 passed, 0 failed.
+$ (cd modules/database && terraform test)
+  run "study_is_destroyable_and_still_private_and_encrypted"... pass
+  run "production_cannot_be_destroyed_by_accident"... pass
+  run "no_replica_by_default"... pass
+  run "a_replica_has_no_credentials_of_its_own"... pass
+Success! 4 passed, 0 failed.
+
+# MUTANT: an alarm without a runbook must make the observability test FAIL
+  run "every_alarm_has_severity_runbook_and_an_action"... fail
+every alarm needs [page|ticket] + summary + runbook (decision 141)
+  run "every_dead_letter_queue_has_its_alarm"... pass
+  run "the_replica_alarm_exists_only_when_there_is_a_replica"... pass
+  run "with_a_replica_the_lag_alarm_appears"... pass
+Failure! 3 passed, 1 failed.
+
+# MUTANT: the database rule opens 5432 to 0.0.0.0/0 (a CIDR instead of a security-group reference)
+  run "no_nat_means_private_subnets_have_no_default_route"... pass
+  run "one_nat_is_shared_by_both_app_route_tables"... pass
+  run "cidr_plan_is_stable"... pass
+  run "the_database_is_reachable_only_from_the_application"... fail
+the database rule must be a security-group reference, never a CIDR
+  run "three_azs_are_refused"... pass
+  run "three_nats_are_refused"... pass
+Failure! 5 passed, 1 failed.
+
+# MUTANT: production forgets deletion protection (deletion_protection = false) -> the database test must FAIL
+  run "study_is_destroyable_and_still_private_and_encrypted"... pass
+  run "production_cannot_be_destroyed_by_accident"... fail
+production: deletion protection ON and a final snapshot
+  run "no_replica_by_default"... pass
+  run "a_replica_has_no_credentials_of_its_own"... pass
+Failure! 3 passed, 1 failed.

@@ -1,0 +1,10 @@
+
+                                    Allocation by Site
+
+Method                                                                Allocation Pressure
+--------------------------------------------------------------------- -------------------
+jdk.internal.misc.Unsafe.allocateUninitializedArray(Class, int)                    63.50%
+java.util.regex.Pattern$BitClass.<init>()                                           8.01%
+java.util.regex.Pattern.compile()                                                   7.84%
+java.util.regex.Pattern.compile(String)                                             5.22%
+java.util.regex.Pattern.newCharProperty(Pattern$CharPredicate)                      4.08%

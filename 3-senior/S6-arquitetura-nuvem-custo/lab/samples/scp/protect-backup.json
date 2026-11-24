@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ProtectBackupKeysAndVaults",
+      "Effect": "Deny",
+      "Action": ["kms:ScheduleKeyDeletion", "kms:DisableKey", "kms:PutKeyPolicy",
+                 "backup:DeleteBackupVault", "backup:DeleteRecoveryPoint", "backup:DeleteBackupVaultLockConfiguration",
+                 "s3:PutBucketObjectLockConfiguration", "s3:DeleteBucket"],
+      "Resource": "*",
+      "Condition": { "ArnNotLike": { "aws:PrincipalArn": "arn:aws:iam::*:role/payflow-breakglass" } }
+    }
+  ]
+}

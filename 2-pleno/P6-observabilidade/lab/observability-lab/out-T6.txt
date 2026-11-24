@@ -1,0 +1,7 @@
+T6 versões: Prometheus 3.16.0 ; Grafana 13.3.0 ; Jaeger v2.23.0
+T6 alvo payflow http://localhost:8081/actuator/prometheus up
+T6 grupo de regras payflow-alerts 9 regras {'ok'}
+T6 grupo de regras payflow-recording 3 regras {'ok'}
+T6 dashboard provisionado: payflow-red | PayFlow — RED + negócio + JVM
+T6 painéis com dado: 13; sem série (esperado só o do Hikari, sem banco no laboratório): ['Threads vivas e pool de conexões (se hou']
+T6 Jaeger serviços: ['payflow-obs-lab', 'jaeger']

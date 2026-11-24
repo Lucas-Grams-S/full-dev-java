@@ -1,0 +1,19 @@
+NOTICE:  table "lab_acc" does not exist, skipping
+=== transfer.pgbench ===
+clientes=1    tps=1107.926576 latência média=0.903 ms
+clientes=2    tps=1913.118923 latência média=1.045 ms
+clientes=4    tps=5201.181183 latência média=0.769 ms
+clientes=8    tps=8414.865775 latência média=0.951 ms
+clientes=16   tps=8625.797511 latência média=1.855 ms
+clientes=32   tps=10879.536360 latência média=2.941 ms
+clientes=64   tps=10488.360276 latência média=6.102 ms
+clientes=128  tps=7980.679630 latência média=16.039 ms
+=== transfer-with-wait.pgbench ===
+clientes=1    tps=100.614612 latência média=9.939 ms
+clientes=2    tps=207.930897 latência média=9.619 ms
+clientes=4    tps=429.422044 latência média=9.315 ms
+clientes=8    tps=873.191703 latência média=9.162 ms
+clientes=16   tps=1757.370429 latência média=9.105 ms
+clientes=32   tps=3504.206458 latência média=9.132 ms
+clientes=64   tps=6456.887474 latência média=9.912 ms
+clientes=128  tps=9083.603804 latência média=14.091 ms

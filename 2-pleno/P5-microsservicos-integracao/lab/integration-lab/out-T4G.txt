@@ -1,0 +1,3 @@
+T4G campo novo: leitor novo lendo dado antigo -> modelVersion='' (padrao); leitor antigo lendo dado novo -> score=42, campo desconhecido preservado=[3]
+T4G enum com valor novo (7) lido por cliente antigo: decision=UNRECOGNIZED, valor numerico preservado=7
+T4G numero reutilizado (int32 -> string): parse OK, id='a', reason='', campo 2 virou 'desconhecido'=true (o score 42 sumiu sem erro)

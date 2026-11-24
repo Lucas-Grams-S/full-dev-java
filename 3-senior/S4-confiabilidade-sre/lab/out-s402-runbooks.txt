@@ -1,0 +1,12 @@
+LINT     docs/runbooks/erros-5xx.md
+MISSING  docs/runbooks/erros-inesperados.md
+MISSING  docs/runbooks/heap-alto.md
+MISSING  docs/runbooks/instancia-fora.md
+MISSING  docs/runbooks/notificacoes-breaker.md
+MISSING  docs/runbooks/outbox-parado.md
+MISSING  docs/runbooks/pool-saturado.md
+MISSING  docs/runbooks/sem-metricas.md
+MISSING  docs/runbooks/slo-queima-lenta.md
+OK       docs/runbooks/slo-queima-rapida.md
+MISSING  docs/runbooks/transferencias-lentas.md
+runbooks referenced: 11 | missing: 9 | failing the lint: 1

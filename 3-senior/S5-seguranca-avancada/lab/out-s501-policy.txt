@@ -1,0 +1,25 @@
+MODEL: Policy.decide(caller, action, resourceOwner) — every call decides again (no trust from 'being inside'); deny by default; owner check; step-up for money; break-glass for admin delete.
+
+ok   customer reads own account                           expect allow got allow (owner)
+ok   customer reads SOMEONE ELSE's account (IDOR)         expect deny  got deny  (not the owner)
+ok   customer transfers from own account with MFA         expect allow got allow (owner)
+ok   customer transfers from own account WITHOUT MFA      expect deny  got deny  (step-up (MFA) required)
+ok   customer transfers from someone else's account       expect deny  got deny  (not the owner)
+ok   customer exports someone else's statement            expect deny  got deny  (not the owner)
+ok   customer calls admin delete                          expect deny  got deny  (no rule allows it (deny by default))
+ok   support reads an account                             expect allow got allow (support read (masked view))
+ok   support transfers                                    expect deny  got deny  (no rule allows it (deny by default))
+ok   admin deletes with MFA and ticket                    expect allow got allow (approved break-glass)
+ok   admin deletes WITHOUT ticket                         expect deny  got deny  (needs MFA + approved ticket (break-glass))
+ok   admin deletes with ticket but WITHOUT MFA            expect deny  got deny  (needs MFA + approved ticket (break-glass))
+ok   api service calls /internal/notify                   expect allow got allow (service allowed)
+ok   reporting service calls /internal/notify             expect deny  got deny  (no rule allows it (deny by default))
+ok   reporting service transfers                          expect deny  got deny  (no rule allows it (deny by default))
+ok   anonymous reads an account                           expect deny  got deny  (unauthenticated)
+
+real policy: 16 cases, 0 failing
+
+MUTANTS (a test table that never fails proves nothing): each removes ONE defence; the table must notice.
+  M1 no owner check (IDOR)                   -> 3 case(s) fail (killed)
+  M2 allow by default (no rule -> allow)     -> 4 case(s) fail (killed)
+  M3 admin delete without ticket/MFA         -> 2 case(s) fail (killed)

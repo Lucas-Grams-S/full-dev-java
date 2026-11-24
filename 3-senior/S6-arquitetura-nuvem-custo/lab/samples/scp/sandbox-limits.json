@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SandboxSmallInstancesOnly",
+      "Effect": "Deny",
+      "Action": "ec2:RunInstances",
+      "Resource": "*",
+      "Condition": { "StringNotLike": { "ec2:InstanceType": ["t4g.*"] } }
+    },
+    {
+      "Sid": "SandboxSmallDatabasesOnly",
+      "Effect": "Deny",
+      "Action": "rds:CreateDBInstance",
+      "Resource": "*",
+      "Condition": { "StringNotLike": { "rds:DatabaseClass": ["db.t4g.*"] } }
+    }
+  ]
+}

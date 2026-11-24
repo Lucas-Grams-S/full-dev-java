@@ -1,0 +1,10 @@
+classe                                           instancias          bytes
+byte[]                                               68,136     61,648,945
+java.util.HashMap$Node                               30,756        861,168
+LeakLab$Session                                      29,744        713,856
+[Ljava.util.HashMap$Node;                               255        563,456
+java.lang.String                                     38,315        536,410
+[Ljava.lang.Object;                                   1,067        234,760
+char[]                                                    7         33,350
+[Ljdk.internal.ref.PhantomCleanable;                      1         32,768
+TOTAL (todas as classes)                            176,047     64,859,261

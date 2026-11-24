@@ -1,0 +1,74 @@
+rule_files:
+  - audit-rules.yml
+evaluation_interval: 15s
+tests:
+  # 1. normal day: 10 events/s, ~1% refused -> nothing fires
+  - interval: 15s
+    input_series:
+      - series: 'payflow_audit_events_total{action="TRANSFER",outcome="ALLOWED"}'
+        values: '0+148x80'
+      - series: 'payflow_audit_events_total{action="READ_ACCOUNT",outcome="DENIED"}'
+        values: '0+2x80'
+    alert_rule_test:
+      - eval_time: 18m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []
+  # 2. scan in progress: 8 of 10 events/s are refused -> ticket after the 5 minutes of 'for'
+  - interval: 15s
+    input_series:
+      - series: 'payflow_audit_events_total{action="TRANSFER",outcome="ALLOWED"}'
+        values: '0+30x80'
+      - series: 'payflow_audit_events_total{action="READ_ACCOUNT",outcome="DENIED"}'
+        values: '0+120x80'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts:
+          - exp_labels:
+              severity: ticket
+            exp_annotations:
+              summary: "More than 20% of audited actions are being refused"
+              runbook: docs/runbooks/audit-denied-spike.md
+  # 3. quiet night: 1 event per minute, all refused (100%) -> must NOT fire (traffic floor)
+  - interval: 15s
+    input_series:
+      - series: 'payflow_audit_events_total{action="READ_ACCOUNT",outcome="DENIED"}'
+        values: '0+0.25x80'
+    alert_rule_test:
+      - eval_time: 18m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []
+  # 4. one approved break-glass delete -> review ticket
+  - interval: 15s
+    input_series:
+      - series: 'payflow_audit_events_total{action="ADMIN_DELETE",outcome="ALLOWED"}'
+        values: '0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: PayflowBreakGlassUsed
+        exp_alerts:
+          - exp_labels:
+              severity: ticket
+            exp_annotations:
+              summary: "A break-glass ADMIN_DELETE was executed: review the ticket and the statements"
+              runbook: docs/runbooks/break-glass-review.md
+  # 5. a SHORT burst (2 minutes at 2 events/s, half refused) is not a scan: the 'for: 5m' must absorb it
+  - interval: 15s
+    input_series:
+      - series: 'payflow_audit_events_total{action="TRANSFER",outcome="ALLOWED"}'
+        values: '0+15x8 120x72'
+      - series: 'payflow_audit_events_total{action="READ_ACCOUNT",outcome="DENIED"}'
+        values: '0+15x8 120x72'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: PayflowAuditDeniedSpike
+        exp_alerts: []

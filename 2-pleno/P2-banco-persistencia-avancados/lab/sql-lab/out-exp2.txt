@@ -1,0 +1,83 @@
+=== 1. Lost update: ler (app), somar na app, gravar o valor (READ COMMITTED) ===
+[A]  balance 
+[A]  1000.00
+[A] (1 row)
+[A] (1 row)
+[B]  balance 
+[B]  1000.00
+[B] (1 row)
+[B] (1 row)
+saldo final: 1050.00 | version: 0
+=== 2. O mesmo em REPEATABLE READ ===
+[A]  balance 
+[A]  1000.00
+[A] (1 row)
+[A] (1 row)
+[B]  balance 
+[B]  1000.00
+[B] (1 row)
+[B] (1 row)
+[B] ERROR:  could not serialize access due to concurrent update
+saldo final: 1100.00 | version: 0
+=== 3. @Version na mão: UPDATE ... SET version = version + 1 WHERE id = ? AND version = ? ===
+[A]  balance | version 
+[A]  1000.00 |       0
+[A] (1 row)
+[A] (1 row)
+[A]      resultado     
+[A]  atualizou 1 linha
+[A] (1 row)
+[B]  balance | version 
+[B]  1000.00 |       0
+[B] (1 row)
+[B] (1 row)
+[B]  resultado 
+[B] (0 rows)
+saldo final: 1100.00 | version: 1
+=== 4. UPDATE atômico: balance = balance + ? ===
+[A] (1 row)
+[B] Time: 1502.651 ms (00:01.503)
+saldo final: 1150.00 | version: 0
+=== 5. Saque condicional (WHERE balance >= ?): dois saques de 800 de uma conta de 1000 ===
+[A]    resultado    
+[A]  A: saque feito
+[A] (1 row)
+[A] (1 row)
+[B]  resultado 
+[B] (0 rows)
+saldo final: 200.00 | version: 0
+=== 6. SELECT ... FOR UPDATE: B espera e lê o valor novo ===
+[A]  balance 
+[A]  1000.00
+[A] (1 row)
+[A] (1 row)
+[B] Time: 0.114 ms
+[B]  balance 
+[B]  1100.00
+[B] (1 row)
+[B] Time: 1504.510 ms (00:01.505)
+[B] Time: 0.584 ms
+[B] Time: 0.341 ms
+saldo final: 1150.00 | version: 0
+=== 7. NOWAIT, SKIP LOCKED e lock_timeout ===
+[B]    q    
+[B]  NOWAIT
+[B] (1 row)
+[B] ERROR:  could not obtain lock on row in relation "accounts"
+[B]                  q                 
+[B]  SKIP LOCKED (4 contas, 1 travada)
+[B] (1 row)
+[B]  id_fim 
+[B]  002
+[B]  003
+[B]  004
+[B] (3 rows)
+[B]          q          
+[B]  lock_timeout 500ms
+[B] (1 row)
+[B] ERROR:  canceling statement due to lock timeout
+[B] CONTEXT:  while locking tuple (0,1) in relation "accounts"
+[A]                   id                  
+[A]  20000000-0000-0000-0000-000000000001
+[A] (1 row)
+[A] (1 row)

@@ -1,0 +1,20 @@
+MODEL: a log scrubber (regex candidate -> Luhn+prefix check -> replace with [PAN last4]). Test lines include formats a naive regex misses.
+
+case                                 | strict scrubber output                         | verdict
+plain                                | charge ok card=[PAN 1111] amount=10.00         | ok
+spaces                               | card [PAN 1111] declined                       | ok
+dashes                               | card [PAN 1111] declined                       | ok
+json                                 | {"pan":"[PAN 4444]","amount":"10.00"}          | ok
+amex 15                              | amex [PAN 0005] ok                             | ok
+order id (fails Luhn)                | order=2026112312345678 created                 | ok
+order id (passes Luhn, prefix 70)    | order=7026112312345679 created                 | ok
+order id (passes Luhn, prefix 4)     | order=[PAN 5676] created                       | FALSE POSITIVE (masked a non-card)
+phone                                | phone=+5511999990000 verified                  | ok
+split by a non-digit                 | pan=41111111|11111111                          | LEAK (card still readable)
+url-encoded space                    | card=4111%201111%201111%201111                 | LEAK (card still readable)
+
+strict (prefix + length + Luhn): leaks = 2, false positives = 1 of 11 lines
+Luhn only                      : false positives = 2 (the order id with prefix 70 is masked too)
+Reading: a scrubber is a SAFETY NET, not the control. The control is not logging the PAN at all (and not storing it): the net still leaks when the digits are split or encoded,
+and it masks innocent numbers that happen to pass the check (the price of failing safe).
+A PAN you MAY show keeps at most the first 6 and last 4 digits (rule to confirm in the PCI DSS text itself): maskPan(4111111111111111) = 411111******1111

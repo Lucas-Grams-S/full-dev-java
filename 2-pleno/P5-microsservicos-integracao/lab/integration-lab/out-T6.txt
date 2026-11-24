@@ -1,0 +1,8 @@
+T6 amount 12345678901234567.89 como numero via JsonNode/double: 1.2345678901234568E16 (perdeu precisao)
+T6 amount como numero JSON 100.10 -> BigDecimal 100.10 (ok aqui, mas qualquer biblioteca que passe por double estraga; decisao 11: string)
+T6 campo novo opcional: mapper do Boot le normalmente -> TransferCompletedV1[eventId=e1, transferId=t1, sourceAccountId=a1, amount=100.00, status=COMPLETED]
+T6 campo renomeado (transferId -> transfer_id): le SEM erro, transferId=null <- null silencioso
+T6 com EnumFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL: status=null (o consumidor decide o que fazer com null)
+T6 FAIL_ON_UNKNOWN_PROPERTIES: Boot=false, Jackson 3 de fabrica=false (no Jackson 2 o padrao era true)
+T6 mapper ESTRITO (FAIL_ON_UNKNOWN_PROPERTIES ligado) diante do campo novo: UnrecognizedPropertyException: Unrecognized property "channel" (class com.payflow.lab.contract.EventCompatibilityTest$TransferCompletedV1), not marked as ignorable (5 known properties: "eventId", "transferId", "sourceAccountId", "amount", "status")
+T6 valor novo de enum (PARTIALLY_REVERSED): InvalidFormatException: Cannot deserialize value of type `com.payflow.lab.contract.EventCompatibilityTest$Status` from String "PARTIALLY_REVERSED": not one of the values accepted for Enum class: [REVERSED, COMPLETED]

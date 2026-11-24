@@ -1,0 +1,4 @@
+# Leitura do saldo por chave primária: PostgreSQL × Redis (mesma máquina, 1 cliente; ver P2.09)
+postgres PK lookup (pgbench, protocolo simples, 1 cliente): 0.017 ms | 0.018 ms | 0.017 ms
+postgres PK lookup (pgbench, -M prepared, 1 cliente):       0.009 ms | 0.009 ms | 0.009 ms
+redis GET (redis-benchmark -t get -n 50000 -c 1):           35 945 | 36 127 | 37 147 requisições/s (p50 = 0,023 ms)

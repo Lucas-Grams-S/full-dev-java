@@ -1,0 +1,101 @@
+key,region,usd,unit,description,effective,source,usage_type
+fargate.arm.vcpu_h,us-east-1,0.03238,hours,AWS Fargate - ARM - vCPU - US East (N. Virginia),2026-11-01,AmazonECS 2026-11-11,USE1-Fargate-ARM-vCPU-Hours:perCPU
+fargate.arm.gb_h,us-east-1,0.00356,hours,AWS Fargate - ARM - Memory - US East (N. Virginia),2026-11-01,AmazonECS 2026-11-11,USE1-Fargate-ARM-GB-Hours
+fargate.x86.vcpu_h,us-east-1,0.04048,hours,AWS Fargate - vCPU - US East (N.Virginia),2026-11-01,AmazonECS 2026-11-11,USE1-Fargate-vCPU-Hours:perCPU
+fargate.x86.gb_h,us-east-1,0.004445,hours,AWS Fargate - Memory  - US East (N.Virginia),2026-11-01,AmazonECS 2026-11-11,USE1-Fargate-GB-Hours
+lambda.arm.gb_s,us-east-1,1.33334e-05,Lambda-GB-Second,AWS Lambda - Total Compute for ARM - US East (Northern Virginia)-Tier-1,2026-11-01,AWSLambda 2026-11-20,Lambda-GB-Second-ARM
+lambda.x86.gb_s,us-east-1,1.66667e-05,Lambda-GB-Second,AWS Lambda - Total Compute - US East (Northern Virginia)-Tier-1,2026-11-01,AWSLambda 2026-11-20,Lambda-GB-Second
+lambda.request,us-east-1,2e-07,Requests,AWS Lambda - Total Requests - US East (Northern Virginia),2026-11-01,AWSLambda 2026-11-20,Request
+ec2.t4g.small.od_h,us-east-1,0.0168,Hrs,$0.0168 per On Demand Linux t4g.small Instance Hour,2026-11-01,AmazonEC2 2026-11-21,BoxUsage:t4g.small
+ec2.m7g.large.od_h,us-east-1,0.0816,Hrs,$0.0816 per On Demand Linux m7g.large Instance Hour,2026-11-01,AmazonEC2 2026-11-21,BoxUsage:m7g.large
+ec2.c7g.large.od_h,us-east-1,0.0725,Hrs,$0.0725 per On Demand Linux c7g.large Instance Hour,2026-11-01,AmazonEC2 2026-11-21,BoxUsage:c7g.large
+rds.pg.t4g.medium.single_h,us-east-1,0.065,Hrs,$ 0.065 per RDS db.t4g.medium Single-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,InstanceUsage:db.t4g.medium
+rds.pg.t4g.medium.multi_h,us-east-1,0.129,Hrs,$ 0.129 per RDS db.t4g.medium Multi-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,Multi-AZUsage:db.t4g.medium
+rds.pg.m7g.large.single_h,us-east-1,0.168,Hrs,$ 0.168 per RDS db.m7g.large Single-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,InstanceUsage:db.m7g.large
+rds.pg.m7g.large.multi_h,us-east-1,0.337,Hrs,$ 0.337 per RDS db.m7g.large Multi-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,Multi-AZUsage:db.m7g.large
+rds.gp3.single_gb_mo,us-east-1,0.115,GB-Mo,$0.115 per GB-month of provisioned GP3 storage running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,RDS:GP3-Storage
+rds.gp3.multi_gb_mo,us-east-1,0.23,GB-Mo,$0.23 per GB-month of provisioned GP3 storage for Multi-AZ deployments running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,RDS:Multi-AZ-GP3-Storage
+rds.backup_gb_mo,us-east-1,0.095,GB-Mo,$0.095 per additional GB-month of backup storage exceeding free allocation running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,RDS:ChargedBackupUsage
+vpc.endpoint_h,us-east-1,0.01,Hrs,$0.01 per VPC Endpoint Hour,2026-11-17,AmazonVPC 2026-11-23,USE1-VpcEndpoint-Hours
+vpc.endpoint_gb,us-east-1,0.01,GB,$0.01 per GB for upto 1 PB monthly data processed by VPC Endpoints,2026-11-17,AmazonVPC 2026-11-23,USE1-VpcEndpoint-Bytes
+vpc.ipv4_h,us-east-1,0.005,Hrs,$0.005 per In-use public IPv4 address per hour,2026-11-17,AmazonVPC 2026-11-23,USE1-PublicIPv4:InUseAddress
+nat.h,us-east-1,0.045,Hrs,$0.045 per NAT Gateway Hour,2026-11-01,AmazonEC2 2026-11-21,NatGateway-Hours
+nat.gb,us-east-1,0.045,GB,$0.045 per GB Data Processed by NAT Gateways,2026-11-01,AmazonEC2 2026-11-21,NatGateway-Bytes
+ebs.gp3_gb_mo,us-east-1,0.08,GB-Mo,$0.08 per GB-month of General Purpose (gp3) provisioned storage - US East (N. Virginia),2026-11-01,AmazonEC2 2026-11-21,EBS:VolumeUsage.gp3
+ebs.snapshot_gb_mo,us-east-1,0.05,GB-Mo,$0.05 per GB-Month of snapshot data stored - US East (Northern Virginia),2026-11-01,AmazonEC2 2026-11-21,EBS:SnapshotUsage
+alb.h,us-east-1,0.0225,Hrs,$0.0225 per Application LoadBalancer-hour (or partial hour),2026-11-01,AWSELB 2026-11-19,LoadBalancerUsage
+alb.lcu_h,us-east-1,0.008,LCU-Hrs,$0.008 per used Application load balancer capacity unit-hour (or partial hour),2026-11-01,AWSELB 2026-11-19,LCUUsage
+kms.key_mo,us-east-1,1,Keys,$1 per customer managed KMS key version in US East (N. Virginia),2026-11-01,awskms 2026-11-08,us-east-1-KMS-Keys
+kms.request,us-east-1,3e-06,Requests,$0.03 per 10000 KMS requests in US East (N. Virginia),2026-11-01,awskms 2026-11-08,us-east-1-KMS-Requests
+cw.logs_ingest_gb,us-east-1,0.5,GB,$0.50 per GB custom log data ingested in Standard log class - US East (Northern Virginia),2026-11-01,AmazonCloudWatch 2026-11-19,DataProcessing-Bytes
+cw.logs_store_gb_mo,us-east-1,0.03,GB-Mo,$0.03 per GB-mo of log storage - US East (Northern Virginia),2026-11-01,AmazonCloudWatch 2026-11-19,USE1-TimedStorage-ByteHrs
+cw.metric_mo,us-east-1,0.3,Metrics,"$0.30 per metric-month for the first 10,000 metrics - US East (Northern Virginia)",2026-11-01,AmazonCloudWatch 2026-11-19,CW:MetricMonitorUsage
+cw.alarm_mo,us-east-1,0.1,Alarms,$0.10 per alarm metric month (standard resolution) - US East (Northern Virginia),2026-11-01,AmazonCloudWatch 2026-11-19,CW:AlarmMonitorUsage
+sm.secret_mo,us-east-1,0.4,Secrets,$0.40 per Secret,2026-11-01,AWSSecretsManager 2026-11-11,USE1-AWSSecretsManager-Secrets
+sm.api,us-east-1,5e-06,API Requests,$0.05 per 10000 API Requests,2026-11-01,AWSSecretsManager 2026-11-11,USE1-AWSSecretsManagerAPIRequest
+s3.std_gb_mo,us-east-1,0.023,GB-Mo,$0.023 per GB - first 50 TB / month of storage used,2026-11-01,AmazonS3 2026-11-21,TimedStorage-ByteHrs
+s3.put,us-east-1,5e-06,Requests,"$0.005 per 1,000 PUT, COPY, POST, or LIST requests",2026-11-01,AmazonS3 2026-11-21,Requests-Tier1
+sqs.request,us-east-1,4e-07,Requests,$0.40 per million Amazon SQS standard requests in Tier1 in US East (N Virginia),2026-11-01,AWSQueueService 2026-11-11,Requests-RBP
+sns.request,us-east-1,5e-07,Requests,"$0.50 per 1,000,000 Amazon SNS API Requests per month thereafter",2026-11-01,AmazonSNS 2026-11-22,Requests-Tier1
+dt.out_gb,us-east-1,0.09,GB,$0.090 per GB - first 10 TB / month data transfer out beyond the global free tier,2026-11-01,AWSDataTransfer 2026-11-19,DataTransfer-Out-Bytes
+dt.inter_az_gb,us-east-1,0.01,GB,$0.010 per GB - regional data transfer - in/out/between EC2 AZs or using elastic IPs or ELB,2026-11-01,AWSDataTransfer 2026-11-19,DataTransfer-Regional-Bytes
+config.item,us-east-1,0.003,ConfigurationItemRecorded,$0.003 per Configuration Item recorded in US East (N.Virginia) region,2026-11-01,AWSConfig 2026-11-08,ConfigurationItemRecorded
+ec2.m7g.large.ri1y_nu_h,us-east-1,0.054,Hrs,"1yr No Upfront standard: Linux/UNIX (Amazon VPC), m7g.large reserved instance applied",2026-11-21,AmazonEC2 2026-11-21,BoxUsage:m7g.large
+ec2.m7g.large.ri3y_nu_h,us-east-1,0.037,Hrs,"3yr No Upfront standard: Linux/UNIX (Amazon VPC), m7g.large reserved instance applied",2026-11-21,AmazonEC2 2026-11-21,BoxUsage:m7g.large
+rds.pg.m7g.large.multi.ri1y_nu_h,us-east-1,0.2595,Hrs,"1yr No Upfront standard: PostgreSQL, db.m7g.large reserved instance applied",2026-11-20,AmazonRDS 2026-11-20,Multi-AZUsage:db.m7g.large
+dt.inter_region_to_sa-east-1_gb,us-east-1,0.02,GB,$0.02 per GB - US East (Northern Virginia) data transfer to South America (Sao Paulo),2026-11-01,AWSDataTransfer 2026-11-19,USE1-SAE1-AWS-Out-Bytes
+sp.fargate.arm.vcpu_h.1y_nu,us-east-1,0.0255,Hrs,1 year No Upfront Compute Savings Plan - Fargate-ARM-vCPU-Hours:perCPU,2026-11-23,AWSComputeSavingsPlan 2026-11-23,USE1-Fargate-ARM-vCPU-Hours:perCPU
+sp.fargate.arm.gb_h.1y_nu,us-east-1,0.0028,Hrs,1 year No Upfront Compute Savings Plan - Fargate-ARM-GB-Hours,2026-11-23,AWSComputeSavingsPlan 2026-11-23,USE1-Fargate-ARM-GB-Hours
+fargate.arm.vcpu_h,sa-east-1,0.0557,hours,AWS Fargate - ARM - vCPU - South America (Sao Paulo),2026-11-01,AmazonECS 2026-11-11,SAE1-Fargate-ARM-vCPU-Hours:perCPU
+fargate.arm.gb_h,sa-east-1,0.00612,hours,AWS Fargate - ARM - Memory - South America (Sao Paulo),2026-11-01,AmazonECS 2026-11-11,SAE1-Fargate-ARM-GB-Hours
+fargate.x86.vcpu_h,sa-east-1,0.0696,hours,AWS Fargate - vCPU  - South America (Sao Paulo),2026-11-01,AmazonECS 2026-11-11,SAE1-Fargate-vCPU-Hours:perCPU
+fargate.x86.gb_h,sa-east-1,0.0076,hours,AWS Fargate - Memory  - South America (Sao Paulo),2026-11-01,AmazonECS 2026-11-11,SAE1-Fargate-GB-Hours
+lambda.arm.gb_s,sa-east-1,1.33334e-05,Lambda-GB-Second,AWS Lambda - Total Compute for ARM - South America (Sao Paulo)-Tier-1,2026-11-01,AWSLambda 2026-11-20,SAE1-Lambda-GB-Second-ARM
+lambda.x86.gb_s,sa-east-1,1.66667e-05,Lambda-GB-Second,AWS Lambda - Total Compute - South America (Sao Paulo)-Tier-1,2026-11-01,AWSLambda 2026-11-20,SAE1-Lambda-GB-Second
+lambda.request,sa-east-1,2e-07,Request,AWS Lambda - Total Requests - South America (Sao Paulo),2026-11-01,AWSLambda 2026-11-20,SAE1-Request
+ec2.t4g.small.od_h,sa-east-1,0.0268,Hrs,$0.0268 per On Demand Linux t4g.small Instance Hour,2026-11-01,AmazonEC2 2026-11-21,SAE1-BoxUsage:t4g.small
+ec2.m7g.large.od_h,sa-east-1,0.1301,Hrs,$0.1301 per On Demand Linux m7g.large Instance Hour,2026-11-01,AmazonEC2 2026-11-21,SAE1-BoxUsage:m7g.large
+ec2.c7g.large.od_h,sa-east-1,0.1111,Hrs,$0.1111 per On Demand Linux c7g.large Instance Hour,2026-11-01,AmazonEC2 2026-11-21,SAE1-BoxUsage:c7g.large
+rds.pg.t4g.medium.single_h,sa-east-1,0.137,Hrs,$ 0.137 per RDS db.t4g.medium Single-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-InstanceUsage:db.t4g.medium
+rds.pg.t4g.medium.multi_h,sa-east-1,0.275,Hrs,$ 0.275 per RDS db.t4g.medium Multi-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-Multi-AZUsage:db.t4g.medium
+rds.pg.m7g.large.single_h,sa-east-1,0.221,Hrs,USD 0.221 per RDS db.m7g.large Single-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-InstanceUsage:db.m7g.large
+rds.pg.m7g.large.multi_h,sa-east-1,0.442,Hrs,USD 0.442 per RDS db.m7g.large Multi-AZ instance hour (or partial hour) running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-Multi-AZUsage:db.m7g.large
+rds.gp3.single_gb_mo,sa-east-1,0.219,GB-Mo,$0.219 per GB-month of provisioned GP3 storage running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-RDS:GP3-Storage
+rds.gp3.multi_gb_mo,sa-east-1,0.438,GB-Mo,$0.438 per GB-month of provisioned GP3 storage for Multi-AZ deployments running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-RDS:Multi-AZ-GP3-Storage
+rds.backup_gb_mo,sa-east-1,0.095,GB-Mo,$0.095 per additional GB-month of backup storage exceeding free allocation running PostgreSQL,2026-11-01,AmazonRDS 2026-11-20,SAE1-RDS:ChargedBackupUsage
+vpc.endpoint_h,sa-east-1,0.021,Hrs,$0.021 per VPC Endpoint Hour,2026-11-17,AmazonVPC 2026-11-23,SAE1-VpcEndpoint-Hours
+vpc.endpoint_gb,sa-east-1,0.01,GB,$0.01 per GB for upto 1 PB monthly data processed by VPC Endpoints,2026-11-17,AmazonVPC 2026-11-23,SAE1-VpcEndpoint-Bytes
+vpc.ipv4_h,sa-east-1,0.005,Hrs,$0.005 per In-use public IPv4 address per hour,2026-11-17,AmazonVPC 2026-11-23,SAE1-PublicIPv4:InUseAddress
+nat.h,sa-east-1,0.093,Hrs,$0.093 per NAT Gateway Hour,2026-11-01,AmazonEC2 2026-11-21,SAE1-NatGateway-Hours
+nat.gb,sa-east-1,0.093,GB,$0.093 per GB Data Processed by NAT Gateways,2026-11-01,AmazonEC2 2026-11-21,SAE1-NatGateway-Bytes
+ebs.gp3_gb_mo,sa-east-1,0.152,GB-Mo,$0.152 per GB-month of General Purpose (gp3) provisioned storage - South America (Sao Paulo),2026-11-01,AmazonEC2 2026-11-21,SAE1-EBS:VolumeUsage.gp3
+ebs.snapshot_gb_mo,sa-east-1,0.068,GB-Mo,$0.068 per GB-Month of snapshot data stored - South America (Sao Paulo),2026-11-01,AmazonEC2 2026-11-21,SAE1-EBS:SnapshotUsage
+alb.h,sa-east-1,0.034,Hrs,$0.034 per Application LoadBalancer-hour (or partial hour),2026-11-01,AWSELB 2026-11-19,SAE1-LoadBalancerUsage
+alb.lcu_h,sa-east-1,0.011,LCU-Hrs,$0.011 per used Application load balancer capacity unit-hour (or partial hour),2026-11-01,AWSELB 2026-11-19,SAE1-LCUUsage
+kms.key_mo,sa-east-1,1,Keys,$1 per customer managed KMS key version in South America (Sao Paulo),2026-11-01,awskms 2026-11-08,sa-east-1-KMS-Keys
+kms.request,sa-east-1,3e-06,Requests,$0.03 per 10000 KMS requests in South America (Sao Paulo),2026-11-01,awskms 2026-11-08,sa-east-1-KMS-Requests
+cw.logs_ingest_gb,sa-east-1,0.9,GB,$0.90 per GB custom log data ingested in Standard log class - South America (Sao Paulo),2026-11-01,AmazonCloudWatch 2026-11-19,SAE1-DataProcessing-Bytes
+cw.logs_store_gb_mo,sa-east-1,0.0408,GB-Mo,$0.0408 per GB-mo of log storage - South America (Sao Paulo),2026-11-01,AmazonCloudWatch 2026-11-19,SAE1-TimedStorage-ByteHrs
+cw.metric_mo,sa-east-1,0.3,Metrics,"$0.30 per metric-month for the first 10,000 metrics - South America (Sao Paulo)",2026-11-01,AmazonCloudWatch 2026-11-19,SAE1-CW:MetricMonitorUsage
+cw.alarm_mo,sa-east-1,0.135,Alarms,$0.135 per alarm metric month (standard resolution) - South America (Sao Paulo),2026-11-01,AmazonCloudWatch 2026-11-19,SAE1-CW:AlarmMonitorUsage
+sm.secret_mo,sa-east-1,0.4,Secrets,$0.40 per Secret,2026-11-01,AWSSecretsManager 2026-11-11,SAE1-AWSSecretsManager-Secrets
+sm.api,sa-east-1,5e-06,API Requests,$0.05 per 10000 API Requests,2026-11-01,AWSSecretsManager 2026-11-11,SAE1-AWSSecretsManagerAPIRequest
+s3.std_gb_mo,sa-east-1,0.0405,GB-Mo,$0.0405 per GB - first 50 TB / month of storage used,2026-11-01,AmazonS3 2026-11-21,SAE1-TimedStorage-ByteHrs
+s3.put,sa-east-1,7e-06,Requests,"$0.007 per 1,000 PUT, COPY, POST, or LIST requests",2026-11-01,AmazonS3 2026-11-21,SAE1-Requests-Tier1
+sqs.request,sa-east-1,4e-07,Requests,$0.40 per million Amazon SQS standard requests in Tier1 in South America (Sao Paulo),2026-11-01,AWSQueueService 2026-11-11,SAE1-Requests-Tier1
+sns.request,sa-east-1,5e-07,Requests,"$0.50 per 1,000,000 Amazon SNS API Requests per month thereafter",2026-11-01,AmazonSNS 2026-11-22,SAE1-Requests-Tier1
+dt.out_gb,sa-east-1,0.15,GB,$0.150 per GB - up to 10 TB / month data transfer out,2026-11-01,AWSDataTransfer 2026-11-19,SAE1-DataTransfer-Out-Bytes
+dt.inter_az_gb,sa-east-1,0.01,GB,$0.010 per GB - regional data transfer - in/out/between EC2 AZs or using elastic IPs or ELB,2026-11-01,AWSDataTransfer 2026-11-19,SAE1-DataTransfer-Regional-Bytes
+config.item,sa-east-1,0.003,SAE1-ConfigurationItemRecorded,$0.003 per  Configuration Item recorded in South America (Sao Paulo) region,2026-11-01,AWSConfig 2026-11-08,SAE1-ConfigurationItemRecorded
+ec2.m7g.large.ri1y_nu_h,sa-east-1,0.0806,Hrs,"1yr No Upfront standard: Linux/UNIX (Amazon VPC), m7g.large reserved instance applied",2026-11-21,AmazonEC2 2026-11-21,SAE1-BoxUsage:m7g.large
+ec2.m7g.large.ri3y_nu_h,sa-east-1,0.0588,Hrs,"3yr No Upfront standard: Linux/UNIX (Amazon VPC), m7g.large reserved instance applied",2026-11-21,AmazonEC2 2026-11-21,SAE1-BoxUsage:m7g.large
+rds.pg.m7g.large.multi.ri1y_nu_h,sa-east-1,0.3403,Hrs,"1yr No Upfront standard: PostgreSQL, db.m7g.large reserved instance applied",2026-11-20,AmazonRDS 2026-11-20,SAE1-Multi-AZUsage:db.m7g.large
+dt.inter_region_to_us-east-1_gb,sa-east-1,0.138,GB,$0.138 per GB - South America (Sao Paulo) data transfer to US East (Northern Virginia),2026-11-01,AWSDataTransfer 2026-11-19,SAE1-USE1-AWS-Out-Bytes
+sp.fargate.arm.vcpu_h.1y_nu,sa-east-1,0.04386,Hrs,1 year No Upfront Compute Savings Plan - Fargate-ARM-vCPU-Hours:perCPU,2026-11-23,AWSComputeSavingsPlan 2026-11-23,SAE1-Fargate-ARM-vCPU-Hours:perCPU
+sp.fargate.arm.gb_h.1y_nu,sa-east-1,0.00482,Hrs,1 year No Upfront Compute Savings Plan - Fargate-ARM-GB-Hours,2026-11-23,AWSComputeSavingsPlan 2026-11-23,SAE1-Fargate-ARM-GB-Hours
+spot.m7g.large.savings_pct,us-east-1,58,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção >20%,,spot-advisor-data.json,
+spot.c7g.large.savings_pct,us-east-1,57,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção 5-10%,,spot-advisor-data.json,
+spot.t4g.small.savings_pct,us-east-1,57,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção 5-10%,,spot-advisor-data.json,
+spot.m7g.large.savings_pct,sa-east-1,38,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção >20%,,spot-advisor-data.json,
+spot.c7g.large.savings_pct,sa-east-1,27,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção >20%,,spot-advisor-data.json,
+spot.t4g.small.savings_pct,sa-east-1,70,percent,Spot Instance Advisor: economia sobre sob demanda; interrupção >20%,,spot-advisor-data.json,

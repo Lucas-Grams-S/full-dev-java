@@ -1,0 +1,39 @@
+server:
+  tomcat:
+    threads:
+      max: 10        # um Tomcat PEQUENO de propósito: o efeito aparece com 30 requisições
+spring:
+  threads:
+    virtual:
+      enabled: false # plataforma, como o padrão do Boot (decisão 113: virtuais só depois de medir)
+resilience4j:
+  retry:
+    instances:
+      notif:
+        max-attempts: 3
+        wait-duration: 20ms
+        retry-exceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+  circuitbreaker:
+    instances:
+      notif:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 2s
+        record-exceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+  bulkhead:
+    instances:
+      notif:
+        max-concurrent-calls: 4
+        max-wait-duration: 0
+  ratelimiter:
+    instances:
+      notif:
+        limit-for-period: 1000
+        limit-refresh-period: 1s
+        timeout-duration: 0

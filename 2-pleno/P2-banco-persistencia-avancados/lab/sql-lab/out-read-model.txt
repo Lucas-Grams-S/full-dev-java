@@ -1,0 +1,20 @@
+Time: 4744.104 ms (00:04.744)
+Time: 1042.410 ms (00:01.042)
+ linhas | tamanho 
+--------+---------
+ 983338 | 119 MB
+(1 row)
+
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Index Scan using ledger_monthly_account_id_month_type_idx on ledger_monthly (actual time=0.182..0.188 rows=50.00 loops=1)
+   Index Cond: (account_id = '01a1d7cf-1449-7de9-8e24-a37b33139710'::uuid)
+   Index Searches: 1
+   Buffers: shared read=4
+ Planning:
+   Buffers: shared hit=12
+ Planning Time: 0.305 ms
+ Execution Time: 0.342 ms
+(8 rows)
+
+Time: 8996.517 ms (00:08.997)

@@ -1,0 +1,90 @@
+name: Infrastructure
+
+on:
+  pull_request:
+    paths: ['deploy/terraform/**', '.github/workflows/infra.yml']
+  push:
+    branches: [main]
+    paths: ['deploy/terraform/**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infra-${{ github.ref }}
+  cancel-in-progress: false      # never cancel an apply in the middle (the state lock would stay)
+
+jobs:
+  plan:
+    name: terraform plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: infrastructure-plan   # no reviewers; only gives the OIDC token a fixed "sub" claim
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: 1.17.2
+          terraform_wrapper: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.TF_PLAN_ROLE_ARN }}    # READ-ONLY role: a PR can plan, never change
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Init (remote state with S3 native lock)
+        working-directory: deploy/terraform/envs/study
+        run: terraform init -input=false -backend-config=backend.hcl
+      - name: "Plan (saved: apply will use EXACTLY this file)"
+        working-directory: deploy/terraform/envs/study
+        run: terraform plan -input=false -lock-timeout=60s -out=tfplan
+      - name: Human-readable summary on the run page
+        working-directory: deploy/terraform/envs/study
+        run: |
+          {
+            echo '### terraform plan'
+            echo '```'
+            terraform show -no-color tfplan | tail -n 60
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: "Keep the plan file (it may contain secrets: short retention, private artifact)"
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tfplan
+          path: deploy/terraform/envs/study/tfplan
+          retention-days: 1
+
+  apply:
+    name: terraform apply (main only, with approval)
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: infrastructure      # required reviewers on this environment
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: 1.17.2
+          terraform_wrapper: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.TF_APPLY_ROLE_ARN }}   # the only role allowed to change infrastructure
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: tfplan
+          path: deploy/terraform/envs/study
+      - name: Init and apply the plan that was reviewed
+        working-directory: deploy/terraform/envs/study
+        run: |
+          terraform init -input=false -backend-config=backend.hcl
+          terraform apply -input=false tfplan

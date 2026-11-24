@@ -1,0 +1,4 @@
+imagem: azul/zulu-openjdk:25-jdk-crac | OpenJDK 64-Bit Server VM Zulu25.38+109-CRaC-CA (build 25.0.5.0.3+1-LTS, mixed mode, sharing)
+checkpoint: 33412 KB em disco (core.img engine )
+JVM normal (docker run ate o 1o 200)           mediana=  217 ms  min=  205  max=  228
+restore do checkpoint CRaC (idem)              mediana=  176 ms  min=  168  max=  180

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package payflow.lab.evolution;
+
+option java_multiple_files = true;
+option java_package = "com.payflow.lab.grpc.evolution";
+
+// SÓ PARA O LABORATÓRIO: três "versões" da mesma mensagem, para provar o que é e o que não é compatível.
+message ReplyV1 {
+  string id = 1;
+  int32 score = 2;
+}
+
+// compatível: campo NOVO com número NOVO
+message ReplyV2Compatible {
+  string id = 1;
+  int32 score = 2;
+  string model_version = 3;
+}
+
+// PERIGOSO: reutiliza o número 2 com outro tipo
+message ReplyV2Broken {
+  string id = 1;
+  string reason = 2;
+}

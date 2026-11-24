@@ -1,0 +1,37 @@
+## G) swap: legacy table becomes the first partition of a new partitioned ledger_entries
+-- 1. online preparation (no long lock): unique index including the future partition key, and a validated CHECK equal to the bound
+   preparation took 1670 ms
+-- 2. start the load (reads and inserts, 4 clients each, 12 s) and swap in the middle
+NOTICE:  ALTER TABLE / ADD CONSTRAINT USING INDEX will rename index "uk_ledger_id_created" to "pk_ledger_entries_legacy"
+   the swap transaction took 190 ms (rename + create + attach + partitions + trigger)
+   pgbench r:
+     number of transactions actually processed: 8725
+     number of failed transactions: 0 (0.000%)
+     latency average = 5.501 ms
+     max latency 63.7 ms over 8725 transactions
+   pgbench w:
+     number of transactions actually processed: 3143
+     number of failed transactions: 0 (0.000%)
+     latency average = 15.276 ms
+     max latency 85.2 ms over 3143 transactions
+-- 3. result
+                                     ?column?                                      
+-----------------------------------------------------------------------------------
+ partitions: ledger_entries_2026_11, ledger_entries_2026_12, ledger_entries_legacy
+(1 row)
+
+                                  ?column?                                   
+-----------------------------------------------------------------------------
+ rows per partition: ledger_entries_2026_11=1, ledger_entries_legacy=3003143
+(1 row)
+
+ERROR:  ledger_entries is append-only (UPDATE blocked)
+CONTEXT:  PL/pgSQL function ledger_append_only() line 2 at RAISE
+ERROR:  ledger_entries is append-only (UPDATE blocked)
+CONTEXT:  PL/pgSQL function ledger_append_only() line 2 at RAISE
+-- the append-only trigger does NOT stop the removal of a whole partition (here: the one that holds the row inserted above):
+                                     ?column?                                      
+-----------------------------------------------------------------------------------
+ partition dropped with the trigger in place; rows left in ledger_entries: 3003143
+(1 row)
+

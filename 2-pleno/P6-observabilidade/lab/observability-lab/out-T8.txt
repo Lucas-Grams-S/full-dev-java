@@ -1,0 +1,17 @@
+T8 Checking /p/alerts.yml
+T8   SUCCESS: 12 rules found
+T8 
+T8 Processing test file: alerts.test.yml
+T8   SUCCESS
+T8 
+T8 pausa de lógica: Processing test file: histogram-pause.test.yml
+T8 pausa de lógica:   SUCCESS
+T8 pausa de lógica: 
+T8 --- regra QUEBRADA de propósito (5xx trocado por 4xx): o teste precisa reprovar
+T8   FAILED:
+T8     name: erros 5xx persistentes disparam,
+T8     alertname: PayflowHighErrorRatio, time: 6m, 
+T8     name: erros 5xx persistentes disparam,
+T8     alertname: PayflowHighErrorRatio, time: 12m, 
+T8     name: 4xx não dispara o alerta de erro,
+T8     alertname: PayflowHighErrorRatio, time: 15m, 

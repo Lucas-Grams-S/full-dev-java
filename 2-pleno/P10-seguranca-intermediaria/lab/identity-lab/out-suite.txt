@@ -1,0 +1,8 @@
+Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.783 s — security.ResourceServerTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.386 s — keycloak.KeycloakRealmIT
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.830 s — keycloak.AuthorizationCodePkceIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.115 s — keycloak.RefreshTokenRotationIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.533 s — keycloak.RealmPolicyIT
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.858 s — keycloak.ResourceServerKeycloakIT
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.217 s — secrets.SecretRotationIT
+Tests run: 54, Failures: 0, Errors: 0, Skipped: 0

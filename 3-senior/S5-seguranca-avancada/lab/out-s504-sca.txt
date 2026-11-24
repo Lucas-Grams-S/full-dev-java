@@ -1,0 +1,7 @@
+MODEL: dependency list x advisory list. The advisories below are SYNTHETIC (ids SYN-*, invented for the exercise); the real SCA run is run-trivy.sh.
+
+HIGH    SYN-0001 acme-json:2.3.1 direct deserialization of untrusted input fix: >= 2.4.0  | used by PayFlow? yes: PayFlow parses request bodies with it
+MEDIUM  SYN-0002 acme-codec:0.8.4 TRANSIT decompression bomb         fix: >= 0.9.0  | used by PayFlow? no: only used by a build-time tool
+
+SYN-0003 is not listed: the version check is what separates 'library present' from 'library vulnerable'.
+Reading: the transitive one (acme-codec) only shows up because the tool resolves the whole tree; 'reachable?' is a HUMAN column that cuts the noise, and it expires (next section).

@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyCreateWithoutCostCenter",
+      "Effect": "Deny",
+      "Action": ["ec2:RunInstances", "rds:CreateDBInstance"],
+      "Resource": "*",
+      "Condition": { "Null": { "aws:RequestTag/cost-center": "true" } }
+    }
+  ]
+}

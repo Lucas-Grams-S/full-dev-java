@@ -1,0 +1,8 @@
+$ trivy config terraform/   (summary per file, MEDIUM and above; ignores are inline with the reason)
+no findings
+$ trivy config (the SAME code with the inline ignores removed: what the ignores hide)
+modules/alb/main.tf  2  AWS-0053,AWS-0054
+modules/database/main.tf  3  AWS-0176,AWS-0177
+modules/messaging/main.tf  1  AWS-0136
+modules/network/main.tf  1  AWS-0178
+modules/observability/main.tf  1  AWS-0136

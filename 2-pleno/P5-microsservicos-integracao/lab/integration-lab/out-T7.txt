@@ -1,0 +1,4 @@
+T7 ARMADILHA (fallback no @CircuitBreaker): servidor recebeu 1 chamada(s) apesar de @Retry(3); resposta: {"channel":"EMAIL","source":"fallback","cause":"ServiceUnavailable"}
+T7 breaker OPEN: chamadas ao servidor nao cresceram (5 -> 5); fallback: {"channel":"EMAIL","source":"fallback","cause":"CallNotPermittedException"}
+T7 CORRETO (fallback no @Retry), 1 chamada logica com @Retry(3)+@CircuitBreaker: servidor recebeu 3 chamadas; o breaker registrou 3 falhas (estado CLOSED)
+T7 resposta do fallback: {"channel":"EMAIL","source":"fallback","cause":"ServiceUnavailable"}

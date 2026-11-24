@@ -1,0 +1,38 @@
+## A) who may remove data: the application role (not the owner) tries DELETE, DETACH and DROP
+ERROR:  permission denied for table ledger_p
+ERROR:  must be owner of table ledger_p
+ERROR:  must be owner of table ledger_p_2024_11
+
+## B) archive the oldest month (ledger_p_2024_11) in 5 verified steps
+-- 1. fingerprint BEFORE (row count, sum, md5 of every row in id order)
+123428 | 3181601.06 | edda20d750f0c202f66874ff651d6a29
+-- 1b. closing snapshot per account for that month: "balance = sum of the ledger" must survive the archive
+   net total of the WHOLE ledger before the archive: -15000.00
+-- 2. DETACH PARTITION CONCURRENTLY (queries on the ledger keep working; the month leaves the parent)
+   rows of that month still reachable through ledger_p: 0
+-- 3. export to compressed CSV + sha256
+4252d79c60c3fdb1795793357b7d1857527ffb9f30a0920bb62254bfe59eeda4  ledger_2024_11.csv.gz
+   csv.gz size: 5167K
+   table size: 21 MB
+   export took 700 ms
+-- 4. restore test: load the file into a scratch table and compare the fingerprint
+   restore took 520 ms
+123428 | 3181601.06 | edda20d750f0c202f66874ff651d6a29
+   fingerprints are IDENTICAL: safe to drop
+-- 5. manifest row, then DROP
+-[ RECORD 1 ]--+----------------------------------------------------------
+partition_name | ledger_p_2024_11
+row_count      | 123428
+amount_sum     | 3181601.06
+sha256         | 4252d79c60c3fdb1...
+location       | s3://payflow-ledger-archive/2024/11/ledger_2024_11.csv.gz
+
+-- 6. the invariant after the archive (sum of the ledger x opening snapshots)
+   whole ledger BEFORE:            -15000.00
+   live ledger only, AFTER drop:   -14417.14   <- no longer equals: the invariant would fire a false alarm
+   live ledger + period_balances:  -15000.00   <- equal again
+total time of the 5 steps: 4050 ms (3M-row ledger; this month = 123428 rows)
+
+## C) pg_dump (custom format, -Fc) of the NEXT month, for size comparison with the CSV above
+pg_dump -Fc ledger_p_2024_12: 5.2 MB
+table ledger_p_2024_12 (heap + indexes): 22 MB

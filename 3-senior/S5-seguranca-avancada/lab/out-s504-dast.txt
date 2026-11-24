@@ -1,0 +1,14 @@
+MODEL: a 3-request black-box probe against a tiny local app (HttpServer on 127.0.0.1). Secure cookie / HSTS are N/A over plain HTTP and not checked.
+
+app (VULNERABLE) -> 7 finding(s)
+  REFLECTED-XSS     payload came back unescaped in the HTML
+  MISSING-CSP       no Content-Security-Policy header
+  MISSING-NOSNIFF   no X-Content-Type-Options header
+  COOKIE-HTTPONLY   cookie without HttpOnly: SESSION
+  COOKIE-SAMESITE   cookie without SameSite
+  VERSION-BANNER    Server header reveals a version: Jetty(9.2.2.v20140723)
+  ERROR-LEAK        500 with a stack trace / SQL error in the body (org.postgresql.util.PSQLException: ERROR...)
+
+app (FIXED) -> 0 finding(s)
+
+Reading: DAST sees only what the running app shows to a request it thought of; it cannot see /admin if nobody sends it there, nor the IDOR that needs two logged-in users (S5.01 policy table).

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payflow
+    username: payflow
+    password: payflow
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+
+payflow:
+  security:
+    jwt:
+      secret: segredo-de-laboratorio-com-mais-de-32-bytes!

@@ -1,0 +1,40 @@
+### C2. Ordem errada (created_at, account_id) com conta NORMAL (≈250 lançamentos em 5 milhões)
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.722..15.763 rows=20.00 loops=1)
+   Buffers: shared hit=26 read=2212
+   ->  Index Scan using idx_wrong_order on ledger_entries (actual time=0.721..15.753 rows=20.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7fad-907d-993a01ec2a64'::uuid)
+         Index Searches: 1
+         Buffers: shared hit=26 read=2212
+ Planning:
+   Buffers: shared hit=37 read=3 dirtied=1
+ Planning Time: 0.351 ms
+ Execution Time: 15.782 ms
+(10 rows)
+
+### D. PostgreSQL 18 skip scan: índice (type, account_id, created_at) e consulta SEM type
+                                               QUERY PLAN                                               
+--------------------------------------------------------------------------------------------------------
+ Aggregate (actual time=10.328..10.329 rows=1.00 loops=1)
+   Buffers: shared hit=19 read=17
+   ->  Index Only Scan using idx_skip on ledger_entries (actual time=4.439..10.310 rows=211.00 loops=1)
+         Index Cond: (account_id = '01a1d7cf-1449-7fad-907d-993a01ec2a64'::uuid)
+         Heap Fetches: 0
+         Index Searches: 5
+         Buffers: shared hit=19 read=17
+ Planning:
+   Buffers: shared hit=26 read=1
+ Planning Time: 0.108 ms
+ Execution Time: 10.349 ms
+(11 rows)
+
+### E. Custo de escrita: 200 000 INSERTs com 2, 3 e 4 índices em ledger_entries
+Time: 53.319 ms
+     ?column?      
+-------------------
+ indices atuais: 4
+(1 row)
+
+Time: 10488.540 ms (00:10.489)
+psql:<stdin>:26: WARNING:  there is no transaction in progress

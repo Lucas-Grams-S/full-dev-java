@@ -1,0 +1,13 @@
+# ADR 0006 — Persistência com JPA: domínio com comportamento, serviços transacionais, associações `LAZY` e `open-in-view` desligado
+
+- **Status:** aceita (J5, 2026-11-13)
+- **Contexto:** na J3 o PayFlow acessava o banco com JDBC puro e SQL escrito à mão (inclusive o depósito como `UPDATE accounts SET balance = balance + ?`). Na J5 o acesso passa a Spring Data JPA/Hibernate. É preciso decidir **onde ficam as regras**, **onde começa e termina a transação**, **como carregar associações** e **o que fazer com a sessão do Hibernate na camada web**.
+- **Opções:** (1) manter JDBC e só colocar o Spring em volta; (2) JPA com **entidades anêmicas** (só getters/setters) e regras nos serviços; (3) JPA com **entidades com comportamento** (`Account.deposit/withdraw`), serviços finos e transacionais, `LAZY` em todas as associações e `open-in-view: false`; (4) o mesmo com `open-in-view: true` (padrão do Boot) e `EAGER` para "facilitar" os templates.
+- **Decisão:** opção 3. As **regras e invariantes** (valor válido, conta ativa, saldo nunca negativo) ficam **no domínio** (`Account`, `Amounts`); os **serviços** (`AccountService`, `TransferService`, `TransferHistoryService`) orquestram e carregam `@Transactional` (uma transação por caso de uso; consultas com `readOnly = true`); todo `@ManyToOne` é **`LAZY`**; **`spring.jpa.open-in-view: false`**; telas e APIs de leitura usam **projeções em DTO** ou `JOIN FETCH`/`@EntityGraph` e o número de consultas é **fixado em teste**; entidades **não** vão para a sessão, o JSON nem o formulário; **sem `cascade`**; `LedgerEntry` é `@Immutable` (regra 5) e recebe a hora do `Clock`.
+- **Consequências:**
+  - (+) As regras do dinheiro estão em um lugar testável sem banco e não se espalham pelos controllers; o rollback cobre débito, crédito, transferência e os dois lançamentos (regra 2).
+  - (+) Nenhuma consulta escondida em template (sem OSIV), nenhum `JOIN` não pedido (sem `EAGER`); N+1 vira falha de teste, não incidente.
+  - (−) O depósito deixou de ser um `UPDATE` atômico no banco e virou **ler-alterar-gravar**: duas escritas concorrentes na mesma conta produzem `ObjectOptimisticLockingFailureException` (a `@Version` impede o *lost update*), que o PayFlow **ainda não trata** (retentativa, locking pessimista, `UPDATE` atômico: P2).
+  - (−) Mais disciplina: a camada web precisa receber dados completos (DTO/`JOIN FETCH`) e `LazyInitializationException` é o sinal de que faltou carregar algo.
+  - (−) O Hibernate gera `UPDATE` com **todas** as colunas (sem `@DynamicUpdate`); aceito.
+  - Descoberta registrada: `@Immutable` combinado com `@Generated` **falha ao gravar** (`Lock mode WRITE not supported for read-only entity`); o `created_at` do `LedgerEntry` é definido pela aplicação.

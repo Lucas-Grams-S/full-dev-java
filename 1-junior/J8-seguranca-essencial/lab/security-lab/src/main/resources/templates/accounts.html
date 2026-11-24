@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Minhas contas · PayFlow</title></head>
+<body>
+<header>
+  <span th:text="${user.fullName}">Ana Silva</span>
+  <form th:action="|/logout|" method="post"><button type="submit">Sair</button></form>
+</header>
+<main>
+  <h1>Minhas contas</h1>
+  <ul><li th:each="account : ${accounts}" th:text="${account.id} + ' · ' + ${account.balance}">conta</li></ul>
+</main>
+</body>
+</html>

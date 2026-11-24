@@ -1,0 +1,19 @@
+MODEL: review scope = components x STRIDE (P10.07). Every cell must be REVIEWED, N/A with a reason, or explicitly OUT-OF-SCOPE with who accepted it. Silence is not allowed.
+
+                S    T    R    I    D    E    
+api             ok   ok   ok   ok   ok   ok   
+ledger-db       ok   ok   ok   ok   na   ok   
+keycloak        ok   ok   ok   ok   ok   ok   
+outbox/broker   ok   ok   ??   ok   na   ok   
+pipeline        ok   ok   ok   ??   ??   ok   
+backups         na   ok   ??   ok   ok   ok   
+
+legend: ok = reviewed, na = N/A with a written reason, ?? = silent (not reviewed, no reason). Columns (STRIDE): S = Spoofing, T = Tampering, R = Repudiation, I = Information disclosure, D = Denial of service, E = Elevation of privilege
+coverage: 32/36 cells decided; silent cells: [outbox/broker/R, pipeline/I, pipeline/D, backups/R]
+verdict: FAIL: the review cannot say 'no more findings' while these cells are silent
+N/A reasons recorded:
+  backups/S -> N/A: backups have no interactive identity
+  ledger-db/D -> N/A: availability of the DB is S4 (SLO), not this review
+  outbox/broker/D -> N/A: covered by the S4.04 experiments
+
+Reading: 'we found nothing' only means something if the report says what was looked at. An empty cell is the most common place for the real finding.

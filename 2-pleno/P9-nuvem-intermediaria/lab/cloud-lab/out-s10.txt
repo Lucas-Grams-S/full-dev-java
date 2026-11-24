@@ -1,0 +1,24 @@
+$ terraform plan -out=second   (second run, nothing changed in the code)
+Plan: 0 to add, 16 to change, 0 to destroy.
+$ attributes that differ, per resource (all of them are emulator artifacts: see the lesson)
+app.aws_iam_role_policy.task  ->  
+database.aws_db_parameter_group.pg18  ->  parameter
+exporter.aws_lambda_alias.live  ->  
+exporter.aws_lambda_function.exporter  ->  snap_start
+messaging.aws_sqs_queue.main["antifraud"]  ->  redrive_policy
+messaging.aws_sqs_queue.main["notifications"]  ->  redrive_policy
+messaging.aws_sqs_queue_policy.from_sns["antifraud"]  ->  
+messaging.aws_sqs_queue_policy.from_sns["notifications"]  ->  
+network.aws_vpc_security_group_egress_rule.alb_to_app_http  ->  referenced_security_group_id
+network.aws_vpc_security_group_egress_rule.alb_to_app_mgmt  ->  referenced_security_group_id
+network.aws_vpc_security_group_egress_rule.app_to_db  ->  referenced_security_group_id
+network.aws_vpc_security_group_egress_rule.app_to_endpoints  ->  referenced_security_group_id
+network.aws_vpc_security_group_ingress_rule.app_from_alb_http  ->  referenced_security_group_id
+network.aws_vpc_security_group_ingress_rule.app_from_alb_mgmt  ->  referenced_security_group_id
+network.aws_vpc_security_group_ingress_rule.db_from_app  ->  referenced_security_group_id
+network.aws_vpc_security_group_ingress_rule.endpoints_from_app  ->  referenced_security_group_id
+$ terraform destroy
+Destroy complete! Resources: 96 destroyed.
+(destroy took 113s)
+$ what is left in the emulator?
+vpcs (non-default): 0  queues: 0  topics: 0  alarms: 0  db instances: 0

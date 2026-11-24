@@ -1,0 +1,15 @@
+$ aws sns publish x3 (TransferCompleted, TransferFailed, TransferCompleted) with the eventType message attribute
+notifications queue: 3 messages   (filter: TransferCompleted + TransferFailed)
+antifraud queue:     2 messages   (filter: TransferCompleted)
+$ aws sns publish WITHOUT the eventType attribute
+notifications queue: 3   antifraud queue: 2   <- unchanged: a filter policy drops the message silently
+$ aws sqs receive-message (raw delivery: the body is exactly the event)
+{"type":"TransferCompleted","amount":"10.00"}
+$ queue attributes that matter
+{"VisibilityTimeout":"60","ReceiveMessageWaitTimeSeconds":"20","RedrivePolicy":"{\"deadLetterTargetArn\": \"<sqs>:payflow-notifications-dlq\", \"maxReceiveCount\": 5}","MessageRetentionPeriod":"345600","SqsManagedSseEnabled":"true"}
+{"dlq_retention":"1209600"}
+
+$ EventBridge: put-events on the custom bus (MonthEnd from payflow.reporting) and one with another source
+FailedEntryCount: 0
+reporting queue: 1 message(s)  (only the matching event arrived)
+{"source":"payflow.reporting","detail-type":"MonthEnd","detail":{"month":"2026-10"}}

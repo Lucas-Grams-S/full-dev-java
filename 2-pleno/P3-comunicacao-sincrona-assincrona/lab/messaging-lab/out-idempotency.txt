@@ -1,0 +1,5 @@
+IDEMPOTENTE_SEQUENCIAL resultados=[true, false, false, false, false] saldo=900.00 pagamentos=1
+SEM_PROTECAO saldo=700.00 pagamentos=3
+IDEMPOTENTE_CONCORRENTE(8 threads) saldo=900.00 pagamentos=1
+INGENUO_CONCORRENTE(8 threads) saldo=200.00 pagamentos=8
+FALHA DataIntegrityViolationException

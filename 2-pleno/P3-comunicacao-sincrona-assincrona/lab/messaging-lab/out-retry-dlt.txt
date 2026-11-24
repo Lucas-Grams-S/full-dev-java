@@ -1,0 +1,33 @@
+[kafka] ok-1 tentativa 1
+[kafka] flaky-1 tentativa 1
+[kafka] flaky-1 tentativa 2
+[kafka] flaky-1 tentativa 3
+[kafka] bad-data-1 tentativa 1
+[kafka] poison-1 tentativa 1
+[kafka] poison-1 tentativa 2
+[kafka] poison-1 tentativa 3
+[kafka] poison-1 tentativa 4
+[kafka] poison-1 tentativa 5
+[kafka] ok-2 tentativa 1
+TEMPO_TOTAL_MS=5261
+PROCESSADAS=[ok-1, flaky-1, ok-2]
+TENTATIVAS={bad-data-1=1, flaky-1=3, ok-1=1, ok-2=1, poison-1=5}
+DLT valor=bad-data-1 particao=0
+   kafka_dlt-exception-cause-fqcn=java.lang.IllegalArgumentException
+   kafka_dlt-original-topic=lab.retry
+   kafka_dlt-original-consumer-group=lab-retry
+DLT valor=poison-1 particao=0
+   kafka_dlt-exception-cause-fqcn=java.lang.IllegalStateException
+   kafka_dlt-original-topic=lab.retry
+   kafka_dlt-original-consumer-group=lab-retry
+[kafka-rt] poison-rt tentativa 1
+[kafka-rt] ok-rt tentativa 1
+[kafka-rt] poison-rt tentativa 2
+[kafka-rt] poison-rt tentativa 3
+RT_DLT=[lab.rt-dlt:poison-rt]
+RT_TOPICOS=[lab.rt, lab.rt-dlt, lab.rt-retry-1000, lab.rt-retry-500]
+[rabbit] poison-r1 tentativa 1
+[rabbit] poison-r1 tentativa 2
+[rabbit] poison-r1 tentativa 3
+[rabbit] ok-r1 tentativa 1
+RABBIT_DLQ corpo=poison-r1 x-death=[{reason=rejected, count=1, exchange=, time=Sat Nov 14 01:45:50 GMT-03:00 2026, routing-keys=[lab.retry.work], queue=lab.retry.work}]

@@ -1,0 +1,12 @@
+waivers:
+  - id: CVE-EXAMPLE-0002
+    reason: upgrade scheduled
+    owner: payments-team
+    until: 2026-11-10
+  - id: CVE-EXAMPLE-0003
+    reason: we will look at it later
+    owner: ""
+    until: 2028-01-01
+  - id: CVE-EXAMPLE-0004
+    owner: data-team
+    until: 2027-01-01

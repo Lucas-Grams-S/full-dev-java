@@ -1,0 +1,14 @@
+## F) the alternative that looks easier: a GENERATED column (PostgreSQL 18)
+-- VIRTUAL (computed on read, no table rewrite) with the user-defined normalize_phone_br:
+ERROR:  generation expression uses user-defined function
+DETAIL:  Virtual generated columns that make use of user-defined functions are not yet supported.
+-- STORED (computed on write): does the table file change, and how long does ACCESS EXCLUSIVE last?
+Time: 3272.029 ms (00:03.272)
+              ?column?               
+-------------------------------------
+ table file replaced (rewrite): true
+(1 row)
+
+-- a generated column cannot be written by the application:
+ERROR:  column "phone_stored" can only be updated to DEFAULT
+DETAIL:  Column "phone_stored" is a generated column.

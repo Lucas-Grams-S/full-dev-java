@@ -1,0 +1,4 @@
+DLQ headers x-death=[{reason=rejected, count=1, exchange=, time=Sat Nov 14 01:45:51 GMT-03:00 2026, routing-keys=[lab.work.9e1acef7], queue=lab.work.9e1acef7}]
+COMPETING {A=10, B=10}
+REDELIVERED=true
+TOPIC transfer.# -> [t1, t2] | transfer.*.brl -> [t1] | fanout -> [a1]

@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: payflow-obs-lab
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+server:
+  shutdown: graceful
+logging:
+  pattern:
+    level: "%5p requestId=%X{requestId:-}"       # decisão 38; o traceId vem do `logging.pattern.correlation` do Boot
+management:
+  server:
+    port: 8081                                    # porta de gestão separada: não é publicada nem roteada pelo gateway
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+      group:
+        liveness:
+          include: livenessState                  # SÓ o processo; nunca banco nem rede
+        readiness:
+          include: readinessState,db              # banco = crítico; o serviço de risco (opcional) fica de fora
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+        http.client.requests: true                # histograma é opt-in POR medidor (sem isto, o painel de p95 do cliente fica vazio)
+      slo:
+        http.server.requests: 50ms,100ms,250ms,500ms,1s,2s
+  otlp:
+    metrics:
+      export:
+        enabled: false                            # métricas por Prometheus (pull); o starter liga OTLP por padrão
+  tracing:
+    sampling:
+      probability: 1.0                            # laboratório; produção: 0.1 (padrão) ou menos, com cauda no coletor
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces

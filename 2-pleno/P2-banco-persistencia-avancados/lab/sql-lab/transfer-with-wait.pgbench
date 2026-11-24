@@ -1,0 +1,14 @@
+\set s random(1, 20000)
+\set t random(1, 20000)
+\set lo least(:s, :t)
+\set hi greatest(:s, :t)
+\set dlo case when :s < :t then -1 else 1 end
+\set dhi 0 - :dlo
+BEGIN;
+\sleep 4 ms
+UPDATE accounts SET balance = balance + :dlo, version = version + 1 WHERE id = (SELECT id FROM lab_acc WHERE n = :lo);
+UPDATE accounts SET balance = balance + :dhi, version = version + 1 WHERE id = (SELECT id FROM lab_acc WHERE n = :hi);
+\sleep 4 ms
+INSERT INTO ledger_entries (account_id, type, amount) SELECT id, 'DEBIT', 1 FROM lab_acc WHERE n = :s;
+INSERT INTO ledger_entries (account_id, type, amount) SELECT id, 'CREDIT', 1 FROM lab_acc WHERE n = :t;
+END;

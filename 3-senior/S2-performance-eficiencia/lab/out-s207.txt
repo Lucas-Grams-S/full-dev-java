@@ -1,0 +1,11 @@
+JVM: openjdk version "25.0.5.0.3" 2026-10-24  | 15 execucoes por variante | 12 nucleos
+padrao (CDS do JDK ligado)                   mediana= 227 ms  min= 220  max= 236  RSS pico=84 MB
+-Xshare:off (sem CDS)                        mediana= 273 ms  min= 267  max= 297  RSS pico=82 MB
+-XX:TieredStopAtLevel=1 (so C1)              mediana= 199 ms  min= 195  max= 202  RSS pico=78 MB
+AppCDS (-XX:SharedArchiveFile)               mediana= 159 ms  min= 156  max= 169  RSS pico=79 MB
+cache AOT (-XX:AOTCache, JDK 25)             mediana= 116 ms  min= 111  max= 123  RSS pico=72 MB
+cache AOT + TieredStopAtLevel=1              mediana=  99 ms  min=  97  max= 103  RSS pico=69 MB
+arquivo app.aot: 23.3 MB
+arquivo app.jsa: 8.1 MB
+native-image: compilacao em 44 s; binario 32 MB; 34.52MB in total image size, 32.64MB in total file size;3.0s (6.9% of total time) in 1083 GCs | Peak RSS: 1.86GB | CPU l
+native image (binario)                       mediana=  11 ms  min=  10  max=  12  RSS pico=27 MB

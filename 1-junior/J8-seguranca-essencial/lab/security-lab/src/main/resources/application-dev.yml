@@ -1,0 +1,10 @@
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+payflow:
+  security:
+    jwt:
+      secret: dev-only-secret-never-use-in-production-0123456789abcdef   # SÓ no dev; produção: PAYFLOW_SECURITY_JWT_SECRET

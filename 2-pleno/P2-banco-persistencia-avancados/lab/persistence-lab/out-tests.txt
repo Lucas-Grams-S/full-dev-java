@@ -1,0 +1,81 @@
+>>>>> PESSIMISTIC_WRITE + lock.timeout=0 (NOWAIT)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.762 s -- in com.payflow.lab.SqlShapeIT
+L2 ligado: 3 leituras de User em 3 transações -> 1 SELECT, L2 hits=2, misses=1, puts=1
+depois do UPDATE por fora, o L2 devolve: Ana
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.486 s -- in com.payflow.lab.SecondLevelCacheIT
+[padrão (sem batch_size)] JPA saveAll(20000)                           tempos(ms)=[1906, 1153, 1126, 1001]  mín=1001  PreparedStatements=20000
+[padrão (sem batch_size)] JPA persist + flush/clear a cada 50          tempos(ms)=[1011, 1013, 970, 1017]  mín=970  PreparedStatements=20000
+[padrão (sem batch_size)] JdbcTemplate.batchUpdate                     tempos(ms)=[257, 207, 204, 190]  mín=190  PreparedStatements=0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.70 s -- in com.payflow.lab.BatchOffIT
+SEM ordem + @Retryable(ConcurrencyFailureException): 0 falhas; tentativas = 3 (2 transferências)
+OTIMISTA sem retry: 1 de 8 passaram; exceções: [ObjectOptimisticLockingFailureException]
+UPDATE atômico: 10 de 16 saques de 100.00 passaram (saldo 1000.00)
+DEADLOCK -> org.springframework.dao.CannotAcquireLockException
+  causa raiz: PSQLException: ERROR: deadlock detected
+PESSIMISTA ordenado, 4 ida + 4 volta cruzadas: 0 falhas
+NOWAIT: falhou em 4 ms com org.springframework.dao.CannotAcquireLockException
+OTIMISTA com @Retryable: 0 falhas; tentativas totais = 28 (para 8 transferências)
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.97 s -- in com.payflow.lab.ConcurrencyIT
+transactional.lock=false: migrações aplicadas = 2; índice existe, valid=true
+PADRÃO: migrate() ainda rodando após 15 s? true
+  sessão: active | espera: virtualxid | CREATE INDEX CONCURRENTLY idx_ledger_entries_account_created
+  sessão: idle in transaction | espera: ClientRead | SELECT COUNT(*) FROM pg_namespace WHERE nspname=$1
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.89 s -- in com.payflow.lab.FlywayConcurrentIT
+CACHE INDISPONÍVEL (get): RedisConnectionFailureException -> seguindo para o banco
+CACHE INDISPONÍVEL (put): RedisConnectionFailureException -> seguindo para o banco
+TOLERANT: Redis fora -> resposta BalanceView[accountId=20000000-0000-0000-0000-000000000001, balance=1000.00, asOf=2026-11-14T02:34:28.950162478Z] em 181 ms; consultas ao banco: 1
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.443 s -- in com.payflow.lab.CacheOutageTolerantIT
+NOWAIT (hint lock.timeout=0):          CannotAcquireLockException após 3 ms
+hint lock.timeout=500 (PostgreSQL):    CannotAcquireLockException após 508 ms
+SET LOCAL lock_timeout = '500ms':       CannotAcquireLockException após 503 ms
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.059 s -- in com.payflow.lab.LockTimeoutIT
+JdbcClient -> record com Instant: OK
+JdbcClient -> record com OffsetDateTime: 3 linhas; 1ª = EntryLineOdt[id=01a1d7e8-264d-743a-bb04-ea69f7090629, type=CREDIT, amount=11.00, createdAt=2026-11-14T02:33:38.028996Z]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s -- in com.payflow.lab.JdbcClientIT
+default_batch_fetch_size=16: o MESMO laço ingênuo (20 transferências) -> 3 comandos SQL
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.316 s -- in com.payflow.lab.BatchFetchIT
+MXBean no meio da disputa: active=2 idle=0 total=2 threadsAwaiting=2
+resultado: ok
+resultado: ok
+resultado: CannotCreateTransactionException <- JDBCConnectionException <- SQLTransientConnectionException | payflow-pool - Connection is not available, request timed out after 1000ms (total=2, active=2, idle=0, waiting=0)
+resultado: CannotCreateTransactionException <- JDBCConnectionException <- SQLTransientConnectionException | payflow-pool - Connection is not available, request timed out after 1000ms (total=2, active=2, idle=0, waiting=0)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.759 s -- in com.payflow.lab.PoolIT
+[batch_size=50, order_inserts] JPA saveAll(20000)                           tempos(ms)=[714, 431, 444, 354]  mín=354  PreparedStatements=1
+[batch_size=50, order_inserts] JPA persist + flush/clear a cada 50          tempos(ms)=[395, 353, 346, 332]  mín=332  PreparedStatements=400
+[batch_size=50, order_inserts] JdbcTemplate.batchUpdate                     tempos(ms)=[209, 204, 204, 195]  mín=195  PreparedStatements=0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.641 s -- in com.payflow.lab.BatchOnIT
+put + get imediato, 500 chaves: escritor padrão = 0 'misses'; immediateWrites() = 0
+banco = 1050.00 | cache = 1000.00 (leitor devolveu 1000.00)
+advisors do proxy (mais externo primeiro): [BeanFactoryCacheOperationSourceAdvisor, BeanFactoryTransactionAttributeSourceAdvisor]
+evict dentro da transação do CHAMADOR, comum:           banco=1050.00 cache=1000.00
+evict dentro da transação do CHAMADOR, transactionAware: banco=1050.00 cache=1050.00
+null com disableCachingNullValues: java.lang.IllegalArgumentException: Cache 'balances' does not allow 'null' values; Avoid storing null via '@Cacheable(unless="#result == null")' or configure RedisCache to allow 'null' via RedisCacheConfiguration
+5 consultas a conta inexistente com unless=#result==null -> 5 idas ao banco (penetração)
+STAMPEDE sem sync: 20 threads, chave fria -> 20 consultas ao banco
+STAMPEDE sync=true com o escritor padrão: 20 consultas ao banco
+STAMPEDE sync=true com lockingRedisCacheWriter: 1 consulta(s) ao banco
+1ª: BalanceView[accountId=20000000-0000-0000-0000-000000000001, balance=1000.00, asOf=2026-11-14T02:34:51.948602374Z] | 2ª: BalanceView[accountId=20000000-0000-0000-0000-000000000001, balance=1000.00, asOf=2026-11-14T02:34:51.948602374Z] | consultas ao banco: 1
+chave Redis: payflow:balances::20000000-0000-0000-0000-000000000001 | TTL(s): 30 | valor: {"accountId":"20000000-0000-0000-0000-000000000001","balance":1000.00,"asOf":"2026-11-14T02:34:51.948602374Z"}
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.195 s -- in com.payflow.lab.CacheIT
+entidade (LedgerEntry completa) x 20             ->  1 comandos SQL
+projeção por interface x 20                      ->  1 comandos SQL
+record via JPQL (select new) x 20                ->  1 comandos SQL
+keyset: próximos 20 depois do último visto       ->  1 comandos SQL
+   keyset devolveu 10 (restam 10 dos 30)
+transfers ingênuo + nomes dos donos (20 transf.) -> 17 comandos SQL
+transfers @EntityGraph(source.owner, target.owner) ->  1 comandos SQL
+fora da transação: org.hibernate.LazyInitializationException: Could not initialize proxy [com.payflow.lab.domain.Account#01a1d7e8-5d18-75e2-a8e8-cb7593641c73] - no session
+join fetch de UMA coleção (entries), 1 dono      ->  1 comandos SQL
+   conta(s): 1, lançamentos da 1ª: 30
+   DUAS coleções (entries + sent) -> org.springframework.dao.InvalidDataAccessApiUsageException
+   causa raiz: org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags: [com.payflow.lab.domain.Account.entries, com.payflow.lab.domain.Account.sent]
+Page + join fetch de coleção (paginação!)        ->  2 comandos SQL
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.166 s -- in com.payflow.lab.FetchIT
+STRICT: Redis fora -> EXCEÇÃO org.springframework.data.redis.RedisConnectionFailureException em 3 ms; consultas ao banco: 0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 s -- in com.payflow.lab.CacheOutageStrictIT
+SERIALIZABLE: org.springframework.dao.CannotAcquireLockException
+SERIALIZABLE: contas de Ana: 3 (limite 3)
+READ COMMITTED: resultados [ok, ok] -> contas de Ana: 4 (limite 3)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.664 s -- in com.payflow.lab.IsolationIT
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS

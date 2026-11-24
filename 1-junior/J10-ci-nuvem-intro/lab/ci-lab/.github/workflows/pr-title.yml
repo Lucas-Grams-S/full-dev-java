@@ -1,0 +1,21 @@
+name: PR title
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  conventional-commits:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the title (Conventional Commits)
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}    # dado do usuario: SEMPRE por env, nunca inline no run
+        run: bash scripts/ci/check-pr-title.sh "$PR_TITLE"

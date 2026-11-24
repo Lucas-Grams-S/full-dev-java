@@ -1,0 +1,19 @@
+== promtool check rules
+Checking slo-rules.yml
+  SUCCESS: 17 rules found
+
+
+== promtool test rules (original)
+Processing test file: slo-rules.test.yml
+  SUCCESS
+
+
+== mutant M1: threshold 14.4 -> 144 (fast burn can no longer fire) -> the tests must FAIL
+  FAILED:
+    name: janela curta apaga a pagina depois da recuperacao,
+    alertname: PayflowTransfersAvailabilityBurnFast, time: 1h5m, 
+
+== mutant M2: short window removed (alert would stay on after recovery) -> the tests must FAIL
+  FAILED:
+    name: janela curta apaga a pagina depois da recuperacao,
+    alertname: PayflowTransfersAvailabilityBurnFast, time: 1h40m,

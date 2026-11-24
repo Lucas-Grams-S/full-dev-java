@@ -1,0 +1,14 @@
+# IDE
+.idea/
+*.iml
+
+# Build e ferramentas (os laboratórios recriam)
+target/
+.terraform/
+*.tfstate
+*.tfstate.*
+out-suite.raw
+
+# Sistema
+.DS_Store
+Thumbs.db

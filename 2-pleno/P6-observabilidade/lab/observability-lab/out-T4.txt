@@ -1,0 +1,19 @@
+T4 amostragem 0.0: spans exportados: 0
+T4 amostragem 0.0: traceId no log do ERROR: 8bab7d3c62eba3a3188a35edd307ce3e
+T4 atributos do span de negócio: AttributesMap{data={payflow.source.account=acc-1, outcome=completed}, capacity=128, totalAddedValues=2}
+T4 exemplar: Content-Type OpenMetrics: application/openmetrics-text;version=1.0.0;charset=utf-8
+T4 exemplar: linha: http_server_requests_seconds_bucket{application="payflow-obs-lab",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/transfers",le="0.447392426"} 1 # {span_id="006f038d0e865aff",trace_id="a5e01840d96156ff4d7ef3ea1c12d9e0"} 0.412982352 1794639321.896
+T4 RestClient.create(): mesmo traceId nos dois servidores?: false
+T4 RestClient.create(): spans CLIENT: 0
+T4 span com falha: ERROR eventos=[exception] outcome=failed
+T4 span de rejeição de negócio (422): OK
+T4 span: trace=0af765 id=18be3e parent=979393 kind=CLIENT   name=http get
+T4 span: trace=0af765 id=22bb58 parent=b7ad6b kind=SERVER   name=http post /api/v1/transfers
+T4 span: trace=0af765 id=979393 parent=22bb58 kind=INTERNAL name=payflow.transfer
+T4 span: trace=0af765 id=d68b89 parent=18be3e kind=SERVER   name=http get /internal/v1/risk
+T4 span: trace=509fc2 id=62d636 parent=- kind=SERVER   name=http get /internal/v1/risk
+T4 span: trace=ab5739 id=0c6d04 parent=ab2596 kind=CLIENT   name=http get
+T4 span: trace=ab5739 id=52e452 parent=0c6d04 kind=SERVER   name=http get /internal/v1/risk
+T4 span: trace=ab5739 id=ab2596 parent=eff3ec kind=INTERNAL name=payflow.transfer
+T4 span: trace=ab5739 id=eff3ec parent=- kind=SERVER   name=http post /api/v1/transfers
+T4 span: trace=d9ba24 id=a64277 parent=- kind=SERVER   name=http get /lab/plain-risk
