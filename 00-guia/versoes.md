@@ -5,7 +5,7 @@
 | Tecnologia | Versão adotada | Observação | Fonte |
 |---|---|---|---|
 | Java (JDK) | **25 (LTS)** — lançado em 2025-09-16 | Java 27 é a versão mais recente (não LTS). Spring Boot 4.1 aceita Java 17 até 27. | [dev.java/download](https://dev.java/download/) (cita Java 27), [Spring Boot system requirements](https://docs.spring.io/spring-boot/system-requirements.html) |
-| Spring Boot | **4.1.2** | 4.2 estava prevista para novembro de 2026; reconferir em J5. A linha 3.5 teve o último patch aberto em junho de 2026 (fonte secundária: HeroDevs). | [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot) |
+| Spring Boot | **4.1.2** | **O 4.2.0 foi publicado em 2026-11-19** (e o Spring AI 2.1.0, que exige o Boot 4.2.0). O treinamento **continua no 4.1.2** (decisão 290): migrar é um passo à parte, com as receitas do OpenRewrite da S7.04 e uma decisão sua (Correções pendentes). A linha 3.5 teve o último patch aberto em junho de 2026 (fonte secundária: HeroDevs). | [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot) |
 | Spring Framework | **7.0.x** (7.0.8 na página do projeto; Boot 4.1.2 exige 7.0.10+) | Gerenciado pelo Boot; não fixar à mão. | [spring.io/projects/spring-framework](https://spring.io/projects/spring-framework) |
 | Spring Security | **7.1.2** | | [spring.io/projects/spring-security](https://spring.io/projects/spring-security) |
 | Spring Data JPA | **4.1.2** | | [spring.io/projects/spring-data-jpa](https://spring.io/projects/spring-data-jpa) |

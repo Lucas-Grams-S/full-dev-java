@@ -1,6 +1,9 @@
 # P6 — Observabilidade
 
-> 🔵 Pleno · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **laboratório executado (Spring Boot 4.1.2, Micrometer 1.17.2, OpenTelemetry 1.62.0, Prometheus 3.16.0, Grafana 13.3.0, Jaeger 2.23.0, JDK 25.0.5; 31 testes sem Docker + `promtool` + pilha real + incidente simulado + `SIGTERM`); o PayFlow do aluno foi revisado apenas por leitura; testes práticos no fim do treinamento, por decisão do aluno**
+> 🔵 Pleno · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído em `~/docs/payflow`, tag `payflow-P6`).** **Executado:** `observability-lab`: **31/31** testes (sem Docker: logs ECS, `requestId`/`traceId`, métricas, saúde, traços); `promtool` (imagem `prom/prometheus`): `check rules` com **12 regras**, `alerts.test.yml` e `histogram-pause.test.yml` com **SUCCESS**, e o mutante (limiar de 5xx de 2% para 20%) **faz o teste falhar**. **Corrigido nas aulas:** nenhuma divergência entre as aulas e a execução. **Ainda não executado:** no PayFlow: o Micrometer/Prometheus, a porta de gestão 8081 com o papel `METRICS`, os traços OTLP, o `compose.observability.yaml`, a pilha Prometheus/Grafana/Jaeger e o incidente simulado (`run-stack.sh`, `incident.sh`, `shutdown-check.sh` do laboratório **não** foram reexecutados nesta rodada). Os avisos "não executado" / "revisado por leitura" nas aulas descrevem a escrita original.
 
 ## 🎯 Objetivo do módulo
 Enxergar o que o sistema faz em produção e **investigar incidentes**: **logs estruturados** com *correlation ID* (`requestId` e `traceId`), **métricas** (Micrometer + Prometheus) lidas pelos métodos **RED/USE**, **painéis** versionados no Git (Grafana), **alertas** por sintoma (testados com `promtool`), **tracing distribuído** com OpenTelemetry (Jaeger), **health checks** (*liveness* × *readiness*, desligamento gracioso) e o ensaio de um **incidente** do alerta ao *postmortem* sem culpa.

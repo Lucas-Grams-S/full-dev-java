@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟣 Sênior · Pré-requisitos: S3.01 a S3.09
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, **PostgreSQL 18** em Docker, **máquina compartilhada de 12 núcleos**; JDK 25.0.5): `lab/run-s301.sh` a `lab/run-s309-generated.sh` (migrações sem downtime, particionamento e *swap* com carga, réplica de *streaming* + roteamento em Java, arquivamento com restauração, busca em texto no PostgreSQL, *logical decoding* e *slots*, BRIN, analytics, migração de coluna com carga concorrente e mutante). **NÃO executados:** o **PayFlow do aluno** (Spring, JPA, Flyway), **OpenSearch/Elasticsearch**, **Debezium/Kafka Connect**, **RDS** (réplicas, Multi-AZ), **S3/Object Lock/Athena**, armazéns colunares, MongoDB/DynamoDB. Tudo isso é **leitura de documentação** (links conferidos) e **está marcado** nas aulas. Os **milissegundos mudam a cada execução**; as **ordens de grandeza** e os **mecanismos** não.
 
 ## Parte 1: Quiz (10 questões)

@@ -1,6 +1,9 @@
 # J9 — Docker essencial
 
-> 🟢 Júnior · ⏱️ 7.5h (5 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **laboratório executado; o PayFlow do aluno foi revisado por leitura; os testes práticos ficam para o fim do treinamento**
+> 🟢 Júnior · ⏱️ 7.5h (5 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído das aulas em `~/docs/payflow`, tag `payflow-J9`).** **Executado:** `docker compose up -d --build --wait` com `db` e `app` saudáveis; token JWT e login do painel por HTTP funcionam; processo como `uid=10001`; `docker stop` em 0,53 s (exit 143); banco não publicado; `docker inspect` sem valor de segredo; imagem de 445 MB. **Corrigido nas aulas:** o `Dockerfile` do PayFlow precisa de `COPY config ./config` (o Checkstyle da J7 roda em `validate`). **Ainda não executado:** os erros provocados do checkpoint (`chmod 600`, senha do banco com volume antigo, `ENTRYPOINT` em forma *shell*), o depurador JDWP, Docker Desktop, Docker Scout/Trivy, Hadolint, `spring-boot:build-image`, o cookie `Secure` em navegador real. Os avisos "não executado" / "revisado por leitura" que aparecem nas aulas descrevem o momento em que elas foram escritas.
 
 ## 🎯 Objetivo do módulo
 Empacotar e rodar o PayFlow em containers, com imagem enxuta e segura, ambiente completo por Compose e diagnóstico de problemas.

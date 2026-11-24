@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🔵 Pleno · Pré-requisitos: P3.01 a P3.13
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, JDK 25.0.5, 12 núcleos **compartilhados**, Docker): `lab/messaging-lab/` (Maven, Spring Boot **4.1.2**, Spring Kafka **4.1.2**, Spring AMQP **4.1.2**, ShedLock **7.11.0**, `kafka-clients` **4.2.2**, Reactor 2025.0.8) contra **Kafka 4.3.1** (KRaft, 1 nó), **RabbitMQ 4.4.0** e **PostgreSQL 18**: **47 testes `*IT`** (`mvn test` inteiro; contagem por classe em `lab/README.md`) e `lab/io-lab/IoLab.java` (JDK 25). **Não executado:** o PayFlow do aluno (tudo o que está em "Entrega prática"), Testcontainers de Kafka/RabbitMQ, Kafka com vários *brokers*/réplicas, TLS/SASL, *publisher confirms*, filas *quorum*, CDC/Debezium, `@RetryableTopic` com ordem, `sendOffsetsToTransaction`, WebSocket/SSE em navegador e atrás de *proxy*, WebFlux/`WebClient`/BlockHound.
 
 ## Parte 1: Quiz (10 questões)

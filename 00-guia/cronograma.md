@@ -460,3 +460,21 @@
 - [ ] Dia 5 — CK-S.6 — Checkpoint de nível Sênior (parte 6 de 6)
 
 **Total: 61 semanas** (~458h em 305 sessões).
+
+## Fase final — testes práticos (fora das 61 semanas)
+Ordem da Parte 7 de [`3-senior/checkpoint-senior.md`](../3-senior/checkpoint-senior.md) (decisões 182, 288 e 290). Marque `[x]` ao concluir; cada divergência entre a aula e o resultado **corrige a aula** e vira registro no `progresso.md`.
+- [x] 1a. J5 a J9 no PayFlow reconstruído (tags `payflow-J5` … `payflow-J9`; 256 testes; Compose saudável)
+- [x] 1b. J10: CI (`actionlint`, `./mvnw verify`) e scripts AWS contra o moto (tag `payflow-J10`); GitHub e AWS reais ficam 💸 pendentes (passos 3 e 4)
+- [ ] 1c. Pleno no PayFlow, módulo a módulo com `mvn verify` (tags `payflow-P1`…): **P1 a P4 feitos no PayFlow**; P5 e P6 só no laboratório (41/41 e 31/31); P7 no k3s; P8, P9 e P10 só nos laboratórios (moto, Keycloak real); Pleno **concluído** nesta rodada
+- [x] 2. P7: Kubernetes no k3s local (tag `payflow-P7`); **o *template* do chart que não aceita *digest* continua por corrigir** (medido: renderiza `payflow:sha256:...`)
+- [ ] 3. P8: GitHub Actions num repositório de teste (precisa da sua autorização)
+- [ ] 4. P9: 💸 alerta de custo **antes**; AWS real; `terraform destroy` e conferência (precisa de conta e de você)
+- [ ] 5. P10: Keycloak com o realm real, **T21** → `503`, rotação no RDS, cosign por *digest*
+- [x] 6. Mapa de migrações (item 2.10) e migrações em banco **vazio** e **com massa**: feito para as 16 que têm SQL (V19–V25 não têm arquivo nas aulas); achados no checkpoint Sênior
+- [ ] 7. S1: saga com falha injetada, os 5 testes de idempotência, CQRS com o projetor parado, limite com Redis
+- [ ] 8. S2: linha de base e k6 em modelo aberto até o joelho
+- [ ] 9. S3: partição com carga (`V19`/`V19_1`), arquivamento com restauração, réplica
+- [ ] 10. S4: `promtool` com os rótulos reais, *runbooks* no CI, caos E1, ensaio de restauração com RTO medido
+- [ ] 11. S5: política de autorização com mutantes, papéis do banco, V25, *pipeline* de segurança
+- [ ] 12. S6: 💸 só com conta, MFA e orçamento; sem conta, `terraform validate` e estimativa com preços novos
+- [ ] 13. S7 e S8: RFC-0001 decidida, `DocLab` e PIT no CI, README de portfólio num clone limpo, `LICENSE`

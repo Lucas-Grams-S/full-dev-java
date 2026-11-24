@@ -10,9 +10,9 @@ cd "$(git rev-parse --show-toplevel)"
 ALLOW='^(([^:]*/)?application-(dev|test)\.(yml|yaml|properties)|src/test/[^:]*|([^:]*/)?docs/[^:]*|[^:]*\.md):'
 status=0
 
-check() {   # check "descrição" "regex"
-  local hits
-  hits=$(git grep -nIE -e "$2" -- . 2>/dev/null | grep -Ev "$ALLOW" || true)
+check() {   # check "descrição" "regex" [pathspec...]  (sem pathspec: todos os arquivos rastreados)
+  local hits; local -a paths=("${@:3}"); [ ${#paths[@]} -eq 0 ] && paths=(.)
+  hits=$(git grep -nIE -e "$2" -- "${paths[@]}" 2>/dev/null | grep -Ev "$ALLOW" || true)
   if [ -n "$hits" ]; then
     echo "✗ $1:"; echo "$hits" | sed 's/^/    /'; status=1
   else
@@ -22,6 +22,6 @@ check() {   # check "descrição" "regex"
 
 check "chave privada"                  '-----BEGIN (RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY'
 check "chave de acesso da AWS"         'AKIA[0-9A-Z]{16}'
-check "senha/segredo literal em config" '^[[:space:]]*[A-Za-z_.-]*(password|secret|token|api-?key)[A-Za-z_.-]*[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9+/_.=-]{8,}'
+check "senha/segredo literal em config" '^[[:space:]]*[A-Za-z_.-]*(password|secret|token|api-?key)[A-Za-z_.-]*[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9+/_.=-]{8,}' '*.yml' '*.yaml' '*.properties'
 
 exit $status

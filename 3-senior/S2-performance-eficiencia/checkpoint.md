@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟣 Sênior · Pré-requisitos: S2.01 a S2.08
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, OpenJDK **25.0.5**, 12 núcleos, **máquina compartilhada**): os programas de [`lab/`](lab/README.md) (`java X.java`), o projeto **JMH** (`lab/jmh-lab`, JMH 1.37), o **k6 1.8.3**, o **GraalVM CE 25** e o **Azul Zulu 25 com CRaC** em Docker. **São modelos e programas pequenos** (um "serviço" com `Thread.sleep`, um cache com chave errada, uma aplicação com 3 defeitos plantados): **os números não valem para o PayFlow, o PostgreSQL ou um Spring Boot**. **Não executado:** o **PayFlow do aluno** (`perf/`, `perf-bench/`, `docs/perf/*`, as *flags* de produção, o evento `payflow.Transfer`, o `perf.yml`), o **async-profiler**, o **JMC**, o **MAT/VisualVM**, o **Gatling**, Spring Boot com cache AOT/CRaC/native e a **nuvem**. O **incidente da Parte 4 é SINTÉTICO** (mecanismos reais do laboratório, números **inventados**).
 
 ## Parte 1: Quiz (10 questões)

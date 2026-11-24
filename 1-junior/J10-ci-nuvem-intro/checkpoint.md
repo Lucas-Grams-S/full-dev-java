@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟢 Júnior · Pré-requisitos: J10.01 a J10.07
 
+> ✅ **Validação final (2026-11-24):** este módulo foi executado no PayFlow reconstruído (CI local e AWS emulada); resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**, e **não há conta AWS neste ambiente**. **Executados de verdade** (Linux, Docker 29.9.2, JDK 25.0.5, Maven Wrapper 3.9.12, AWS CLI 2.39.5): `./mvnw verify` do `lab/ci-lab` (4 testes com Testcontainers `postgres:18`, JaCoCo 72,2% das linhas, piso 0,70; 10,9 s), o build quebrado de propósito e a violação do piso de cobertura, o `actionlint 1.7.12` e o `shellcheck 0.11.0`, o `check-pr-title.sh`, o `deploy.sh` (PostgreSQL 18 com TLS, `sslmode=verify-full`, SSM do moto, `chown 10001` + `chmod 400`), o Caddy 2.11 (413 × 500), o SQL de `bootstrap-admin` com o hash BCrypt validado pelo Spring Security 7.1.2 e a sequência `scripts/aws/*.sh` + teardown + verificação **contra o moto**. **Revisados por leitura, não executados:** o GitHub Actions de verdade (cache, artefatos, OIDC, *environments*), `dependency-review`, Dependency-Check, Dependabot, a trust policy e as políticas do IAM (só JSON válido), o RDS, a EC2 e o `user-data` no Amazon Linux 2023, `ssm send-command`/`start-session`, o login do painel por túnel, a **reversão** do `deploy.sh`, `aws login`, o fechamento da conta e qualquer **custo real**. O PayFlow **do aluno** não existe em disco.
 
 ## Parte 1: Quiz (10 questões)

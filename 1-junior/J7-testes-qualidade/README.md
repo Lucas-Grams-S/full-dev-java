@@ -1,6 +1,9 @@
 # J7 — Testes e qualidade
 
-> 🟢 Júnior · ⏱️ 15h (10 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **revisado por leitura; testes práticos ficam para o fim do treinamento**
+> 🟢 Júnior · ⏱️ 15h (10 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído das aulas em `~/docs/payflow`, tag `payflow-J7`).** **Executado:** `mvn verify` com **192 testes** verdes (42 métodos novos, 62 execuções), Testcontainers (`postgres:18`), Checkstyle **0** violações, SpotBugs **0** após triagem, JaCoCo **96,0%** de linhas e **86,7%** de ramos (o piso `0.70` do exemplo continua sendo só ponto de partida). **Corrigido nas aulas:** o `TransfersControllerWebTest` precisa de `@EnableConfigurationProperties(PayflowProperties.class)`; o `application-test.yml` mantém o bloco `springdoc`; o *script* de migração para `@PayflowTest` tinha 3 defeitos; a primeira rodada de Checkstyle (76) e SpotBugs (16) foi **medida**; eram 42 métodos novos, não 43. **Ainda não executado:** SonarLint na IDE; o *hook* `commit-msg` no repositório do aluno. Os avisos "não executado" / "revisado por leitura" que aparecem nas aulas descrevem o momento em que elas foram escritas.
 
 ## 🎯 Objetivo do módulo
 Cobrir o PayFlow com testes confiáveis e manter o código limpo.

@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟢 Júnior · Pré-requisitos: J7.01 a J7.09
 
+> ✅ **Validação final (2026-11-24):** este módulo foi executado no PayFlow reconstruído; o resultado e o que continua não executado estão no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** os exemplos de J7 foram **revisados por leitura**; a bateria prática de testes fica para o **fim do treinamento** (decisão do aluno). Foram **executados**: o laboratório `StatementLab` (J7.07), o laboratório `qa-lab` com Checkstyle e SpotBugs (J7.08), o *hook* `commit-msg` e o `ReleaseBump` (J7.09), a lógica pura de `Masking` e o *script* `coverage-summary.sh` (J7.06). **Não executados:** todos os testes JUnit/Spring/Testcontainers, a configuração do JaCoCo, a aplicação de Checkstyle/SpotBugs ao código do PayFlow e a migração dos testes antigos. Os números de "testes esperados" abaixo vêm de **contagem por leitura**, não de execução.
 
 ## Parte 1 — Quiz (10 questões)
@@ -54,7 +56,7 @@ docs/testing-notes.md   docs/quality-notes.md   docs/clean-code-lab/StatementLab
 Novas dependências de teste: `spring-boot-starter-webmvc-test`, `spring-boot-starter-data-jpa-test`, `spring-boot-testcontainers`, `org.testcontainers:testcontainers-postgresql` (todas pelo BOM). Novos plugins (com `<version>`): `jacoco-maven-plugin` 0.8.16, `maven-checkstyle-plugin` 3.6.0 (+ Checkstyle 14.4.0), `spotbugs-maven-plugin` 4.10.5.0; mais `maven-dependency-plugin` (do BOM) para o agente do Mockito.
 
 Critérios de pronto:
-- [ ] **43 métodos de teste novos** (62 execuções, **esperado, contado por leitura**): `AmountsTest` 3 (12), `AccountTest` 10 (12), `TransferServiceUnitTest` 8, `TransfersControllerWebTest` 7 (9), `RepositoriesJpaTest` 6, `ApplicationContextSmokeTest` 2, `PostgresContainerTest` 3, `MaskingTest` 4 (10).
+- [ ] **42 métodos de teste novos** (62 execuções; **medido na validação final**, 2026-11-24: 183 + 9 = 192 testes verdes com os da J5/J6): `AmountsTest` 3 (12), `AccountTest` 10 (12), `TransferServiceUnitTest` 8, `TransfersControllerWebTest` 6 (9), `RepositoriesJpaTest` 6, `ApplicationContextSmokeTest` 2, `PostgresContainerTest` 3, `MaskingTest` 4 (10).
 - [ ] **Pirâmide:** testes de unidade rodam **sem** Spring e sem banco (nenhum `Started PayflowApplication` ao rodar `AmountsTest` e `AccountTest*`); a fatia web **sem** Flyway/Hikari/Tomcat nos logs.
 - [ ] **Banco real, sem H2:** `@PayflowTest` (container `postgres:18` por `@ServiceConnection`); `application-test.yml` sem `spring.datasource`; o container local `payflow-pg` **parado** e `mvn test` verde.
 - [ ] **`mvn verify`** gera o relatório do JaCoCo; o piso foi **medido** e registrado em `docs/testing-notes.md` (não é o `0.70` do exemplo); `ApiMapperImpl` e `PayflowApplication` excluídos com justificativa.

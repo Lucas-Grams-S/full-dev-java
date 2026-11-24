@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟣 Sênior · Pré-requisitos: S8.01 a S8.05
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, JDK 25.0.5.1, git 2.53): `lab/PortfolioLint.java` (README de portfólio PT/EN bom, ruim e **3 mutantes**; **higiene do repositório real deste treinamento**, `HEAD` `7f3d23d`), `lab/history-secrets.sh` (segredo **falso** no histórico de um repositório descartável), `lab/ResumeLint.java` (3 currículos de pessoas **fictícias** e uma vaga **sintética**), `lab/LiveCodingLab.java` (exemplos, teste diferencial com 2.000 casos e 3 mutantes, trabalho contado), `lab/StarLint.java` (4 histórias e a matriz tema × história) e `lab/OfferLab.java` (INSS/IRRF 2026 contra os **5 exemplos oficiais** da Receita, 2 mutantes, CLT × PJ). **São PREMISSAS:** ofertas, benefícios, custos e alíquota efetiva do PJ, velocidade de fala, volumes do *system design*. **NÃO executados:** nada publicado no GitHub ou no LinkedIn, nenhuma entrevista nem negociação, nenhuma faixa salarial pesquisada (o aluno pesquisa, com fonte e data).
 
 ## Parte 1: Quiz (10 questões)

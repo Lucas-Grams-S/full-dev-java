@@ -2,6 +2,9 @@
 
 > 🟢 Júnior · ⏱️ 24h (16 sessões de 1h30) · Status: ✅ concluído (aulas geradas em 2026-11-13)
 
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído das aulas em `~/docs/payflow`, tag `payflow-J5`).** **Executado:** 87/87 testes verdes (`mvn test`, PostgreSQL 18 local); o JAR sobe com `--spring.profiles.active=dev`, o Flyway valida 5 migrações e `/actuator/env` responde 404. **Corrigido nas aulas:** `Transfer.complete()` (J5.11) e o código do `NPlusOneBatchLabTest` (J5.12) estavam só descritos. **Ainda não executado:** o repositório do aluno em si (a validação usou o PayFlow reconstruído das aulas, em `~/docs/payflow`, tag `payflow-J5`); navegador real. Os avisos "não executado" / "revisado por leitura" que aparecem nas aulas descrevem o momento em que elas foram escritas.
+
 ## 🎯 Objetivo do módulo
 Construir um monólito Spring Boot com persistência JPA, validação e configuração por profiles.
 

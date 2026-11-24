@@ -1,6 +1,9 @@
 # P5 — Microsserviços e integração
 
-> 🔵 Pleno · ⏱️ 16.5h (11 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **laboratório executado (Spring Boot 4.1.2, Resilience4j 2.4.0, Spring Cloud 2025.1.4/Gateway 5.0.4, Spring gRPC 1.1.2, Pact JVM 4.7.7, JDK 25.0.5; 41 testes, sem Docker); o PayFlow do aluno foi revisado apenas por leitura; testes práticos no fim do treinamento, por decisão do aluno**
+> 🔵 Pleno · ⏱️ 16.5h (11 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído em `~/docs/payflow`, tag `payflow-P5`).** **Executado:** laboratório `integration-lab` (multimódulo, sem Docker): **41/41** testes (`resilience-lab`, `gateway-lab` 6, `grpc-lab` 10, `contract-lab` 8: Pact do consumidor e do provedor, compatibilidade de eventos). **Corrigido nas aulas:** nenhuma divergência encontrada entre as aulas e a execução do laboratório. **Ainda não executado:** no PayFlow: o serviço `payflow-notifications` extraído, o `payflow-gateway`, Resilience4j (circuit breaker, *bulkhead*, *retry*) em volta do câmbio da J6.08, os testes Pact e o *modo sombra* (são projetos e dependências novos; só o laboratório os exercitou). Os avisos "não executado" / "revisado por leitura" nas aulas descrevem a escrita original.
 
 ## 🎯 Objetivo do módulo
 Decidir **quando dividir** um sistema (e quando **não**) e **como integrar** serviços com **resiliência**: extrair **um** serviço (`payflow-notifications`) pelo método do **estrangulamento**, escolher **REST ou gRPC**, evoluir APIs e eventos **sem quebrar** consumidores, pôr um **gateway** na frente, proteger as chamadas remotas (**timeouts, retry, circuit breaker, bulkhead, rate limiter**) e provar o contrato com **testes de contrato**.

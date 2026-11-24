@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🔵 Pleno · Pré-requisitos: P8.01 a P8.08
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** nesta geração (Linux, Docker 29.9.2, Terraform 1.17.1, AWS provider 6.73.0, Trivy 0.76.2, `actionlint` 1.7.12, JDK 25.0.5): (1) o **Terraform** do PayFlow contra o **moto** (`plan`/`apply`/`destroy` de 20 recursos, *drift*, `moved`, `import`, *state* remoto com **bloqueio**, `terraform test` com **mutantes**, `-detailed-exitcode`, recriação do banco e `prevent_destroy`); (2) o **Trivy** (imagem, configuração, dependências, SBOM e exceção com validade); (3) os **mecanismos de deploy** (recreate, rolling, blue/green, canary) em Docker/nginx e a migração ***expand/contract*** no PostgreSQL 18; (4) o **avaliador de *feature flags*** (Java puro); (5) `actionlint`/`shellcheck` nos *workflows* e *scripts*, com **mutantes**. **NÃO executado:** o **GitHub Actions** (nada foi publicado: o `gh` do ambiente está logado na conta real), a **AWS real**, o **OIDC**, o **ECR**, a **atestação**, o **Kubernetes** (kind/kubectl/helm), **Gateway API/Argo Rollouts/Argo CD/Flux/Jenkins**, o **OpenFeature**, e **todo o PayFlow do aluno** (revisado por leitura). A **lista "a validar no fim do treinamento"** está em `00-guia/progresso.md`.
 
 ## Parte 1: Quiz (10 questões)

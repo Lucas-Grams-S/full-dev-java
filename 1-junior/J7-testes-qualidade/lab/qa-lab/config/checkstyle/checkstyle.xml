@@ -32,7 +32,10 @@
     <module name="ModifierOrder"/>
     <module name="RedundantModifier"/>
     <module name="FinalClass"/>
-    <module name="HideUtilityClassConstructor"/>
+    <module name="HideUtilityClassConstructor">
+      <!-- a classe principal do Boot só tem o main, mas o Spring precisa instanciá-la (é uma @Configuration) -->
+      <property name="ignoreAnnotatedBy" value="SpringBootApplication"/>
+    </module>
     <module name="UpperEll"/>
     <module name="ArrayTypeStyle"/>
   </module>

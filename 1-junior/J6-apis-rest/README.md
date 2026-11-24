@@ -2,6 +2,9 @@
 
 > 🟢 Júnior · ⏱️ 15h (10 sessões de 1h30) · Status: ✅ concluído (2026-11-13)
 
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído das aulas em `~/docs/payflow`, tag `payflow-J6`).** **Executado:** 130/130 testes (87 da J5 + 43 da J6); `scripts/api-smoke.sh` com **15 `ok`** contra a aplicação em `dev`; corrida de 8 requisições com a mesma chave = 1×`201` + 7×`200`. **Corrigido nas aulas:** J6.03/J6.04/J6.05 tinham blocos de teste truncados; faltava o código de `PayflowProperties.Exchange/Cors` (J6.08); o *pool* de conexões dos testes precisa de `hikari.minimum-idle` menor (13 contextos × 10 conexões > `max_connections`); a corrida de 6 transferências dá 1×`201` com *pool* aquecido e 2×`201` com o do perfil de teste (o teste confere o invariante do saldo, não a contagem). **Ainda não executado:** CORS em navegador real e a API Frankfurter real (só o servidor falso foi usado); desafios e exercícios opcionais. Os avisos "não executado" / "revisado por leitura" que aparecem nas aulas descrevem o momento em que elas foram escritas.
+
 ## 🎯 Objetivo do módulo
 Projetar e documentar uma API REST consistente, com erros padronizados.
 

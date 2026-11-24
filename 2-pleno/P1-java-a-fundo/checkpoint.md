@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🔵 Pleno · Pré-requisitos: P1.01 a P1.13
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, JDK 25.0.5 e 21 do Ubuntu, 12 núcleos): todo o `lab/jvm-lab/` (`MemoryAreas`, `Warmup`, `GcLoad` com G1/Parallel/Serial/ZGC/Shenandoah, `Threads`, `Futures`, `Concurrent`, `Visibility`, `Races`, `Virtual`, `Pinning`, `Structured`, `Modern`, `Hello25`, `TransferResultDemo`, `ReflectJdk`, `StudyCase`, `modules-lab` com `javac --module-source-path`/`jdeps`/`jlink`), mais `jcmd`/`jstat`/NMT numa JVM viva. **Não executado:** **tudo** o que toca no PayFlow do aluno (as classes e testes novos descritos abaixo foram **revisados por leitura**), o **PostgreSQL** (o estudo de caso é um modelo **em memória**), o `spring.threads.virtual.enabled` e o comportamento da JVM **dentro de um contêiner** (Docker) com limites. Lista consolidada em "a validar no fim do treinamento" (`00-guia/progresso.md`).
 
 ## Parte 1: Quiz (10 questões)

@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟢 Júnior · Pré-requisitos: J8.01 a J8.07
 
+> ✅ **Validação final (2026-11-24):** este módulo foi executado no PayFlow reconstruído; o resultado e o que continua não executado estão no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, OpenJDK 25.0.5, Maven 3.9.12, Spring Boot 4.1.2, Spring Security 7.1.2): `lab/security-lab` (**81 testes**, a segurança do PayFlow com usuários em memória), `lab/default-security-lab` (**8 testes**), `lab/PasswordLab.java`, `lab/InjectionLab.java` (H2), `lab/check-secrets.sh` e `lab/osv-check.sh`. **Não executados:** o repositório `payflow` do aluno (nada foi compilado contra ele), o OWASP Dependency-Check, o gitleaks, a chamada real ao Have I Been Pwned, os testes de navegador (CSP, CSRF, `SameSite`) e a leitura do texto da LGPD. Os números de "testes esperados" abaixo vêm de **contagem por leitura**, não de execução.
 
 ## Parte 1: Quiz (10 questões)

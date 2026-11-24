@@ -1,6 +1,9 @@
 # J8 — Segurança essencial
 
-> 🟢 Júnior · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **laboratórios executados; o PayFlow do aluno foi revisado por leitura; os testes práticos ficam para o fim do treinamento**
+> 🟢 Júnior · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído das aulas em `~/docs/payflow`, tag `payflow-J8`).** **Executado:** `mvn verify` com **256 testes** verdes, Checkstyle **0**, SpotBugs **0**; login do painel (sessão + CSRF) e API com JWT passando. **Corrigido nas aulas:** a J8.04 chamava `account.unblock()` (o método da `Account` é `activate()`); a J8.06 falava em três mudanças na `SecurityConfig` e eram duas; a migração para a J8 muda resultados de testes da J6/J7 (401 em `/api/v2` e `/api/v9`, 302 em páginas sem sessão e no Actuator, springdoc liberado na cadeia do painel, seed com 2 contas da Ana). **Ainda não executado:** os itens (b)–(i) da lista "a validar" da J8: CSP sem violações no navegador, `SameSite` entre `localhost` e `127.0.0.1`, Dependency-Check com chave do NVD, gitleaks, política de senha com o HIBP real, texto da LGPD. Os avisos "não executado" / "revisado por leitura" que aparecem nas aulas descrevem o momento em que elas foram escritas.
 
 ## 🎯 Objetivo do módulo
 Proteger a API com autenticação, autorização e as defesas do OWASP Top 10.

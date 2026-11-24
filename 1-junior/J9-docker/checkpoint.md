@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟢 Júnior · Pré-requisitos: J9.01 a J9.04
 
+> ✅ **Validação final (2026-11-24):** este módulo foi executado no PayFlow reconstruído; o resultado e o que continua não executado estão no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, Docker 29.9.2, Compose v5.6.1, Temurin 25.0.5, Spring Boot 4.1.2, PostgreSQL 18.6): o laboratório `lab/docker-lab` (PayFlow Lite): `Dockerfile` multi-stage (build frio 48 s, sem mudança 1,4 s, mudando um `.java` 3,7 s; imagens de 639 MB, 527 MB e 357 MB), usuário `10001`, `docker stop` de 0,15 s (exit 143) × 10,19 s (exit 137), falha rápida (exit 1), limites de memória, `compose.yaml` (rede, DNS, volume, segredos por `configtree`, `healthcheck`, `restart`, perfil `tools`), os erros de permissão do segredo e de senha do banco com volume antigo, `logs`/`inspect`/`stats`/`top`/`diff`/`cp`, *thread dump* por `SIGQUIT`, depuração por JDWP (`jdb`) e o `.dockerignore` (contexto de 47,38 MB × 1,08 kB, segredo visível na imagem sem ele). **Revisados por leitura, não executados:** o `Dockerfile`, o `compose.yaml`, o `.dockerignore` e o `compose.debug.yaml` **do PayFlow do aluno** (o repositório dele não existe em disco), o `POST /api/v1/auth/token` e o painel dentro do Compose, o cookie `Secure` por HTTP em navegadores, Docker Desktop (Windows/macOS), varredura de imagem (Docker Scout/Trivy), Hadolint e `spring-boot:build-image`.
 
 ## Parte 1: Quiz (10 questões)

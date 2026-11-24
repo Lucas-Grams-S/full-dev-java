@@ -1,6 +1,9 @@
 # J10 — CI e introdução à nuvem
 
-> 🟢 Júnior · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **laboratório executado (sem conta AWS: AWS emulada pelo moto); o PayFlow do aluno foi revisado por leitura; os testes práticos ficam para o fim do treinamento**
+> 🟢 Júnior · ⏱️ 12h (8 sessões de 1h30) · Status: ✅ concluído (2026-11-13) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído em `~/docs/payflow`, tag `payflow-J10`).** **Executado:** `./mvnw -B -ntp verify` no PayFlow: **256 testes** verdes, JaCoCo e Checkstyle ok, **BUILD SUCCESS** em 1 min 15 s; `actionlint 1.7.12` sobre os 4 workflows sem saída; `shellcheck` sem avisos de nível *warning* nos `scripts/ci`, `deploy` e `scripts/*.sh` (só 3 notas de estilo e os `SC2034` de variáveis do `env.sh`, usadas por outros scripts); `check-pr-title.sh` (aceita `feat(api): ...`, recusa `Update stuff`); `scripts/aws/*.sh` contra o **moto** (budget, IAM, S3/ECR, rede, RDS, instância): o `91-verify-empty.sh` achou **10 tipos** de recurso, o `90-teardown.sh` sem `CONFIRM=payflow` **recusou** e com ele destruiu tudo, e o `91` depois deu **11 `ok`**; JSON das 4 políticas IAM válidos; `compose.prod.yaml` e `compose.edge.yaml` passam em `docker compose config`. **Corrigido nas aulas:** o `check-secrets.sh` (J8.07, usado pelo `security.yml`) acusava `this.passwordHash = passwordHash;` no PayFlow real: restrito a YAML/properties. **Ainda não executado:** GitHub Actions de verdade (OIDC, cache, artefatos), a AWS real (EC2, RDS, SSM, ECR), `deploy.sh` com PostgreSQL em TLS e o Caddy neste PayFlow (só foram executados no laboratório) e o `aws login`. Os avisos "não executado" nas aulas descrevem a escrita original.
 
 ## 🎯 Objetivo do módulo
 Automatizar o build no GitHub Actions e colocar o PayFlow no ar de forma barata e segura, **e destruir tudo provando que nada ficou**.

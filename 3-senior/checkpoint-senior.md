@@ -145,6 +145,28 @@ Preencha a última coluna com o número **real** do seu repositório, **na ordem
 3. Registre o mapa em `docs/migracoes.md` (esta tabela, preenchida) e ponha no CI um teste que **lista** `src/main/resources/db/migration` e **falha** se duas migrações tiverem a **mesma versão** (não dependa da mensagem do Flyway para isso: ela **não** foi reproduzida neste treinamento).
 4. **Não** reescreva as aulas para "acertar" os números: a aula é o plano; o `docs/migracoes.md` é o que aconteceu.
 
+**Mapa preenchido na validação final (2026-11-24, PostgreSQL 18, PayFlow reconstruído).** Apliquei **em ordem de *merge*** o SQL que as aulas trazem, num banco **vazio** e num banco **com massa** (50.000 usuários e contas, 300.000 lançamentos). Resultado: **16 migrações passam nos dois bancos** (V1–V7 do PayFlow real e as 9 seguintes); a 17ª (**V18**, `phone_e164`) **falha em banco vazio**: `column "phone" of relation "users" does not exist`.
+
+| Seu número (real) | Nome nas aulas | Aula | Resultado |
+|---|---|---|---|
+| V1–V4 | `create_users` … `create_indexes` | J3.12 | ok |
+| **V5** | `V5__ledger_covering_index` | P2.05 | ok (`CONCURRENTLY`) |
+| **V6** | `V6__drop_old_ledger_index` | P2.05 | ok |
+| **V7** | `V11__outbox_events` (aula) | P3.09 | ok (`outbox_events`, índice parcial) |
+| V8 | `V9__shedlock` | P3.02 | ok |
+| V9 | `V10__processed_messages` | P3.07 | ok |
+| V10 | `V12__payment_requests` | P3.10 | ok |
+| V11 | `V12__users_password_hash_nullable` | P10.03 | ok |
+| V12 | `V13__ledger_account_seq` | S1.05 | ok (`CREATE UNIQUE INDEX CONCURRENTLY`, 107 ms com massa) |
+| V13 | `V14__statement_read_model` | S1.05 | ok |
+| V14 | `V15__payment_saga` | S1.07 | ok (`account_holds` + `payment_sagas`) |
+| V15 | `V16__payment_request_short_code` | S1.11 | ok |
+| V16 | `V17__idempotency_keys` | S1.08 | ok |
+| V17 | `V18__expand_users_phone_e164` | S3.01/S3.09 | **falha sem `users.phone`**; com a coluna: **72 ms**, o gatilho preenche `+5511987654321` |
+| *(não montadas)* | `V19`, `V19_1`, `V20`–`V25` | S3.02, S3.04, S3.06, S3.08, S3.09, S5.06 | o SQL está em *scripts* do laboratório ou em trechos de texto, **não** em arquivos de migração completos (a `V21` é só `CREATE PUBLICATION`; a `V25` só o DDL da seção 4 da S5.06) |
+
+**Quatro achados do mapa** (nenhuma aula foi reescrita; vão para "Correções pendentes"): (1) **a colisão não é só V12 e V13**: o `V5` do **exercício** da J3.12 (`V5__add_users_phone`) colide com o `V5__ledger_covering_index` da P2.05, e o `V7__ledger_monthly_summary` da P2.11 com o `V7` do *outbox*; (2) **a S3.01/S3.09 dependem de `users.phone`**, que **nenhuma migração do plano cria** (só esse exercício): sem ele o V18 falha; (3) **`payment_sagas.payment_request_id` é `UUID` (S1.07) e `payment_requests.id` é `text` (P3.10)**: não há `FOREIGN KEY`, então o banco **não acusa** o descasamento; (4) **o PayFlow real só tem V1–V7**: o número do plano é um rótulo, o `docs/migracoes.md` (no PayFlow) registra o que aconteceu.
+
 **Nota do projeto:** conte os itens marcados **com evidência** (os "não executado" **não** contam como feitos, mas também não como erro). O item 2.10 é **obrigatório**: sem ele, o nível não fecha.
 - **≥ 80%** dos itens **executáveis** ✅ pronto · **60–79%** ⚠️ pronto com plano de reforço (itens abertos e a aula que os cobre) · **< 60%** ❌ refaça os módulos indicados antes de declarar o nível concluído.
 

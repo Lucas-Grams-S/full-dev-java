@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🔵 Pleno · Pré-requisitos: P6.01 a P6.07
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, JDK 25.0.5, Maven 3.9.12; Docker para a pilha): `lab/observability-lab/` (Spring Boot **4.1.2**, Micrometer **1.17.2**, Micrometer Tracing **1.7.2**, OpenTelemetry Java **1.62.0**): **[INFO] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0** (sem Docker) mais `promtool` (Prometheus **3.16.0**: 12 regras, 8 grupos de teste, regra quebrada **reprova**), a pilha real (**Prometheus 3.16.0, Grafana 13.3.0, Jaeger 2.23.0**) com o **incidente simulado** (`incident.sh`), `shutdown-check.sh` (**SIGTERM** com requisição em voo) e `lab/mgmt-security-lab/` (Spring Security 7 na porta de gestão, 1 teste). **Por leitura:** o `payflow` **do aluno** (logs, métricas, traces, *dashboards*, alertas, `compose.observability.yaml`, runbooks). **Não executado:** **Alertmanager** e canais de notificação, **Kubernetes** (sondas do `kubelet`, P7), OpenTelemetry **Collector**/amostragem por cauda, *agent* Java, propagação de traço por **Kafka/RabbitMQ**, Prometheus/Grafana lendo ***exemplars***, rastreadores de exceção, o incidente **no PayFlow real**.
 
 ## Parte 1: Quiz (10 questões)

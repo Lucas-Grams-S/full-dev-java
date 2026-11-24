@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🟣 Sênior · Pré-requisitos: S6.01 a S6.06
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** (Linux, JDK 25.0.5.1): `lab/WellArchitectedLab.java` (opções de folga e Multi-AZ com preço; *linter* de revisão), `lab/ComputeLab.java` (Lambda × Fargate × EC2; memória do Lambda), `lab/LockInLab.java` (varredura de SDK; gravidade dos dados; sair × ativo/ativo), `lab/FinOpsLab.java` (estimativa, NAT × *endpoints*, tags, compromissos, Spot), `lab/LandingZoneLab.java` (17 casos de SCP e 5 mutantes/variantes) e `lab/BillLab.java` (fatura sintética e detectores), todos com **preços reais da AWS Price List** (`lab/prices.csv`, ofertas publicadas de 08 a 23/11/2026, gerado por `lab/fetch-prices.py`); `terraform validate` nos módulos `finops` e `organization` (Terraform 1.17.1, provedor AWS 6.73.0) com **mutante**; as classes de exemplo do *lock-in* **compiladas** contra o AWS SDK v2 2.59.1. **São modelos com premissas declaradas**, não o PayFlow nem a AWS. **NÃO executados:** qualquer recurso na AWS (Organizations, Control Tower, Identity Center, Budgets, Cost Anomaly Detection, Well-Architected Tool, *Savings Plans*), fatura real, Azure e Google Cloud, o PayFlow do aluno.
 
 ## Parte 1: Quiz (10 questões)

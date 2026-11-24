@@ -1,6 +1,9 @@
 # P4 — Arquitetura de aplicações
 
-> 🔵 Pleno · ⏱️ 18h (12 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **laboratório executado (Spring Boot 4.1.2, Spring Modulith 2.1.2, ArchUnit 1.4.2, JDK 25.0.5; 40 testes, sem Docker); o PayFlow do aluno foi revisado apenas por leitura; testes práticos no fim do treinamento, por decisão do aluno**
+> 🔵 Pleno · ⏱️ 18h (12 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído em `~/docs/payflow`, tag `payflow-P4`).** **Executado:** laboratório `architecture-lab`: **40/40** testes (Spring Modulith 2.1.2, ArchUnit 1.4.2; sem Docker). No PayFlow real: `ArchitectureRulesTest` com **5 regras que já passam** e **4 medidas como pendentes** (25 + 24 + 7 violações e 1 ciclo); `mvn verify` com **272 testes** (4 desativados), Checkstyle 0, SpotBugs 0. **Corrigido nas aulas:** P4.02: a decisão 116 ("o domínio só importa `jakarta.persistence`") é violada pelas entidades da J5.07, que usam `org.hibernate.annotations`. **Ainda não executado:** a reorganização em módulos hexagonais (`shared`, `identity`, `account`, `transfer`, `payment`, `notification`, `antifraud`, `reporting`, `outbox`), o `ApplicationModules.verify()` do Spring Modulith e o diagrama no PayFlow; o contrato HTTP e o esquema continuam como estavam. Os avisos "não executado" / "revisado por leitura" nas aulas descrevem a escrita original.
 
 ## 🎯 Objetivo do módulo
 Estruturar o PayFlow como um **monólito modular bem desenhado**: separar responsabilidades, aplicar **hexagonal**, **SOLID**, **padrões GoF** e **DDD** (tático e estratégico) **com critério**, organizar em **módulos** (Spring Modulith) e **impor** as regras por **testes de arquitetura** (ArchUnit), sem mudar o contrato HTTP nem o esquema.

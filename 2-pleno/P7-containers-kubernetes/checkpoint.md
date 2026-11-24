@@ -2,6 +2,8 @@
 
 > ⏱️ ~1h30 · 🔵 Pleno · Pré-requisitos: P7.01 a P7.09
 
+> ✅ **Validação final (2026-11-24):** módulo executado no PayFlow reconstruído; resultado e o que continua não executado no [README do módulo](README.md). Os avisos "não executado" / "por leitura" abaixo descrevem a escrita original.
+
 > ⚠️ **Estado de verificação do módulo:** por decisão do aluno, os testes práticos do PayFlow ficam para o **fim do treinamento**. **Executados de verdade** nesta geração (Linux, Docker 29.9.2, Maven 3.9.12, JDK 25.0.5): (1) as **três formas de construir a imagem** (Dockerfile, Buildpacks, Jib) sobre o PayFlow Lite da J9 (tamanhos, camadas, tempos, usuário, calculador de memória); (2) o **laboratório da JVM sob limites** (`lab/k8s-lab/jvm-lab`: heap, coletor, CPUs, `OOMKilled` × `OutOfMemoryError`). **Não executado:** **todo o Kubernetes** (`kind`, `kubectl`, `helm`: o ambiente **não permitiu instalá-los**), o `metrics-server`, o HPA, o Ingress, o `helm lint/template`. Os **manifestos** e o **chart** foram **escritos por leitura**: YAML validado, conteúdo **conferido** na documentação oficial, mas **sem um cluster que os aplique**. Isso está listado em "Correções pendentes" do `progresso.md` como **a validar no fim do treinamento**.
 
 ## Parte 1: Quiz (10 questões)

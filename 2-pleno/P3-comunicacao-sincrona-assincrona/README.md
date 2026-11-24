@@ -1,6 +1,9 @@
 # P3 — Comunicação síncrona e assíncrona
 
-> 🔵 Pleno · ⏱️ 21h (14 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **laboratórios executados (Kafka 4.3.1, RabbitMQ 4.4.0, PostgreSQL 18, Spring Boot 4.1.2, Spring Kafka/AMQP 4.1.2, ShedLock 7.11.0, JDK 25.0.5); o PayFlow do aluno foi revisado apenas por leitura; testes práticos no fim do treinamento, por decisão do aluno**
+> 🔵 Pleno · ⏱️ 21h (14 sessões de 1h30) · Status: ✅ concluído (2026-11-14) — **validado na execução final (2026-11-24); veja o bloco abaixo**
+
+
+> ✅ **Validação final (2026-11-24, PayFlow reconstruído em `~/docs/payflow`, tag `payflow-P3`).** **Executado:** laboratório `messaging-lab`: **47/47 `*IT`** contra Kafka (apache/kafka), RabbitMQ 4 e PostgreSQL 18 reais (fatos-chave idênticos aos das aulas: escrita dupla perde o evento, `SEM_PROTECAO` saldo 700,00 / 3 pagamentos, `INGENUO_CONCORRENTE` 8 pagamentos, caso do débito duplo, 2 relés 300/300); no PayFlow: o **outbox** (V7, escrita na mesma transação, relé com `SKIP LOCKED`; 4 testes) e `mvn verify` com **263 testes**, Checkstyle 0, SpotBugs 0. **Corrigido nas aulas:** P3.09: o PayFlow usa V7 (a aula diz V11); `OutboxWriter` com `MANDATORY`; o `TransferServiceUnitTest` precisa do dublê do `OutboxWriter`; testes do PayFlow devem se chamar `*Test` (um `*IT` fica fora do `mvn verify`). **Ainda não executado:** Kafka e RabbitMQ **dentro do PayFlow** (`KafkaTemplate`, filas, DLQ, `processed_messages` do consumidor idempotente, ShedLock, webhook assinado com `payment_requests`, SSE) — só o laboratório os exercitou; o Compose do PayFlow não ganhou Kafka/RabbitMQ. Os avisos "não executado" / "revisado por leitura" nas aulas descrevem a escrita original.
 
 ## 🎯 Objetivo do módulo
 Desacoplar o PayFlow com **mensageria confiável**: decidir **o que sai do caminho da requisição**, escolher entre **fila e log** (RabbitMQ × Kafka), entender as **garantias de entrega** e tornar tudo **seguro contra duplicatas** (idempotência, retry com *backoff*, DLQ, Outbox), receber **webhooks** com segurança e empurrar eventos em **tempo real**.
